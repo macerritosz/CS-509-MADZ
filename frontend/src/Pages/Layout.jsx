@@ -1,11 +1,11 @@
 import React from 'react';
 import {Outlet} from 'react-router-dom';
-import Header from "./Header.jsx";
+import Header from "../components/Header.jsx";
 import '../styles/tailwind.css'
 
 function Layout({children}) {
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col min-h-screen bg-background">
             <Header/>
 
             <main className="App">

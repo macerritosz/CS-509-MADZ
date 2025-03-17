@@ -4,7 +4,7 @@ import '../styles/tailwind.css';
 function Header() {
     return (
         <header className="madz-header">
-            <div className="madz-header-container p-4 bg-primary/45  ">
+            <div className="madz-header-container p-4 bg-accent/75  ">
                 <div className="madz-header-nav-container pl-2 pr-2 flex ">
                     <div id="madz-header-logo" className="p-4 font-bold">
                         LOGO GOES HERE
@@ -28,7 +28,7 @@ function Header() {
                                 </Button>
                             </div>
                             <div id="madz-header-login">
-                                <Button className="bg-secondary text-text text-sm"> Login </Button>
+                                <Button className="bg-primary/45  text-sm"> Login </Button>
                             </div>
                         </div>
                     </nav>
