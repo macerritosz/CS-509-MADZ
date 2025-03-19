@@ -51,6 +51,11 @@ public class TestBooking implements IBooking {
 
 //    following get method calls should be accessing the server
     @Override
+    public DateTime getDepartureDate() {
+        return departureDate;
+    }
+
+    @Override
     public DateTime getArrivalDate() {
         return arrivalDate;
     }
@@ -80,6 +85,8 @@ public class TestBooking implements IBooking {
                 if (Objects.equals(cur.get(cur.size() - 1).getArrivalLocation(), booking.departureLocation)
                         && cur.get(cur.size() - 1).getArrivalDate().isBefore(booking.departureDate)
                         && !Objects.equals(cur.get(cur.size() - 1).getArrivalLocation(), arrivalLocation)
+                        && ((cur.get(cur.size() - 1).getArrivalDate().getDifference(booking.getDepartureDate()) > 90)
+                            && (cur.get(cur.size() - 1).getArrivalDate().getDifference(booking.getDepartureDate()) < 1440))
                         && cur.size() < 3) {
 
                     ArrayList<IBooking> newList = (ArrayList<IBooking>) cur.clone();

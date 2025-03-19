@@ -28,6 +28,11 @@ public class Booking implements IBooking {
     }
 
     @Override
+    public DateTime getDepartureDate() {
+        return departureDate;
+    }
+
+    @Override
     public DateTime getArrivalDate() {
         return arrivalDate;
     }
