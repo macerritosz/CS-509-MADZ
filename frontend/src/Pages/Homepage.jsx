@@ -8,8 +8,8 @@ function Homepage() {
     const navigate = useNavigate();
 
     const carouselImages = [
-        "/assets/istockphoto-1629109811-612x612.jpg",
-        "/assets/pexels-sergei-a-1322276-2539430.jpg"
+        "./istockphoto-1629109811-612x612.jpg",
+        "./pexels-sergei-a-1322276-2539430.jpg"
     ]
     /**
      * API Call Handler

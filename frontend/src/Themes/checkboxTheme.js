@@ -18,6 +18,7 @@ export const checkboxTheme = {
                 container: {
                 },
                 input: {
+                    black:"text-black"
                 },
                 label: {
                     color: "text-gray-700",
