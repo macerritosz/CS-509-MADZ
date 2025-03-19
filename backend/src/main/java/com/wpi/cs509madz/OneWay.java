@@ -1,6 +1,6 @@
 package com.wpi.cs509madz;
 
-public class OneWay {
+public class OneWay implements ITrip{
     IBooking booking;
 
     public OneWay(IBooking booking) {

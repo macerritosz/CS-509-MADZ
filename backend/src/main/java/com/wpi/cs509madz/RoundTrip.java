@@ -1,6 +1,6 @@
 package com.wpi.cs509madz;
 
-public class RoundTrip {
+public class RoundTrip implements ITrip {
     IBooking toDestination;
     IBooking fromDestination;
 
