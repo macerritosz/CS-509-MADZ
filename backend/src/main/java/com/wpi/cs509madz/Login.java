@@ -1,10 +1,13 @@
 package com.wpi.cs509madz;
 
-public class Login extends Authenticate implements ILogin {
+public class Login extends Authenticate implements IAuthenticate {
 
-    public Login(String username, String password) {
+    //A database of usernames (key) and passwords (value) that is shared amongst
+    //all instances of the Authenticate class
 
-        super(username, password);
+    public Login(String username, String password, DatabaseManager user_db) {
+
+        super(username, password, user_db);
     }
 
     @Override

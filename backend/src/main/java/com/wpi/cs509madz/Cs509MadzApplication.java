@@ -9,5 +9,4 @@ public class Cs509MadzApplication {
     public static void main(String[] args) {
         SpringApplication.run(Cs509MadzApplication.class, args);
     }
-
 }
