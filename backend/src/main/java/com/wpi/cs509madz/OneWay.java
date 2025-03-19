@@ -6,4 +6,9 @@ public class OneWay implements ITrip{
     public OneWay(IBooking booking) {
         this.booking = booking;
     }
+
+    @Override
+    public void updateFlight() {
+
+    }
 }

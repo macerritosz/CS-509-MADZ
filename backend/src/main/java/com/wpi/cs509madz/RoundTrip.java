@@ -8,4 +8,9 @@ public class RoundTrip implements ITrip {
         this.toDestination = toDestination;
         this.fromDestination = fromDestination;
     }
+
+    @Override
+    public void updateFlight() {
+
+    }
 }
