@@ -1,15 +1,16 @@
 /** @type {(tailwindConfig: object) => object} */
-const withMT = require("@material-tailwind/react/utils/withMT");
+import withMT from "@material-tailwind/react/utils/withMT";
+
 const config = ({
+    mode: "jit",
     content: [
-        "./src/app/**/*.{js,ts,jsx,tsx}",
-        "./src/components/**/*.{js,ts,jsx,tsx}",
+        "./src/**/*.{js,ts,jsx,tsx}",
     ],
     theme: {
         extend: {
             colors: {
                 text: '#120808',
-                background: { DEFAULT: '#f5f5f5' },
+                background: {DEFAULT: '#f5f5f5'},
                 primary: '#076e5f',
                 secondary: '#f3ec85',
                 accent: '#78c593',
@@ -24,4 +25,4 @@ const config = ({
     plugins: [],
 });
 
-module.exports = withMT(config);
+export default withMT(config);

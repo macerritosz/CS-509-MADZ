@@ -7,9 +7,11 @@ function Header() {
             <div className="madz-header-container p-4 bg-accent/75  ">
                 <div className="madz-header-nav-container pl-2 pr-2 flex ">
                     <div id="madz-header-logo" className="p-4 font-bold">
-                        LOGO GOES HERE
+                      <a href={"/"}>
+                          LOGO GOES HERE
+                      </a>
                         {
-                            /* A logo with aerodynamics line in our colors around text: WPI, to higher places*/
+                            /* Logo Idea: aerodynamics line in our colors around text: WPI, to higher places*/
                         }
                     </div>
                     <nav className="madz-header-nav flex items-center ms-auto">
@@ -26,9 +28,6 @@ function Header() {
                                 <Button className="text-sm">
                                     Signup
                                 </Button>
-                            </div>
-                            <div id="madz-header-login">
-                                <Button className="bg-primary/45  text-sm"> Login </Button>
                             </div>
                         </div>
                     </nav>

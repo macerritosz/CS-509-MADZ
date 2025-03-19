@@ -5,7 +5,7 @@ import '../styles/tailwind.css'
 
 function Layout({children}) {
     return (
-        <div className="flex flex-col min-h-screen bg-background">
+        <div className="flex flex-col bg-background">
             <Header/>
 
             <main className="App">
