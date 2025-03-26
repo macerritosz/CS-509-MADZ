@@ -9,8 +9,8 @@ public class Main {
 
         // Connection URL
         String url = "jdbc:mysql://localhost:3306/flightdata";
-        String user = "root";      // MySQL username
-        String password = "Awesome19*";  // MySQL password
+        String user = "root";
+        String password = "Awesome19*";
 
         // Establish a connection
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
@@ -40,12 +40,6 @@ public class Main {
         }
 
         System.out.println();
-
-//        DateTime date1 = new DateTime("2022-12-28 14:00:00");
-//        DateTime date2 = new DateTime("2022-12-28 16:10:00");
-//
-//        System.out.println(date1.getDifference(date2));
-
 
         TestBooking test = new TestBooking(database,
                 new DateTime("2022-12-27"), "New York (EWR)",
