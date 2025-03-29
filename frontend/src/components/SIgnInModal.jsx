@@ -3,6 +3,21 @@ import {Button, Card, CardBody, CardFooter, Checkbox, Dialog, Input, Typography,
 
 export function SIgnInModal(props) {
     const [isSignUp, setIsSignUp] = useState(false);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    async function signIn() {
+        try {
+            const response = await fetch("/signin", {
+                method: "POST",
+            })
+            if(response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error('Invalid Signin: ', error);
+        }
+    }
 
     return (
         <>
