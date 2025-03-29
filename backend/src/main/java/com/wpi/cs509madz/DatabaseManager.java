@@ -16,7 +16,7 @@ public class DatabaseManager {
 
         //The provided url, username, and password are used on a class called DriverManager, which
         //is also provided by the imported java.sql package. The static getConnection() function
-        //returns a connection object that is stored in the db_connection attribute already
+        //returns a connection object that is swtored in the db_connection attribute already
         //initialized
         this.db_connection = DriverManager.getConnection(url, user, password);
     }

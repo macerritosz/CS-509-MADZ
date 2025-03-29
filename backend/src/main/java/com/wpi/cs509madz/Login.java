@@ -13,7 +13,7 @@ public class Login extends Authenticate implements IAuthenticate {
     @Override
     public void sendRequest() {
 
-        if (validData()) {  // Uses the method from Authenticate to check credentials
+        if (validData()) {
 
             System.out.println("Login successful! Welcome, " + username);
         }

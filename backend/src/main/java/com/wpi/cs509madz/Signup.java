@@ -25,10 +25,12 @@ public class Signup extends Authenticate implements IAuthenticate {
             if (register_result == 0) {
 
                 System.out.println("Username already taken. Please choose another.");
-            } else if (register_result == -1) {
+            }
+            else if (register_result == -1) {
 
                 System.out.println("An error has occurred. Please try again.");
-            } else {
+            }
+            else {
 
                 System.out.println("Signup successful! You can now log in.");
             }
