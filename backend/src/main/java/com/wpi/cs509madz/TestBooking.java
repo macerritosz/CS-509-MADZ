@@ -71,7 +71,7 @@ public class TestBooking implements IBooking {
         ArrayList<ArrayList<IBooking>> finalOptions = new ArrayList<>();
         System.out.println(departureLocation + ", " + arrivalLocation);
         for (TestBooking booking : database) {
-            if (Objects.equals(booking.departureLocation, departureLocation)) {
+            if (Objects.equals(booking.departureLocation, departureLocation) && booking.getDepartureDate().isBefore(booking.getArrivalDate())) {
                 ArrayList<IBooking> newList = new ArrayList<>();
                 newList.add(booking);
                 options.add(newList);
@@ -80,13 +80,15 @@ public class TestBooking implements IBooking {
 
         while (!options.isEmpty()) {
             ArrayList<IBooking> cur = options.get(0);
+            IBooking lastFlight = cur.get(cur.size() - 1);
 
             for (TestBooking booking : database) {
-                if (Objects.equals(cur.get(cur.size() - 1).getArrivalLocation(), booking.departureLocation)
-                        && cur.get(cur.size() - 1).getArrivalDate().isBefore(booking.departureDate)
-                        && !Objects.equals(cur.get(cur.size() - 1).getArrivalLocation(), arrivalLocation)
-                        && ((cur.get(cur.size() - 1).getArrivalDate().getDifference(booking.getDepartureDate()) > 90)
-                            && (cur.get(cur.size() - 1).getArrivalDate().getDifference(booking.getDepartureDate()) < 1440))
+                if (Objects.equals(lastFlight.getArrivalLocation(), booking.departureLocation)
+                        && booking.getDepartureDate().isBefore(booking.getArrivalDate())
+                        && lastFlight.getArrivalDate().isBefore(booking.departureDate)
+                        && !Objects.equals(lastFlight.getArrivalLocation(), arrivalLocation)
+                        && ((lastFlight.getArrivalDate().getDifference(booking.getDepartureDate()) > 90)
+                            && (lastFlight.getArrivalDate().getDifference(booking.getDepartureDate()) < 1440))
                         && cur.size() < 3) {
 
                     ArrayList<IBooking> newList = (ArrayList<IBooking>) cur.clone();
