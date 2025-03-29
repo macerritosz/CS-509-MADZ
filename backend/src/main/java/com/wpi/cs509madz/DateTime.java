@@ -40,8 +40,22 @@ public class DateTime {
     }
 
     public boolean isBefore(DateTime date) {
-        return year <= date.year && month <= date.month && day <= date.day &&
-                hour <= date.hour && min <= date.min && sec <= date.sec;
+        if (year != date.year) {
+            return year < date.year;
+        }
+        if (month != date.month) {
+            return month < date.month;
+        }
+        if (day != date.day) {
+            return day < date.day;
+        }
+        if (hour != date.hour) {
+            return hour < date.hour;
+        }
+        if (min != date.min) {
+            return min < date.min;
+        }
+        return sec < date.sec;
     }
 
     public int getDifference(DateTime date) {

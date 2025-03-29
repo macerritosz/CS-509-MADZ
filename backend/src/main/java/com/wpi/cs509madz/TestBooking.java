@@ -89,7 +89,7 @@ public class TestBooking implements IBooking {
                         && !Objects.equals(lastFlight.getArrivalLocation(), arrivalLocation)
                         && ((lastFlight.getArrivalDate().getDifference(booking.getDepartureDate()) > 90)
                             && (lastFlight.getArrivalDate().getDifference(booking.getDepartureDate()) < 1440))
-                        && cur.size() < 3) {
+                        && cur.size() < 4) {
 
                     ArrayList<IBooking> newList = (ArrayList<IBooking>) cur.clone();
                     newList.add(booking);
