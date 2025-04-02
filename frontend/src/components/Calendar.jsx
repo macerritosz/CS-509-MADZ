@@ -7,15 +7,28 @@ import {ChevronLeftIcon} from "@heroicons/react/24/outline";
 export default function Calendar(props) {
     const [date, setDate] = useState();
 
+    const handleDateChange = (date) => {
+        if(!date) return;
+
+        setDate(date);
+        props.handleChange({
+            target: {
+                name: `${props.type}Date`,
+                value: format(date, "yyyy-MM-dd"),
+            },
+        });
+    }
+
     return (
         <Popover placement="bottom">
             <PopoverHandler>
                 <Input
                     size="lg"
-                    label={props.type}
-                    className="text-text"
-                    onChange={() => null}
+                    label={`Select a ${props.type} Date`}
+                    className= "text-text"
+                    onChange={props.handleChange}
                     value={date ? format(date, "PPP") : ""}
+                    disabled={props.isDisabled}
                     required
                 />
             </PopoverHandler>
@@ -27,7 +40,7 @@ export default function Calendar(props) {
                     startMonth={new Date(2022, 11)}
                     endMonth={new Date(2023, 0)}
                     disabled={{before: new Date(2022, 11, 26), after: new Date(2023, 0, 5)}}
-                    onSelect={setDate}
+                    onSelect={handleDateChange}
                     classNames={
                         {
                             [UI.CaptionLabel]: "flex justify-center py-1 items-center text-lg font-semibold text-text",

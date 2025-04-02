@@ -2,25 +2,82 @@ import {Button, Card, CardBody, Carousel, Checkbox, Input, Radio,} from "@materi
 import Calendar from "../components/Calendar.jsx";
 import {PaperAirplaneIcon} from "@heroicons/react/16/solid/index.js";
 import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useCookies} from "react-cookie"
 
 
 function Homepage() {
     const navigate = useNavigate();
+    /* User input states */
+    const [formData, setFormData] = useState({
+        departAirport : "",
+        arrivalAirport : "",
+        departureDate : "",
+        returnDate : "",
+        isSameDay : false,
+        isDirect : false,
+    })
+
+    const [isOneway, setOneway] = useState(true);
+
+    //const [cookies, setCookies] = useCookies(["recentAirSearch"])
 
     const carouselImages = [
         "./istockphoto-1629109811-612x612.jpg",
         "./pexels-sergei-a-1322276-2539430.jpg"
     ]
+    /*
+    TODO
+    On selecting one way, set the arrival date to
+    Same-day flight option
+
+    Display 5 from all flight locaions in drop down
+    Use cookies to save the last search and auto fill everything, except return date
+     */
+
     /**
      * API Call Handler
      * Request: POST: Form contents for getting within database an associated functions
      * Response: OK to confirm redirect
      * @param e
      */
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate('/Flights');
+        try {
+            appendSearchType();
+            const jsonFormData = JSON.stringify(formData);
+            const response = await fetch("/submit", {
+                method: "POST",
+                headers: {
+                    ContentType: "application/json",
+                },
+                body: jsonFormData,
+            })
+            if (response.ok) {
+                navigate('/Flights');
+            }
+        } catch (error) {
+            console.log( "Form Submission Error: ", error);
+        }
     }
+
+    const handleChange = (e) => {
+        if(e.target.name === "isSameDay" || e.target.name === "isDirect") {
+            setFormData({...formData, [e.target.name]: e.target.checked});
+        } else  {
+            setFormData({...formData, [e.target.name]: e.target.value});
+        }
+    }
+
+    const appendSearchType = () => {
+        setFormData({...formData, isOneway: isOneway});
+    }
+
+    useEffect(() => {
+        console.log(formData)
+    }, [formData])
+
+
 
     return (
         <section className="homepage flex flex-col justify-center items-center">
@@ -34,31 +91,50 @@ function Homepage() {
                                         <Radio name="flight-type"
                                                label="One-way"
                                                color="accent"
-                                               defaultChecked/>
+                                               onClick={() => {
+                                                   setOneway(true)
+                                               }}
+                                               defaultChecked
+                                        />
                                         <Radio name="flight-type"
                                                label="Round-Trip"
-                                               color="accent"/>
+                                               color="accent"
+                                               onClick={() => {
+                                                   setOneway(false)
+                                               }}
+                                        />
                                     </div>
                                     <div>
-                                        <Checkbox label="Direct Flights Only" color="accent"/>
+                                        <Checkbox label="Same-Day Flights Only" color="accent" name="isSameDay" onChange={handleChange}/>
+                                        <Checkbox label="Direct Flights Only" color="accent" name="isDirect" onChange={handleChange}/>
                                     </div>
                                 </div>
                                 <div className="flex gap-2 mt-2 justify-evenly">
                                     <div className="w-full max-w-[16rem] ">
                                         <Input label="From"
+                                               name="departAirport"
                                                className="text-text"
-                                               size="lg"/>
+                                               size="lg"
+                                               onChange={(e) => {
+                                                   handleChange(e)
+                                               }}
+                                        />
                                     </div>
                                     <div className="w-full max-w-[16rem]">
                                         <Input label="To"
+                                               name = "arrivalAirport"
                                                className="text-text"
-                                               size="lg"/>
+                                               size="lg"
+                                               onChange={(e) => {
+                                                   handleChange(e)
+                                               }}
+                                        />
                                     </div>
                                     <div className="w-full max-w-[16rem]">
-                                        <Calendar type={"Select a Departure Date"}/>
+                                        <Calendar type={"departure"} isDisabled={false} handleChange={(e) => handleChange(e)} />
                                     </div>
                                     <div className="w-full max-w-[16rem]">
-                                        <Calendar type={"Select a Arrival Date"}/>
+                                        <Calendar type={"return"} isDisabled={isOneway} handleChange={(e) => handleChange(e)} />
                                     </div>
 
                                     <Button type="submit" className="!bg-accent flex items-center gap-1 px-4 py-2">
