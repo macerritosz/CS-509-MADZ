@@ -2,6 +2,7 @@ import {useContext, useEffect, useState} from "react";
 import SortSideBar from "../components/SortSideBar.jsx";
 import {Button, Card, CardBody, Typography} from "@material-tailwind/react";
 import { ArrowRightIcon} from "@heroicons/react/16/solid/index.js";
+import FlightCard from "../components/FlightCard.jsx";
 
 export default function FlightDisplay() {
     /**
@@ -73,9 +74,7 @@ export default function FlightDisplay() {
             <SortSideBar />
             <div className="m-auto">
                 <div id="mt-8">
-                    {
-                        createFlightDisplay()
-                    }
+                   <FlightCard />
                 </div>
             </div>
         </section>

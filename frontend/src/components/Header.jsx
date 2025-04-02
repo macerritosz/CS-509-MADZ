@@ -1,7 +1,7 @@
 import {Button} from "@material-tailwind/react";
 import '../styles/tailwind.css';
 import {useState} from "react";
-import {SIgnInModal} from "./SIgnInModal.jsx";
+import {SignInModal} from "./SignInModal.jsx";
 
 function Header() {
     const [open, setOpen] = useState(false);
@@ -41,7 +41,7 @@ function Header() {
             </div>
         </div>
         {
-            open && <SIgnInModal open = {open} handleOpen={handleModalOpen} onClose={handleModalOpen}/>
+            open && <SignInModal open = {open} handleOpen={handleModalOpen} onClose={handleModalOpen}/>
         }
     </header>
 }
