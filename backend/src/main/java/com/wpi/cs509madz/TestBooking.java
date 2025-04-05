@@ -69,7 +69,7 @@ public class TestBooking implements IBooking {
     public ArrayList<ArrayList<IBooking>> calculateLayoverOptions() {
         ArrayList<ArrayList<IBooking>> options = new ArrayList<>();
         ArrayList<ArrayList<IBooking>> finalOptions = new ArrayList<>();
-        System.out.println(departureLocation + ", " + arrivalLocation);
+        System.out.println(departureLocation + " -> " + arrivalLocation);
         for (TestBooking booking : database) {
             if (Objects.equals(booking.departureLocation, departureLocation) && booking.getDepartureDate().isBefore(booking.getArrivalDate())) {
                 ArrayList<IBooking> newList = new ArrayList<>();
@@ -82,13 +82,15 @@ public class TestBooking implements IBooking {
             ArrayList<IBooking> cur = options.get(0);
             IBooking lastFlight = cur.get(cur.size() - 1);
 
+//            System.out.println(cur.size() + ", " + lastFlight + " " + cur);
+
             for (TestBooking booking : database) {
                 if (Objects.equals(lastFlight.getArrivalLocation(), booking.departureLocation)
                         && booking.getDepartureDate().isBefore(booking.getArrivalDate())
                         && lastFlight.getArrivalDate().isBefore(booking.departureDate)
                         && !Objects.equals(lastFlight.getArrivalLocation(), arrivalLocation)
                         && ((lastFlight.getArrivalDate().getDifference(booking.getDepartureDate()) > 90)
-                            && (lastFlight.getArrivalDate().getDifference(booking.getDepartureDate()) < 1440))
+                            && (lastFlight.getArrivalDate().getDifference(booking.getDepartureDate()) < 720))
                         && cur.size() < 4) {
 
                     ArrayList<IBooking> newList = (ArrayList<IBooking>) cur.clone();
@@ -109,6 +111,8 @@ public class TestBooking implements IBooking {
             System.out.println(finalOption);
         }
 
+
+        // check that none of the flights overlap but that if the flights are directly after one another (so a layover flight) that it doesnt remove that one
         return finalOptions;
     }
 
