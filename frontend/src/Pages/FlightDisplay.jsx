@@ -23,11 +23,34 @@ export default function FlightDisplay() {
      */
 
     return (
-        <section className="box-border flex relative">
-            <SortSideBar />
-            <div className="m-auto">
-                <div id="mt-8">
+        <section className=" flex relative h-full mx-40">
+            <aside className="sticky mt-8">
+                <SortSideBar />
+            </aside>
+            <div className="mt-8 px-10 w-full ">
+                <div classname = "m-auto" id="">
                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard />
+
+                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard /><FlightCard />
+                    <FlightCard />
+
+
+
+
+
+
+
+
+
+
                 </div>
             </div>
         </section>
