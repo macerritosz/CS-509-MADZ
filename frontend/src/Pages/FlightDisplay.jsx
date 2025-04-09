@@ -22,59 +22,35 @@ export default function FlightDisplay() {
     const
      */
 
-    function createFlightDisplay() {
-        return (
-            <div>
-                <Card>
-                    <CardBody>
-                        <Typography className = "relative">
-                            Flight Number
-                        </Typography>
-                        <div className="flex gap-5 ">
-                            <div>
-                                <div className="flex gap-2 ">
-                                    <Typography>
-                                        Departure Time
-                                    </Typography>
-                                    <ArrowRightIcon className="w-5 h-5" />
-                                    <Typography>
-                                        Arrival Time
-                                    </Typography>
-                                </div>
-                                <div className="flex gap-6">
-                                    <Typography id="DepartureTimeValue">
-                                        Departure Time
-                                    </Typography>
-                                    <Typography id="ArrivalTimeValue">
-                                        Arrival Time
-                                    </Typography>
-                                </div>
-                            </div>
-                            <div>
-                                <Typography>
-                                    Layover Number
-                                </Typography>
-                                <Button>
-                                    View Layover Info
-                                </Button>
-                            </div>
-
-                            <Button className = "block" id="full card size button">
-                                Flight Submit
-                            </Button>
-                        </div>
-                    </CardBody>
-                </Card>
-            </div>
-        )
-    }
-
     return (
-        <section className="box-border flex relative">
-            <SortSideBar />
-            <div className="m-auto">
-                <div id="mt-8">
+        <section className=" flex relative h-full mx-40">
+            <aside className="sticky mt-8">
+                <SortSideBar />
+            </aside>
+            <div className="mt-8 px-10 w-full ">
+                <div classname = "m-auto" id="">
                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard />
+
+                    <FlightCard />
+                    <FlightCard />
+                    <FlightCard /><FlightCard />
+                    <FlightCard />
+
+
+
+
+
+
+
+
+
+
                 </div>
             </div>
         </section>
