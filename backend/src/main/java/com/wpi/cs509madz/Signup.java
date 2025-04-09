@@ -2,7 +2,18 @@ package com.wpi.cs509madz;
 
 import java.sql.SQLException;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.SecureRandom;
+import java.util.Base64;
+
 public class Signup extends Authenticate implements IAuthenticate {
+
+    //How many hashings are done
+    private static final int ITERATIONS = 65536;
+
+    //How long the resulting hash will be
+    private static final int KEY_LENGTH = 256;
 
     public Signup(String username, String password, DatabaseManager user_db) {
 
@@ -41,10 +52,8 @@ public class Signup extends Authenticate implements IAuthenticate {
         }
     }
 
-    // Method to validate the password
     private boolean validPassword(String password) {
 
-        // Password validation logic, e.g., length, special characters, etc.
         if (password.length() < 8) {
 
             return false; // Password too short

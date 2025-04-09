@@ -35,4 +35,14 @@ public abstract class Authenticate implements IAuthenticate {
 
     @Override
     public abstract void sendRequest();
+
+    public String getUsername() {
+
+        return username;
+    }
+
+    public String getPassword() {
+
+        return password;
+    }
 }
