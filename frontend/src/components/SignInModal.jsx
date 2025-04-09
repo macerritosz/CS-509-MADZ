@@ -5,7 +5,7 @@ export function SignInModal(props) {
     const [isSignUp, setIsSignUp] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    /* Database Pass: zvt*BGW5qeu2gak*rdx */
+   
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
