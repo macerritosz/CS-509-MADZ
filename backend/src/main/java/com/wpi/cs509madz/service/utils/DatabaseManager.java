@@ -1,4 +1,4 @@
-package com.wpi.cs509madz;
+package com.wpi.cs509madz.service.utils;
 
 //This imports necessary SQL classes, specifically the Connection class, that allows for Java
 //to connect with MySQL databases

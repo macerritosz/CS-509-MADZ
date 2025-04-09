@@ -1,4 +1,6 @@
-package com.wpi.cs509madz;
+package com.wpi.cs509madz.service.authenticateService;
+
+import com.wpi.cs509madz.service.utils.DatabaseManager;
 
 public class Logout extends Authenticate implements IAuthenticate {
 

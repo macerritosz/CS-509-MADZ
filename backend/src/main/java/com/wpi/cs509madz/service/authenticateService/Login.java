@@ -1,9 +1,6 @@
-package com.wpi.cs509madz;
+package com.wpi.cs509madz.service.authenticateService;
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-import java.sql.SQLException;
+import com.wpi.cs509madz.service.utils.DatabaseManager;
 
 public class Login extends Authenticate implements IAuthenticate {
 

@@ -1,5 +1,7 @@
-package com.wpi.cs509madz;
+package com.wpi.cs509madz.controller;
 
+import com.wpi.cs509madz.service.authenticateService.Authenticate;
+import com.wpi.cs509madz.service.utils.DatabaseManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;

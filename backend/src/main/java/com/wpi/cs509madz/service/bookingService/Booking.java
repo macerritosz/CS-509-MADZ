@@ -1,7 +1,8 @@
-package com.wpi.cs509madz;
+package com.wpi.cs509madz.service.bookingService;
+
+import com.wpi.cs509madz.service.utils.DateTime;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Booking implements IBooking {
     private String flightNumber;
