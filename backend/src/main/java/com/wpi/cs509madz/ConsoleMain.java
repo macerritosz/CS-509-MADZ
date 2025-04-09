@@ -10,7 +10,7 @@ public class ConsoleMain {
 
         //The following string variables are then initialized, as this is the information
         //that will be provided to the Database Manager object in order to connect to MySQL
-        String db_url = "jdbc:mysql://localhost:3307/user_db";
+        String db_url = "jdbc:mysql://localhost:3307/users_db";
         String db_user = "root";
         String db_password = "Joyful#83900";
 
