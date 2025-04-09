@@ -1,4 +1,4 @@
-package com.wpi.cs509madz;
+package com.wpi.cs509madz.service.authenticateService;
 
 public interface ILogin {
 

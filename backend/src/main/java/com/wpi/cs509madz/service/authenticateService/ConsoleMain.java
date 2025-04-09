@@ -1,8 +1,8 @@
-package com.wpi.cs509madz;
+package com.wpi.cs509madz.service.authenticateService;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import org.springframework.boot.SpringApplication;
+import com.wpi.cs509madz.service.utils.DatabaseManager;
 
 public class ConsoleMain {
 

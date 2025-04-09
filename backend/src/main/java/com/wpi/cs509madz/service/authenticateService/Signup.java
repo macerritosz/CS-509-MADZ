@@ -1,11 +1,8 @@
-package com.wpi.cs509madz;
+package com.wpi.cs509madz.service.authenticateService;
+
+import com.wpi.cs509madz.service.utils.DatabaseManager;
 
 import java.sql.SQLException;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.SecureRandom;
-import java.util.Base64;
 
 public class Signup extends Authenticate implements IAuthenticate {
 
