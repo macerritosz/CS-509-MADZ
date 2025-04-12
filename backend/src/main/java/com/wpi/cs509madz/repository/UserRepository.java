@@ -1,5 +1,8 @@
 package com.wpi.cs509madz.repository;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
 import com.wpi.cs509madz.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,33 +15,44 @@ import java.util.List;
 @Repository
 public class UserRepository {
 
-
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcTemplate getJdbcTemplate(){
+
+    public JdbcTemplate getJdbcTemplate() {
+
         return jdbcTemplate;
     }
+
+
     @Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate){
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
     public void save(User user) {
+
         //pass the query string into the repository execute the user
         String sql = "INSERT INTO users (username, password) VALUES (?,?)";
         jdbcTemplate.update(sql, user.getUsername(), user.getPassword());
     }
 
+
     public int findUserByUsername(String username) {
+
         String sql = "select * from users where username = ?";
 
         RowMapper<User> rowMapper = new RowMapper<User>() {
+
             @Override
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+
                 User u = new User();
-                u.setId(rs.getInt("id"));
+                u.setId(rs.getInt("ID"));
                 u.setUsername(rs.getString("username"));
                 u.setPassword(rs.getString("password"));
+                u.setPassword(rs.getString("salt"));
 
                 return u;
             }
@@ -48,16 +62,30 @@ public class UserRepository {
         return user.size();
     }
 
+
+    public boolean doesIdExist(int id) {
+
+        String sql = "select * from users where id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+
+        return count != null && count > 0;
+
+    }
+
     public List<User> authenticateUser(String username, String password) {
+
         String sql = "select * from users where username = ? and password = ?";
 
         RowMapper<User> rowMapper = new RowMapper<User>() {
+
             @Override
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+
                 User u = new User();
-                u.setId(rs.getInt("id"));
+                u.setId(rs.getInt("ID"));
                 u.setUsername(rs.getString("username"));
                 u.setPassword(rs.getString("password"));
+                u.setPassword(rs.getString("salt"));
 
                 return u;
             }
