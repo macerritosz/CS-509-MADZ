@@ -1,8 +1,13 @@
 package com.wpi.cs509madz.service.authenticateService;
-import java.sql.SQLException;
-import java.util.Scanner;
 
 import com.wpi.cs509madz.service.utils.DatabaseManager;
+import com.wpi.cs509madz.repository.UserRepository; // ← Make sure this is the correct path
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import java.sql.SQLException;
+import java.util.Scanner;
 
 public class ConsoleMain {
 
@@ -14,49 +19,50 @@ public class ConsoleMain {
         String db_user = "root";
         String db_password = "Joyful#83900";
 
-        try {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setUrl(db_url);
+        dataSource.setUsername(db_user);
+        dataSource.setPassword(db_password);
 
-            DatabaseManager db_manager = new DatabaseManager(db_url, db_user, db_password);
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-            Scanner scanner = new Scanner(System.in);
+        UserRepository userRepository = new UserRepository();
+        userRepository.setJdbcTemplate(jdbcTemplate);
 
-            System.out.println("Hello, and welcome to the beta implementation of the Authenticate Class!");
-            System.out.println("What would you like to do?");
-            System.out.println("1. Log In");
-            System.out.println("2. Sign Up");
-            System.out.print("Type your response here: ");
+        DatabaseManager db_manager = new DatabaseManager(userRepository);
 
-            int choice =scanner.nextInt();
-            scanner.nextLine();
+        Scanner scanner = new Scanner(System.in);
 
-            if (choice == 1) {
+        System.out.println("Hello, and welcome to the beta implementation of the Authenticate Class!");
+        System.out.println("What would you like to do?");
+        System.out.println("1. Log In");
+        System.out.println("2. Sign Up");
+        System.out.print("Type your response here: ");
 
-                System.out.print("Enter your username: ");
-                String login_username = scanner.nextLine();
+        int choice =scanner.nextInt();
+        scanner.nextLine();
 
-                System.out.print("Enter your password: ");
-                String login_password = scanner.nextLine();
+        if (choice == 1) {
 
-                Login login = new Login(login_username, login_password, db_manager);
-                login.sendRequest();
-            }
-            if (choice == 2) {
+            System.out.print("Enter your username: ");
+            String login_username = scanner.nextLine();
 
-                System.out.print("Enter your username: ");
-                String register_username = scanner.nextLine();
+            System.out.print("Enter your password: ");
+            String login_password = scanner.nextLine();
 
-                System.out.print("Enter your password: (Must be more than 8 characters, feature an uppercase letter, number, and special character): ");
-                String register_password = scanner.nextLine();
-
-                Signup signup = new Signup(register_username, register_password, db_manager);
-                signup.sendRequest();
-            }
+            Login login = new Login(login_username, login_password, db_manager);
+            login.sendRequest();
         }
-        //In the event of an SQLException, the error is caught:
-        catch (SQLException e) {
+        if (choice == 2) {
 
-            //The details of the error are then printed to the terminal via the getMessage() function
-            System.out.println(e.getMessage());
+            System.out.print("Enter your username: ");
+            String register_username = scanner.nextLine();
+
+            System.out.print("Enter your password: (Must be more than 8 characters, feature an uppercase letter, number, and special character): ");
+            String register_password = scanner.nextLine();
+
+            Signup signup = new Signup(register_username, register_password, db_manager);
+            signup.sendRequest();
         }
     }
 }
