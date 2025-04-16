@@ -11,17 +11,17 @@ import java.util.List;
 @Repository
 public class SouthwestsRepository {
 
-    private JdbcTemplate jdbcTemplate;
+    private static JdbcTemplate jdbcTemplate;
 
     public JdbcTemplate getJdbcTemplate(){
         return jdbcTemplate;
     }
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate = jdbcTemplate;
+        SouthwestsRepository.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Flight> findAll() {
+    public static List<Flight> findAll() {
         String sql = "select * from southwests";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Flight.class));
     }
