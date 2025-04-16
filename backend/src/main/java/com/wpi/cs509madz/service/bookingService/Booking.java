@@ -11,18 +11,8 @@ public class Booking implements IBooking {
     private DateTime arrivalDate;
     private String arrivalLocation;
 
-    public Booking(String departureLocation, String arrivalLocation) {
-        this.departureLocation = departureLocation;
-        this.arrivalLocation = arrivalLocation;
-    }
-
-    public Booking(DateTime departureDate, String departureLocation, String arrivalLocation) {
+    public Booking(DateTime departureDate, String departureLocation, DateTime arrivalDate, String arrivalLocation) {
         this.departureDate = departureDate;
-        this.departureLocation = departureLocation;
-        this.arrivalLocation = arrivalLocation;
-    }
-
-    public Booking(String departureLocation, DateTime arrivalDate, String arrivalLocation) {
         this.departureLocation = departureLocation;
         this.arrivalDate = arrivalDate;
         this.arrivalLocation = arrivalLocation;
@@ -45,13 +35,6 @@ public class Booking implements IBooking {
 
     @Override
     public ArrayList<ArrayList<IBooking>> calculateLayoverOptions() {
-        if (arrivalDate == null) {
-            // only care about the day/time the leave
-        } else if (departureDate == null) {
-            // only care about the day/time they arrive
-        } else {
-            // don't care the day/time they arrive/leave
-        }
 
         // same logic as testBooking but using the database directly to get information rather than something passed around
         return null;
