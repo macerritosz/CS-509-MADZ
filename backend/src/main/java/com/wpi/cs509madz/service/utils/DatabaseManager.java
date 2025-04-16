@@ -4,6 +4,8 @@ package com.wpi.cs509madz.service.utils;
 //to connect with MySQL databases
 import com.wpi.cs509madz.repository.UserRepository;
 import com.wpi.cs509madz.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 
@@ -15,6 +17,7 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+@Repository
 public class DatabaseManager {
 
     //How many hashings are done
@@ -28,6 +31,7 @@ public class DatabaseManager {
 
     //This is the constructor for the DatabaseManager class. It throws an exception in the event
     //that a connection cannot be established or the incorrect username or password were provided
+    @Autowired
     public DatabaseManager(UserRepository user_repository) {
 
         //The provided url, username, and password are used on a class called DriverManager, which

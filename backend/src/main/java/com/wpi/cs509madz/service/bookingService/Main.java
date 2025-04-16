@@ -43,9 +43,9 @@ public class Main {
 
         System.out.println();
 
-        TestBooking test = new TestBooking(database,
-                new DateTime("2022-12-26"), "Salt Lake City (SLC)",
-                new DateTime("2023-12-27"), "Sioux Falls (FSD)");
-        test.calculateLayoverOptions();
+//        TestBooking test = new TestBooking(database,
+//                new DateTime("2022-12-26"), "Salt Lake City (SLC)",
+//                new DateTime("2023-12-27"), "Sioux Falls (FSD)");
+//        test.calculateLayoverOptions();
     }
 }
