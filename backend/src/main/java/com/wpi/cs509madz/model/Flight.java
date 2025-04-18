@@ -19,8 +19,55 @@ public class Flight {
 
     private String flightNumber;
 
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDepartDateTime(String departDateTime) {
+        this.departDateTime = departDateTime;
+    }
+
+    public void setArriveDateTime(String arriveDateTime) {
+        this.arriveDateTime = arriveDateTime;
+    }
+
+    public void setDepartAirport(String departAirport) {
+        this.departAirport = departAirport;
+    }
+
+    public void setArriveAirport(String arriveAirport) {
+        this.arriveAirport = arriveAirport;
+    }
+
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
+    }
+
+    public String getDepartDateTime() {
+        return departDateTime;
+    }
+
+    public String getArriveDateTime() {
+        return arriveDateTime;
+    }
+
+    public String getDepartAirport() {
+        return departAirport;
+    }
+
+    public String getArriveAirport() {
+        return arriveAirport;
+    }
+
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
+    // when formatting, add a t to the json for separation
     @Override
     public String toString() {
-        return id + " " + departDateTime + " " + arriveDateTime + " " + departAirport + " " + arriveAirport + " " + flightNumber;
+        return flightNumber + " " + departDateTime + " " + arriveDateTime + " " + departAirport + " " + arriveAirport + " " + flightNumber;
     }
 }

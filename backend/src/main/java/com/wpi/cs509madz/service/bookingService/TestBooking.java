@@ -1,12 +1,14 @@
 package com.wpi.cs509madz.service.bookingService;
 
+import com.wpi.cs509madz.model.Flight;
 import com.wpi.cs509madz.service.utils.DateTime;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class TestBooking implements IBooking {
-    private ArrayList<TestBooking> database; // only for testing
+    private List<Flight> flightDatabase; // only for testing
     private String flightNumber;
     private DateTime departureDate;
     private String departureLocation;
@@ -14,8 +16,8 @@ public class TestBooking implements IBooking {
     private String arrivalLocation;
 
     // currently used for testing, won't actually have to pass in database
-    public TestBooking(ArrayList<TestBooking> database, DateTime departureDate, String departureLocation, DateTime arrivalDate, String arrivalLocation) {
-        this.database = database;
+    public TestBooking(List<Flight> flightDatabase, DateTime departureDate, String departureLocation, DateTime arrivalDate, String arrivalLocation) {
+        this.flightDatabase = flightDatabase;
         this.departureDate = departureDate;
         this.departureLocation = departureLocation;
         this.arrivalDate = arrivalDate;
@@ -24,15 +26,6 @@ public class TestBooking implements IBooking {
 
     public TestBooking(String departureLocation, String arrivalLocation) {
         this.departureLocation = departureLocation;
-        this.arrivalLocation = arrivalLocation;
-    }
-
-    public TestBooking(ArrayList<TestBooking> database, String flightNumber, DateTime departureDate, String departureLocation, DateTime arrivalDate, String arrivalLocation) {
-        this.database = database;
-        this.flightNumber = flightNumber;
-        this.departureDate = departureDate;
-        this.departureLocation = departureLocation;
-        this.arrivalDate = arrivalDate;
         this.arrivalLocation = arrivalLocation;
     }
 
@@ -69,6 +62,14 @@ public class TestBooking implements IBooking {
 
     @Override
     public ArrayList<ArrayList<IBooking>> calculateLayoverOptions() {
+        ArrayList<TestBooking> database = new ArrayList<>();
+        for (int i = 0; i < flightDatabase.size(); i++) {
+            Flight cur = flightDatabase.get(i);
+            database.add(
+                    new TestBooking(new DateTime(cur.getDepartDateTime()), cur.getDepartAirport(), new DateTime(cur.getArriveDateTime()), cur.getArriveAirport())
+            );
+        }
+
         ArrayList<ArrayList<IBooking>> options = new ArrayList<>();
         ArrayList<ArrayList<IBooking>> finalOptions = new ArrayList<>();
         System.out.println(departureLocation + " -> " + arrivalLocation);
@@ -112,7 +113,6 @@ public class TestBooking implements IBooking {
         for (ArrayList<IBooking> finalOption : finalOptions) {
             System.out.println(finalOption);
         }
-
 
         // check that none of the flights overlap but that if the flights are directly after one another (so a layover flight) that it doesnt remove that one
         return finalOptions;

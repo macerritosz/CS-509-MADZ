@@ -20,32 +20,25 @@ public class Signup extends Authenticate implements IAuthenticate {
     @Override
     public void sendRequest() {
 
-        try {
+        if (!validPassword(password)) {
 
-            if (!validPassword(password)) {
-
-                System.out.println("Password does not meet the required criteria.");
-                return;
-            }
-
-            int register_result = user_db.registerUser(username, password);
-
-            if (register_result == 0) {
-
-                System.out.println("Username already taken. Please choose another.");
-            }
-            else if (register_result == -1) {
-
-                System.out.println("An error has occurred. Please try again.");
-            }
-            else {
-
-                System.out.println("Signup successful! You can now log in.");
-            }
+            System.out.println("Password does not meet the required criteria.");
+            return;
         }
-        catch (SQLException error) {
+
+        int register_result = user_db.registerUser(username, password);
+
+        if (register_result == 0) {
+
+            System.out.println("Username already taken. Please choose another.");
+        }
+        else if (register_result == -1) {
 
             System.out.println("An error has occurred. Please try again.");
+        }
+        else {
+
+            System.out.println("Signup successful! You can now log in.");
         }
     }
 

@@ -2,15 +2,22 @@ package com.wpi.cs509madz.service.utils;
 
 //This imports necessary SQL classes, specifically the Connection class, that allows for Java
 //to connect with MySQL databases
+import com.wpi.cs509madz.repository.UserRepository;
+import com.wpi.cs509madz.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import java.sql.*;
 
 import java.util.Random;
+import java.util.List;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+@Repository
 public class DatabaseManager {
 
     //How many hashings are done
@@ -19,34 +26,30 @@ public class DatabaseManager {
     //How long the resulting hash will be
     private static final int KEY_LENGTH = 256;
 
-    //The Connection object is initialized as an attribute of this class. It will be used to
-    //run MySQL queries
-    private final Connection db_connection;
+    //COMMENT CODE
+    private final UserRepository user_repository;
 
     //This is the constructor for the DatabaseManager class. It throws an exception in the event
     //that a connection cannot be established or the incorrect username or password were provided
-    public DatabaseManager(String url, String user, String password) throws SQLException {
+    @Autowired
+    public DatabaseManager(UserRepository user_repository) {
 
         //The provided url, username, and password are used on a class called DriverManager, which
         //is also provided by the imported java.sql package. The static getConnection() function
         //returns a connection object that is swtored in the db_connection attribute already
         //initialized
-        this.db_connection = DriverManager.getConnection(url, user, password);
+        this.user_repository = user_repository;
     }
 
 
-    public int registerUser(String username, String password) throws SQLException {
+    public int registerUser(String username, String password) {
 
-        try (PreparedStatement check = db_connection.prepareStatement("SELECT COUNT(*) FROM users WHERE username = ?")) {
+        int result = user_repository.findUserByUsername(username);
 
-            check.setString(1, username);
-            ResultSet result = check.executeQuery();
+        if (result > 0) {
 
-            if (result.next() && result.getInt(1) > 0) {
-
-                //Username already taken, return 0
-                return 0;
-            }
+            //Username already taken, return 0
+            return 0;
         }
 
         //Generate a salt
@@ -54,75 +57,48 @@ public class DatabaseManager {
 
         //Hash the password with the salt
         String hashed_password = null;
+
         try {
 
             hashed_password = hashPassword(password, salt);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
             System.out.println(e.getMessage());
             return -1;
         }
 
-        try (PreparedStatement insert = db_connection.prepareStatement(
-                "INSERT INTO users (ID, username, password, salt) VALUES (?, ?, ?, ?)")) {
+        User user = new User();
+        user.setId(createID(user_repository));
+        user.setUsername(username);
+        user.setPassword(hashed_password);
+        user.setSalt(salt);
 
-            insert.setInt(1, DatabaseManager.createID());
-            insert.setString(2, username);
-            insert.setString(3, hashed_password);
-            insert.setBytes(4, salt);
+        user_repository.save(user);
 
-            int rows_affected = insert.executeUpdate();
-
-            if (rows_affected > 0) {
-
-                //User registration is a success, return 1
-                return 1;
-            }
-        }
-
-        //An error occurred, return -1
-        return -1;
+        return 0;
     }
 
 
-    public boolean searchUser(String username, String password)  throws SQLException {
+    public boolean searchUser(String username, String password) throws SQLException {
 
-        try (PreparedStatement query = db_connection.prepareStatement("SELECT password, salt FROM users WHERE username = ?")) {
-
-            query.setString(1, username);
-
-            ResultSet result = query.executeQuery();
-
-            if (result.next()) {
-
-                String storedHash = result.getString("password");
-                byte[] storedSalt = result.getBytes("salt");
-
-                try {
-
-                    // Verify the entered password using the stored hash and salt
-                    return verifyPassword(password, storedHash, storedSalt);
-                }
-                catch (Exception e) {
-
-                    e.printStackTrace();  // Handle the exception properly
-                }
-            }
-        }
-        catch (SQLException error) {
-
-            error.printStackTrace();
-        }
-
-        return false;
+        // You’d compare hashed passwords here in a real implementation
+        List<User> users = user_repository.authenticateUser(username, password);
+        return !(users).isEmpty();
     }
 
-
-    static public int createID() {
+    static public int createID(UserRepository user_repository) {
 
         Random random = new Random();
-        return 100_000_000 + random.nextInt(900_000_000); // Ensures a 9-digit number
+
+        int id = 0;
+
+        do {
+
+            id = 100_000_000 + random.nextInt(900_000_000); // Ensures a 9-digit number
+        }
+        while (user_repository.doesIdExist(id));
+
+        return id;
     }
 
 
