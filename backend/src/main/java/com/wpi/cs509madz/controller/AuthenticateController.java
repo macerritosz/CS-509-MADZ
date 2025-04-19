@@ -5,7 +5,6 @@ import com.wpi.cs509madz.service.utils.DatabaseManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import java.sql.SQLException;
 
 @RestController
 public class AuthenticateController {
@@ -30,6 +29,10 @@ public class AuthenticateController {
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Username already taken.\"}");
         }
+        else if (result == 2) {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Password does not meet requirements.\"}");
+        }
         else {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Database error.\"}");
@@ -52,9 +55,8 @@ public class AuthenticateController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid username or password.\"}");
             }
         }
-        catch (SQLException e) {
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Database error.\"}");
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": " + e.getMessage());
         }
     }
 
