@@ -7,8 +7,6 @@ import com.wpi.cs509madz.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
-
 import java.util.Random;
 import java.util.List;
 
@@ -44,12 +42,18 @@ public class DatabaseManager {
 
     public int registerUser(String username, String password) {
 
+        if (!validPassword(password)) {
+
+            //Invalid password, return 2
+            return 2;
+        }
+
         int result = user_repository.findUserByUsername(username);
 
-        if (result > 0) {
+        if (result == 1) {
 
-            //Username already taken, return 0
-            return 0;
+            //Username already taken, return 1
+            return 1;
         }
 
         //Generate a salt
@@ -79,11 +83,19 @@ public class DatabaseManager {
     }
 
 
-    public boolean searchUser(String username, String password) throws SQLException {
+    public boolean searchUser(String username, String password) throws Exception {
 
         // You’d compare hashed passwords here in a real implementation
-        List<User> users = user_repository.authenticateUser(username, password);
-        return !(users).isEmpty();
+        List<User> user = user_repository.findUserByUsernameUser(username);
+
+        if (!(user.isEmpty())) {
+
+            return verifyPassword(password, user.get(0).getPassword(), user.get(0).getSalt());
+        }
+        else {
+
+            return false;
+        }
     }
 
     static public int createID(UserRepository user_repository) {
@@ -138,5 +150,27 @@ public class DatabaseManager {
 
         // Compare the newly created hash with the stored hash
         return enteredHash.equals(storedHash);
+    }
+
+
+    private boolean validPassword(String password) {
+
+        if (password.length() < 8) {
+
+            return false; // Password too short
+        }
+        if (!password.matches(".*[A-Z].*")) {
+
+            return false; // Password must contain at least one uppercase letter
+        }
+        if (!password.matches(".*[0-9].*")) {
+
+            return false; // Password must contain at least one digit
+        }
+        if (!password.matches(".*[!@#$%^&*()].*")) {
+
+            return false; // Password must contain at least one special character
+        }
+        return true; // Password is valid
     }
 }

@@ -1,10 +1,10 @@
 package com.wpi.cs509madz.service.authenticateService;
 
-import java.sql.SQLException;
-
 import com.wpi.cs509madz.service.utils.DatabaseManager;
 
-public abstract class Authenticate implements IAuthenticate {
+
+
+public class Authenticate {
 
     protected String username;
     protected String password;
@@ -18,23 +18,6 @@ public abstract class Authenticate implements IAuthenticate {
         this.user_db = user_db;
     }
 
-    @Override
-    public boolean validData() {
-
-        try {
-
-            return user_db.searchUser(username, password);
-        }
-        catch (SQLException error) {
-
-            error.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public abstract void sendRequest();
-
     public String getUsername() {
 
         return username;
@@ -44,4 +27,16 @@ public abstract class Authenticate implements IAuthenticate {
 
         return password;
     }
+
+    public void setUsername(String username) {
+
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+
+        this.password = password;
+    }
+
+
 }
