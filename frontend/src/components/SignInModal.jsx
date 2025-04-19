@@ -18,9 +18,10 @@ export function SignInModal(props) {
         try {
             console.log(username, password);
             const payload = JSON.stringify({"username": username, "password": password});
-            const response = await fetch("/signIn", {
+            const response = await fetch("/api/signIn", {
                 method: "POST",
-                body: payload
+                body: payload,
+                headers:{"Content-Type": "application/json"}
             })
             if(response.ok) {
                 return await response.json();
@@ -33,9 +34,10 @@ export function SignInModal(props) {
         try {
             console.log(username, password);
             const payload = JSON.stringify({"username": username, "password": password});
-            const response = await fetch("/signUp", {
+            const response = await fetch("/api/signUp", {
                 method: "POST",
-                body: payload
+                body: payload,
+                headers:{"Content-Type": "application/json"}
             })
             if(response.ok) {
                 return await response.json();

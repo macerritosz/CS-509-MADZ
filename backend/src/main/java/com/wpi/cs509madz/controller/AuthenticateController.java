@@ -17,7 +17,7 @@ public class AuthenticateController {
         this.database_manager = database_manager;
     }
 
-    @PostMapping(value =  {"signUp"})
+    @PostMapping(value =  {"/api/signUp"})
     public ResponseEntity<?> signUp(@RequestBody Authenticate request) {
 
         int result = database_manager.registerUser(request.getUsername(), request.getPassword());
@@ -37,7 +37,7 @@ public class AuthenticateController {
     }
 
     // Handle the sign-in request
-    @PostMapping("/signIn")
+    @PostMapping("/api/signIn")
     public ResponseEntity<?> signIn(@RequestBody Authenticate request) {
 
         try {
