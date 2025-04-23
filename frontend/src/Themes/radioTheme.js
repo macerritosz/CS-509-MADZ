@@ -1,7 +1,6 @@
 export const radioTheme = {
     radio: {
-        defaultProps: {
-        },
+        defaultProps: {},
         valid: {
             colors: [
                 "primary",
@@ -15,10 +14,8 @@ export const radioTheme = {
                     display: "inline-flex",
                     alignItems: "items-center",
                 },
-                container: {
-                },
-                input: {
-                },
+                container: {},
+                input: {},
                 label: {
                     color: "text-gray-700",
                     fontWeight: "font-light",
@@ -32,8 +29,7 @@ export const radioTheme = {
                         primary: "text-accent",
                     }
                 },
-                disabled: {
-                },
+                disabled: {},
             },
             colors: {
                 primary: {

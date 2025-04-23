@@ -1,7 +1,6 @@
 export const checkboxTheme = {
     checkbox: {
-        defaultProps: {
-        },
+        defaultProps: {},
         valid: {
             colors: [
                 "primary",
@@ -15,10 +14,9 @@ export const checkboxTheme = {
                     display: "inline-flex",
                     alignItems: "items-center",
                 },
-                container: {
-                },
+                container: {},
                 input: {
-                    black:"text-black"
+                    black: "text-black"
                 },
                 label: {
                     color: "text-gray-700",
@@ -33,8 +31,7 @@ export const checkboxTheme = {
                         primary: "text-accent",
                     }
                 },
-                disabled: {
-                },
+                disabled: {},
             },
             colors: {
                 primary: {

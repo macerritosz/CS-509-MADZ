@@ -3,19 +3,18 @@ import Calendar from "../components/Calendar.jsx";
 import {PaperAirplaneIcon} from "@heroicons/react/16/solid/index.js";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {useCookies} from "react-cookie"
 
 
 function Homepage() {
     const navigate = useNavigate();
     /* User input states */
     const [formData, setFormData] = useState({
-        departAirport : "",
-        arrivalAirport : "",
-        departureDate : "",
-        returnDate : "",
-        isSameDay : false,
-        isDirect : false,
+        departAirport: "",
+        arrivalAirport: "",
+        departureDate: "",
+        returnDate: "",
+        isSameDay: false,
+        isDirect: false,
     })
 
     const [isOneway, setOneway] = useState(true);
@@ -42,29 +41,30 @@ function Homepage() {
      * @param e
      */
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            appendSearchType();
-            const jsonFormData = JSON.stringify(formData);
-            const response = await fetch("/submit", {
-                method: "POST",
-                headers: {
-                    ContentType: "application/json",
-                },
-                body: jsonFormData,
-            })
-            if (response.ok) {
-                navigate('/Flights');
-            }
-        } catch (error) {
-            console.log( "Form Submission Error: ", error);
-        }
+        navigate('/Flights');
+        // e.preventDefault();
+        // try {
+        //     appendSearchType();
+        //     const jsonFormData = JSON.stringify(formData);
+        //     const response = await fetch("/submit", {
+        //         method: "POST",
+        //         headers: {
+        //             ContentType: "application/json",
+        //         },
+        //         body: jsonFormData,
+        //     })
+        //     if (response.ok) {
+        //         navigate('/Flights');
+        //     }
+        // } catch (error) {
+        //     console.log( "Form Submission Error: ", error);
+        // }
     }
 
     const handleChange = (e) => {
-        if(e.target.name === "isSameDay" || e.target.name === "isDirect") {
+        if (e.target.name === "isSameDay" || e.target.name === "isDirect") {
             setFormData({...formData, [e.target.name]: e.target.checked});
-        } else  {
+        } else {
             setFormData({...formData, [e.target.name]: e.target.value});
         }
     }
@@ -76,7 +76,6 @@ function Homepage() {
     useEffect(() => {
         console.log(formData)
     }, [formData])
-
 
 
     return (
@@ -105,8 +104,10 @@ function Homepage() {
                                         />
                                     </div>
                                     <div>
-                                        <Checkbox label="Same-Day Flights Only" color="accent" name="isSameDay" onChange={handleChange}/>
-                                        <Checkbox label="Direct Flights Only" color="accent" name="isDirect" onChange={handleChange}/>
+                                        <Checkbox label="Same-Day Flights Only" color="accent" name="isSameDay"
+                                                  onChange={handleChange}/>
+                                        <Checkbox label="Direct Flights Only" color="accent" name="isDirect"
+                                                  onChange={handleChange}/>
                                     </div>
                                 </div>
                                 <div className="flex gap-2 mt-2 justify-evenly">
@@ -122,7 +123,7 @@ function Homepage() {
                                     </div>
                                     <div className="w-full max-w-[16rem]">
                                         <Input label="To"
-                                               name = "arrivalAirport"
+                                               name="arrivalAirport"
                                                className="text-text"
                                                size="lg"
                                                onChange={(e) => {
@@ -131,10 +132,12 @@ function Homepage() {
                                         />
                                     </div>
                                     <div className="w-full max-w-[16rem]">
-                                        <Calendar type={"departure"} isDisabled={false} handleChange={(e) => handleChange(e)} />
+                                        <Calendar type={"departure"} isDisabled={false}
+                                                  handleChange={(e) => handleChange(e)}/>
                                     </div>
                                     <div className="w-full max-w-[16rem]">
-                                        <Calendar type={"return"} isDisabled={isOneway} handleChange={(e) => handleChange(e)} />
+                                        <Calendar type={"return"} isDisabled={isOneway}
+                                                  handleChange={(e) => handleChange(e)}/>
                                     </div>
 
                                     <Button type="submit" className="!bg-accent flex items-center gap-1 px-4 py-2">
@@ -149,10 +152,11 @@ function Homepage() {
                     </Card>
                 </div>
                 <div id="madz-main-carousel" className=" min-h-[600px] mb-8">
-                    <Carousel transition={{ duration: 2 }} autoplay={true} autoplayDelay={7500} loop={true} className=" w-full rounded-xl">
+                    <Carousel transition={{duration: 2}} autoplay={true} autoplayDelay={7500} loop={true}
+                              className=" w-full rounded-xl">
                         {carouselImages.map((image, index) => (
                             <div key={index}>
-                                <img src={image} alt={`slide-${index}`} className="w-full h-[600px] object-cover" />
+                                <img src={image} alt={`slide-${index}`} className="w-full h-[600px] object-cover"/>
                             </div>
                         ))}
                     </Carousel>

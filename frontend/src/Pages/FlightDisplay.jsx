@@ -1,12 +1,51 @@
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import SortSideBar from "../components/SortSideBar.jsx";
-import {Button, Card, CardBody, Typography} from "@material-tailwind/react";
-import { ArrowRightIcon} from "@heroicons/react/16/solid/index.js";
 import FlightCard from "../components/FlightCard.jsx";
-import Loading from "../components/Loading.jsx";
 
 export default function FlightDisplay() {
     const [flightData, setFlightData] = useState(null);
+
+    const dummyFlightData = [
+        {
+            departureDateTime: "2025-04-12T08:30:00",
+            arrivalDateTime: "2025-04-12T12:15:00",
+            departAirport: "New York (JFK)",
+            arrivalAirport: "Los Angeles (LAX)",
+            layoverFlights: [],
+            flightNumber: "AA100"
+        },
+        {
+            departureDateTime: "2025-04-13T14:45:00",
+            arrivalDateTime: "2025-04-13T22:00:00",
+            departAirport: "ORD",
+            arrivalAirport: "San Francisco (SFO)",
+            layoverFlights: [
+                {
+                    departureDateTime: "2025-04-13T14:45:00",
+                    arrivalDateTime: "2025-04-13T17:15:00",
+                    departAirport: "ORD",
+                    arrivalAirport: "DEN",
+                    flightNumber: "UA300"
+                },
+                {
+                    departureDateTime: "2025-04-13T18:00:00",
+                    arrivalDateTime: "2025-04-13T22:00:00",
+                    departAirport: "DEN",
+                    arrivalAirport: "SFO",
+                    flightNumber: "UA450"
+                }
+            ],
+            flightNumber: "UA999"
+        },
+        {
+            departureDateTime: "2025-04-14T06:20:00",
+            arrivalDateTime: "2025-04-14T09:30:00",
+            departAirport: "ATL",
+            arrivalAirport: "MIA",
+            layoverFlights: [],
+            flightNumber: "DL404"
+        }
+    ];
 
     /**
      * On page Load:
@@ -15,11 +54,11 @@ export default function FlightDisplay() {
      * Access of session storage: an hastable to access for data
      */
     useEffect(() => {
-         setFlightData(parseData())
-    },[])
+        setFlightData(dummyFlightData)
+    }, [])
 
-    useEffect( () => {
-        if(flightData === null){
+    useEffect(() => {
+        if (flightData === null) {
             //response thats like error getting data, navigate to homepage and
         }
     }, [flightData])
@@ -30,8 +69,8 @@ export default function FlightDisplay() {
 
     const createFlightCards = (flights, key) => {
         return (
-            <div id={`flightCard-${key}`} className="p-2">
-                <FlightCard flightData={flights} />
+            <div key={key} className="p-2">
+                <FlightCard flightData={flights}/>
             </div>
         )
     }
@@ -39,12 +78,12 @@ export default function FlightDisplay() {
     return (
         <section className=" flex relative min-h-screen mx-40">
             <aside className="sticky top-0 mt-8">
-                <SortSideBar />
+                <SortSideBar/>
             </aside>
             <div className="mt-8 px-10 w-full ">
-                { flightData &&
+                {flightData &&
                     flightData.map((flight, index) => (
-                        createFlightCards(flight, index)
+                        createFlightCards(flight, `flightCard-${index}`)
                     ))
                 }
             </div>

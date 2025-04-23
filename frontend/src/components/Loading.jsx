@@ -1,7 +1,6 @@
-
 export default function Loading() {
     return (
-        <div >
+        <div>
             <div className={"svg-bounce w-[75px] h-[75px]"}>
                 <img src="/airplane-in-flight-thin-svgrepo-com.svg" alt="earth spin"/>
             </div>

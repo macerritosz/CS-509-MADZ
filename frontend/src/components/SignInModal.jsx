@@ -5,7 +5,7 @@ export function SignInModal(props) {
     const [isSignUp, setIsSignUp] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-   
+
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
@@ -21,15 +21,16 @@ export function SignInModal(props) {
             const response = await fetch("/api/signIn", {
                 method: "POST",
                 body: payload,
-                headers:{"Content-Type": "application/json"}
+                headers: {"Content-Type": "application/json"}
             })
-            if(response.ok) {
+            if (response.ok) {
                 return await response.json();
             }
         } catch (error) {
             console.error('Invalid Signin: ', error);
         }
     }
+
     async function signUp() {
         try {
             console.log(username, password);
@@ -37,9 +38,9 @@ export function SignInModal(props) {
             const response = await fetch("/api/signUp", {
                 method: "POST",
                 body: payload,
-                headers:{"Content-Type": "application/json"}
+                headers: {"Content-Type": "application/json"}
             })
-            if(response.ok) {
+            if (response.ok) {
                 return await response.json();
             }
         } catch (error) {
@@ -48,7 +49,7 @@ export function SignInModal(props) {
     }
 
     const handleSubmit = async () => {
-        if(isSignUp) {
+        if (isSignUp) {
             await signUp()
         } else {
             await signIn()
@@ -79,18 +80,19 @@ export function SignInModal(props) {
                         <Typography className="-mb-2" variant="h6">
                             Your Username
                         </Typography>
-                        <Input label="Username" size="lg" onChange={handleUsernameChange} value={username} />
+                        <Input label="Username" size="lg" onChange={handleUsernameChange} value={username}/>
                         <Typography className="-mb-2" variant="h6">
                             Your Password
                         </Typography>
-                        <Input label="Password" size="lg" type="password" onChange={handlePasswordChange} value={password} />
+                        <Input label="Password" size="lg" type="password" onChange={handlePasswordChange}
+                               value={password}/>
                         <div className="-ml-2.5 -mt-3">
                             <Checkbox label="Remember Me"/>
                         </div>
                     </CardBody>
                     <CardFooter className="pt-0">
                         <Button onClick={handleSubmit} fullWidth className="!bg-accent">
-                            Sign In
+                            {isSignUp ? "Sign Up" : "Sign In"}
                         </Button>
                         <Typography variant="small" className="mt-4 flex justify-center">
                             Don&apos;t have an account?
@@ -102,11 +104,12 @@ export function SignInModal(props) {
                                 className="ml-1 font-bold"
                                 onClick={() => setIsSignUp(!isSignUp)}
                             >
-                                Sign up
+                                {isSignUp ? "Sign Up" : "Sign In"}
                             </Typography>
                         </Typography>
                         <div className="mt-4 mb-4 text-center">
-                            <button className="py-2 p-4 bg-black text-white font-semibold border border-black rounded-md hover:bg-gray-900 hover:border-gray-900 cursor-pointer active:bg-gray-600">
+                            <button
+                                className="py-2 p-4 bg-black text-white font-semibold border border-black rounded-md hover:bg-gray-900 hover:border-gray-900 cursor-pointer active:bg-gray-600">
                               <span className="flex justify-center items-center gap-2">
                                   <img src="/github.svg" alt="GitHub" width="30" height="30"/>
                                   Continue with GitHub
@@ -114,7 +117,8 @@ export function SignInModal(props) {
                             </button>
                         </div>
                         <div className="mt-4 mb-4 text-center">
-                            <button className="py-2 p-4 bg-black text-white font-semibold border border-black rounded-md hover:bg-gray-900 hover:border-gray-900 cursor-pointer active:bg-gray-600">
+                            <button
+                                className="py-2 p-4 bg-black text-white font-semibold border border-black rounded-md hover:bg-gray-900 hover:border-gray-900 cursor-pointer active:bg-gray-600">
                               <span className="flex justify-center items-center gap-2">
                                 <img src="/google.svg" alt="Google" width="30" height="30"/>
                                 Continue with Google
