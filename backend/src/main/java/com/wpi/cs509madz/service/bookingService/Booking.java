@@ -64,8 +64,6 @@ public class Booking implements IBooking {
         Queue<List<IBooking>> options = new LinkedList<>();
         List<List<IBooking>> finalOptions = new ArrayList<>();
 
-        System.out.println(departureLocation + " -> " + arrivalLocation);
-
         for (Booking booking : curDatabase) {
             if (booking.getDepartureLocation().equals(departureLocation)) {
                 options.offer(List.of(booking));

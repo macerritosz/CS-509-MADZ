@@ -4,7 +4,6 @@ import com.wpi.cs509madz.model.Flight;
 import com.wpi.cs509madz.repository.DeltasRepository;
 import com.wpi.cs509madz.service.bookingService.Booking;
 import com.wpi.cs509madz.service.bookingService.IBooking;
-import com.wpi.cs509madz.service.bookingService.TestBooking;
 import com.wpi.cs509madz.service.utils.DateTime;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,6 +20,7 @@ public class Main {
         DeltasRepository deltasRepository = context.getBean(DeltasRepository.class);
         List<Flight> flightDatabase = deltasRepository.findAll();
 
+        System.out.println("Salt Lake City (SLC)" + " -> " + "Sioux Falls (FSD)");
         Booking test = new Booking(flightDatabase,
                 new DateTime("2022-12-26"), "Salt Lake City (SLC)",
                 new DateTime("2023-12-27"), "Sioux Falls (FSD)");
