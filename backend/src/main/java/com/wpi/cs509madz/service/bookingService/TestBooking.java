@@ -51,6 +51,11 @@ public class TestBooking implements IBooking {
     }
 
     @Override
+    public String getDepartureLocation() {
+        return departureLocation;
+    }
+
+    @Override
     public DateTime getArrivalDate() {
         return arrivalDate;
     }
@@ -61,17 +66,17 @@ public class TestBooking implements IBooking {
     }
 
     @Override
-    public ArrayList<ArrayList<IBooking>> calculateLayoverOptions() {
+    public List<List<IBooking>> calculateLayoverOptions() {
         ArrayList<TestBooking> database = new ArrayList<>();
         for (int i = 0; i < flightDatabase.size(); i++) {
             Flight cur = flightDatabase.get(i);
             database.add(
-                    new TestBooking(new DateTime(cur.getDepartDateTime()), cur.getDepartAirport(), new DateTime(cur.getArriveDateTime()), cur.getArriveAirport())
+                    new TestBooking(cur.getDepartDateTime(), cur.getDepartAirport(), cur.getArriveDateTime(), cur.getArriveAirport())
             );
         }
 
         ArrayList<ArrayList<IBooking>> options = new ArrayList<>();
-        ArrayList<ArrayList<IBooking>> finalOptions = new ArrayList<>();
+        List<List<IBooking>> finalOptions = new ArrayList<>();
         System.out.println(departureLocation + " -> " + arrivalLocation);
         for (TestBooking booking : database) {
             if (Objects.equals(booking.departureLocation, departureLocation) && booking.getDepartureDate().isBefore(booking.getArrivalDate())) {
@@ -84,8 +89,6 @@ public class TestBooking implements IBooking {
         while (!options.isEmpty()) {
             ArrayList<IBooking> cur = options.get(0);
             IBooking lastFlight = cur.get(cur.size() - 1);
-
-//            System.out.println(cur.size() + ", " + lastFlight + " " + cur);
 
             for (TestBooking booking : database) {
                 if (Objects.equals(lastFlight.getArrivalLocation(), booking.departureLocation)
@@ -110,7 +113,7 @@ public class TestBooking implements IBooking {
             options.remove(cur);
         }
 
-        for (ArrayList<IBooking> finalOption : finalOptions) {
+        for (List<IBooking> finalOption : finalOptions) {
             System.out.println(finalOption);
         }
 
