@@ -8,21 +8,6 @@ public class DateTime {
     private int min;
     private int sec;
 
-//    public DateTime(int year, int month, int day, int hour, int min, int sec) {
-//        this.year = year;
-//        this.month = month;
-//        this.day = day;
-//        this.hour = hour;
-//        this.min = min;
-//        this.sec = sec;
-//    }
-//
-//    public DateTime(int year, int month, int day) {
-//        this.year = year;
-//        this.month = month;
-//        this.day = day;
-//    }
-
     public DateTime(String date) {
         String[] split = date.split(" ");
 
@@ -31,10 +16,12 @@ public class DateTime {
         month = Integer.parseInt(newDate[1]);
         day = Integer.parseInt(newDate[2]);
 
-        String[] newTime = split[1].split(":");
-        hour = Integer.parseInt(newTime[0]);
-        min = Integer.parseInt(newTime[1]);
-        sec = Integer.parseInt(newTime[2]);
+        if (split.length != 1) {
+            String[] newTime = split[1].split(":");
+            hour = Integer.parseInt(newTime[0]);
+            min = Integer.parseInt(newTime[1]);
+            sec = Integer.parseInt(newTime[2]);
+        }
     }
 
     public boolean isBefore(DateTime date) {
@@ -57,11 +44,24 @@ public class DateTime {
     }
 
     public int getDifference(DateTime date) {
-        return (Math.abs(year - date.year) * 525600) +
-                (Math.abs(month - date.month) * 43800) +
-                (Math.abs(day - date.day) * 1440) +
-                (Math.abs(hour - date.hour) * 60) +
-                (Math.abs(min - date.min));
+        int diff = 0;
+
+        int yearDiff = this.year - date.year;
+        diff += yearDiff * 365 * 24 * 60;
+
+        int monthDiff = this.month - date.month;
+        diff += monthDiff * 30 * 24 * 60;
+
+        int dayDiff = this.day - date.day;
+        diff += dayDiff * 24 * 60;
+
+        int hourDiff = this.hour - date.hour;
+        diff += hourDiff * 60;
+
+        int minDiff = this.min - date.min;
+        diff += minDiff;
+
+        return Math.abs(diff);
     }
 
     @Override
