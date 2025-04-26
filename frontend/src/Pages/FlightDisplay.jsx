@@ -69,23 +69,28 @@ export default function FlightDisplay() {
 
     const createFlightCards = (flights, key) => {
         return (
-            <div key={key} className="p-2">
+            <div key={key} className="p-1">
                 <FlightCard flightData={flights}/>
             </div>
         )
     }
 
     return (
-        <section className=" flex relative min-h-screen mx-40">
-            <aside className="sticky top-0 mt-8">
-                <SortSideBar/>
-            </aside>
-            <div className="mt-8 px-10 w-full ">
-                {flightData &&
-                    flightData.map((flight, index) => (
-                        createFlightCards(flight, `flightCard-${index}`)
-                    ))
-                }
+        <section className="relative min-h-screen">
+            <div className="w-full mx-auto">
+                <div className="flex max-w-[78rem] m-auto p-4 align-top">
+                    <aside className="sticky top-0 mt-8">
+                        <SortSideBar/>
+                    </aside>
+                    <div className="flex-col mt-8 w-full">
+                        {flightData &&
+                            flightData.map((flight, index) => (
+                                createFlightCards(flight, `flightCard-${index}`)
+                            ))
+                        }
+                    </div>
+                </div>
+
             </div>
         </section>
     )

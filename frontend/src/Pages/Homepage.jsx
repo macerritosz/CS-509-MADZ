@@ -80,8 +80,8 @@ function Homepage() {
 
     return (
         <section className="homepage flex flex-col justify-center items-center">
-            <div className="container mx-auto">
-                <div id="madz-home-form-holder" className=" p-4 m-10 rounded-lg">
+            <div className="content-start w-full h-screen">
+                <div id="madz-home-form-holder" className="rounded-lg max-w-[78rem] m-auto p-4">
                     <Card className="w-full" id="madz-form-card">
                         <CardBody>
                             <form id="madz-main-flight-form" className="items-center" onSubmit={handleSubmit}>
@@ -151,7 +151,7 @@ function Homepage() {
                         </CardBody>
                     </Card>
                 </div>
-                <div id="madz-main-carousel" className=" min-h-[600px] mb-8">
+                <div id="madz-main-carousel" className=" min-h-[600px] m-auto max-w-[78rem] px-4">
                     <Carousel transition={{duration: 2}} autoplay={true} autoplayDelay={7500} loop={true}
                               className=" w-full rounded-xl">
                         {carouselImages.map((image, index) => (

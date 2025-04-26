@@ -1,18 +1,36 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Card, CardBody, CardFooter, Checkbox, Dialog, Input, Typography,} from "@material-tailwind/react";
 
 export function SignInModal(props) {
     const [isSignUp, setIsSignUp] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-
+    const [invalidPassword, setInvalidPassword] = useState(false);
+    const [checkPasswordReqs, setCheckPasswordReqs] = useState({
+        isLength: false,
+        upperChar: false,
+        numberChar: false,
+        specialChar: false
+    });
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
     }
     const handlePasswordChange = (e) => {
+        if (isSignUp) {
+            setCheckPasswordReqs({
+                isLength: e.target.value.length >= 8,
+                upperChar: /[A-Z]/.test(e.target.value),
+                numberChar: /[0-9]/.test(e.target.value),
+                specialChar: /[!@#$%^&*()]/.test(e.target.value),
+            });
+        }
         setPassword(e.target.value);
     }
+
+    useEffect(() => {
+        setInvalidPassword(false);
+    }, [isSignUp])
 
     async function signIn() {
         try {
@@ -50,11 +68,58 @@ export function SignInModal(props) {
 
     const handleSubmit = async () => {
         if (isSignUp) {
-            await signUp()
+            if (validPassword()) {
+                await signUp()
+            } else {
+                setInvalidPassword(true)
+                return
+            }
         } else {
             await signIn()
         }
         props.handleOpen()
+    }
+    const validPassword = () => {
+        return checkPasswordReqs.isLength && checkPasswordReqs.upperChar && checkPasswordReqs.numberChar && checkPasswordReqs.specialChar;
+    }
+
+    const updateVisualPasswordChecks = () => {
+        return (
+            <div>
+                <Typography className="flex">
+                    {
+                        changeValidationSvg(checkPasswordReqs.isLength)
+                    }
+                    At least 8 Characters
+                </Typography>
+                <Typography className="flex">
+                    {
+                        changeValidationSvg(checkPasswordReqs.upperChar)
+                    }
+                    At least one uppercase letter
+                </Typography>
+                <Typography className="flex">
+                    {
+                        changeValidationSvg(checkPasswordReqs.numberChar)
+                    }
+                    At least one number (0-9)
+                </Typography>
+                <Typography className="flex">
+                    {
+                        changeValidationSvg(checkPasswordReqs.specialChar)
+                    }
+                    At least one special character: !@#$%^&*()
+                </Typography>
+            </div>
+        )
+    }
+
+    const changeValidationSvg = (target) => {
+        if (target) {
+            return <img src="/checkmark-svgrepo-com.svg" className="w-[20px]" alt="CheckMark"/>
+        } else {
+            return <img src="/cross-svgrepo-com.svg" className="w-[20px]" alt="Cross"/>
+        }
     }
 
     return (
@@ -86,9 +151,21 @@ export function SignInModal(props) {
                         </Typography>
                         <Input label="Password" size="lg" type="password" onChange={handlePasswordChange}
                                value={password}/>
-                        <div className="-ml-2.5 -mt-3">
-                            <Checkbox label="Remember Me"/>
-                        </div>
+                        {
+                            isSignUp && invalidPassword ? (
+                                <Typography className="text-red">
+                                    &#9940; Invalid Password
+                                </Typography>
+                            ) : <></>
+                        }
+                        {
+                            isSignUp ? (updateVisualPasswordChecks()) :
+                                (
+                                    <div className="-ml-2.5 -mt-3">
+                                        <Checkbox label="Remember Me"/>
+                                    </div>
+                                )
+                        }
                     </CardBody>
                     <CardFooter className="pt-0">
                         <Button onClick={handleSubmit} fullWidth className="!bg-accent">

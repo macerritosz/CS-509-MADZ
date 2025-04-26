@@ -9,41 +9,41 @@ function Header() {
         setOpen((cur) => !cur);
     }
 
-    return <header className="madz-header">
-        <div className="madz-header-container p-4 bg-accent/75  ">
-            <div className="madz-header-nav-container pl-2 pr-2 flex ">
-                <div id="madz-header-logo" className="p-4 font-bold">
-                  <a href={"/"}>
-                      LOGO GOES HERE
-                  </a>
-                    {
-                        /* Logo Idea: aerodynamics line in our colors around text: WPI, to higher places*/
-                    }
+    return (
+        <header className="madz-global-header">
+            <div className="madz-global-header-container block">
+                <div className="madz-header-container flex flex-col justify-center p-4 bg-accent/75">
+                    <div className="madz-header-nav-container items-center m-auto w-full">
+                        <div className=" flex flex-nowrap items-center justify-between max-w-[78rem] mx-auto px-4">
+                            <div>
+                                <a href={"/"} className="font-bold p-4">
+                                    LOGO GOES HERE
+                                </a>
+                                {
+                                    /* Logo Idea: aerodynamics line in our colors around text: WPI, to higher places*/
+                                }
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <Button>
+                                    My Flights
+                                </Button>
+                                <div id="madz-nav-authentication-items">
+                                    <Button className="text-sm" onClick={() => {
+                                        handleModalOpen()
+                                    }}>
+                                        Sign in
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <nav className="madz-header-nav flex items-center ms-auto">
-                    <div id="madz-header-nav-pages">
-                        <div id="madz-header-nav-booking">
-
-                        </div>
-                        <div id="madz-header-nav-mytrips">
-
-                        </div>
-                    </div>
-                    <div id="madz-nav-authentication-items" className="flex gap-2 ">
-                        <div id="madz-header-signup">
-                            <Button className="text-sm" onClick={() => {
-                                handleModalOpen()}}>
-                                Sign in
-                            </Button>
-                        </div>
-                    </div>
-                </nav>
             </div>
-        </div>
-        {
-            open && <SignInModal open = {open} handleOpen={handleModalOpen} onClose={handleModalOpen}/>
-        }
-    </header>
+            {
+                open && <SignInModal open={open} handleOpen={handleModalOpen} onClose={handleModalOpen}/>
+            }
+        </header>
+    )
 }
 
 export default Header;
