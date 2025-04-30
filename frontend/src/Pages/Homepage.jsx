@@ -1,4 +1,4 @@
-import {Button, Card, CardBody, Carousel, Checkbox, Input, Radio,} from "@material-tailwind/react";
+import {Button, Card, CardBody, Carousel, Checkbox, Input, Radio, Typography,} from "@material-tailwind/react";
 import Calendar from "../components/Calendar.jsx";
 import {PaperAirplaneIcon} from "@heroicons/react/16/solid/index.js";
 import {useNavigate} from "react-router-dom";
@@ -42,23 +42,24 @@ function Homepage() {
      */
     const handleSubmit = async (e) => {
         navigate('/Flights');
-        // e.preventDefault();
-        // try {
-        //     appendSearchType();
-        //     const jsonFormData = JSON.stringify(formData);
-        //     const response = await fetch("/submit", {
-        //         method: "POST",
-        //         headers: {
-        //             ContentType: "application/json",
-        //         },
-        //         body: jsonFormData,
-        //     })
-        //     if (response.ok) {
-        //         navigate('/Flights');
-        //     }
-        // } catch (error) {
-        //     console.log( "Form Submission Error: ", error);
-        // }
+        e.preventDefault();
+        try {
+            appendSearchType();
+            const jsonFormData = JSON.stringify(formData);
+            const response = await fetch("/api/submit", {
+                method: "POST",
+                headers: {
+                    ContentType: "application/json",
+                },
+                body: jsonFormData,
+            })
+            if (response.ok) {
+                navigate('/Flights');
+                sessionStorage.setItem("FlightDataResponse", JSON.stringify(response));
+            }
+        } catch (error) {
+            console.log("Form Submission Error: ", error);
+        }
     }
 
     const handleChange = (e) => {
@@ -80,76 +81,89 @@ function Homepage() {
 
     return (
         <section className="homepage flex flex-col justify-center items-center">
-            <div className="content-start w-full h-screen">
-                <div id="madz-home-form-holder" className="rounded-lg max-w-[78rem] m-auto p-4">
-                    <Card className="w-full" id="madz-form-card">
-                        <CardBody>
-                            <form id="madz-main-flight-form" className="items-center" onSubmit={handleSubmit}>
-                                <div className="flex justify-between">
-                                    <div id="madz-radio-flight-type" className="flex gap-5">
-                                        <Radio name="flight-type"
-                                               label="One-way"
-                                               color="accent"
-                                               onClick={() => {
-                                                   setOneway(true)
-                                               }}
-                                               defaultChecked
-                                        />
-                                        <Radio name="flight-type"
-                                               label="Round-Trip"
-                                               color="accent"
-                                               onClick={() => {
-                                                   setOneway(false)
-                                               }}
-                                        />
-                                    </div>
-                                    <div>
-                                        <Checkbox label="Same-Day Flights Only" color="accent" name="isSameDay"
-                                                  onChange={handleChange}/>
-                                        <Checkbox label="Direct Flights Only" color="accent" name="isDirect"
-                                                  onChange={handleChange}/>
-                                    </div>
-                                </div>
-                                <div className="flex gap-2 mt-2 justify-evenly">
-                                    <div className="w-full max-w-[16rem] ">
-                                        <Input label="From"
-                                               name="departAirport"
-                                               className="text-text"
-                                               size="lg"
-                                               onChange={(e) => {
-                                                   handleChange(e)
-                                               }}
-                                        />
-                                    </div>
-                                    <div className="w-full max-w-[16rem]">
-                                        <Input label="To"
-                                               name="arrivalAirport"
-                                               className="text-text"
-                                               size="lg"
-                                               onChange={(e) => {
-                                                   handleChange(e)
-                                               }}
-                                        />
-                                    </div>
-                                    <div className="w-full max-w-[16rem]">
-                                        <Calendar type={"departure"} isDisabled={false}
-                                                  handleChange={(e) => handleChange(e)}/>
-                                    </div>
-                                    <div className="w-full max-w-[16rem]">
-                                        <Calendar type={"return"} isDisabled={isOneway}
-                                                  handleChange={(e) => handleChange(e)}/>
-                                    </div>
+            <div className="content-start w-full h-full ">
+                <div className=" relative w-full h-[30rem]">
+                    <img src="/StockCake-Expansive%20Cloudy%20Sky_1746028727.jpg"
+                         className="max-h-[30rem] w-full object-cover"/>
 
-                                    <Button type="submit" className="!bg-accent flex items-center gap-1 px-4 py-2">
+                    <div id="madz-home-form-holder" className="absolute inset-0 flex items-center justify-center">
+                        <Card className="w-full max-w-[78rem] backdrop-blur-md rounded-lg m-auto " id="madz-form-card">
+                            <CardBody className="p-4">
+                                <Typography variant="h4" component="h2" className="mt-2 mb-2">
+                                    Book Flights through WPI
+                                </Typography>
+                                <form id="madz-main-flight-form" className="items-center h-full" onSubmit={handleSubmit}>
+                                    <div className="flex justify-between pb-1">
+                                        <div id="madz-radio-flight-type" className="flex gap-5">
+                                            <Radio name="flight-type"
+                                                   label="One-way"
+                                                   color="accent"
+                                                   onClick={() => {
+                                                       setOneway(true)
+                                                   }}
+                                                   defaultChecked
+                                            />
+                                            <Radio name="flight-type"
+                                                   label="Round-Trip"
+                                                   color="accent"
+                                                   onClick={() => {
+                                                       setOneway(false)
+                                                   }}
+                                            />
+                                        </div>
+                                        <div>
+                                            <Checkbox label="Same-Day Flights Only" color="accent" name="isSameDay"
+                                                      onChange={handleChange}/>
+                                            <Checkbox label="Direct Flights Only" color="accent" name="isDirect"
+                                                      onChange={handleChange}/>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <div className="flex justify-evenly gap-2 p-3">
+                                        <div className="w-full max-w-[20rem] ">
+                                            <Input label="From"
+                                                   name="departAirport"
+                                                   className="text-text"
+                                                   size="lg"
+                                                   onChange={(e) => {
+                                                       handleChange(e)
+                                                   }}
+                                            />
+                                        </div>
+                                        <div className="w-full max-w-[20rem]">
+                                            <Input label="To"
+                                                   name="arrivalAirport"
+                                                   className="text-text"
+                                                   size="lg"
+                                                   onChange={(e) => {
+                                                       handleChange(e)
+                                                   }}
+                                            />
+                                        </div>
+                                        <div className="w-full max-w-[16rem]">
+                                            <Calendar type={"departure"} isDisabled={false}
+                                                      handleChange={(e) => handleChange(e)}/>
+                                        </div>
+                                        <div className="w-full max-w-[16rem]">
+                                            <Calendar type={"return"} isDisabled={isOneway}
+                                                      handleChange={(e) => handleChange(e)}/>
+                                        </div>
+
+                                    </div>
+                                    <div className="pt-2 p-4">
+                                        <Button type="submit"
+                                                className="!bg-accent flex items-center gap-1 px-8">
                                         <span>
                                             Submit
                                         </span>
-                                        <PaperAirplaneIcon className="w-5 h-5"/>
-                                    </Button>
-                                </div>
-                            </form>
-                        </CardBody>
-                    </Card>
+                                            <PaperAirplaneIcon className="w-5 h-5"/>
+                                        </Button>
+                                    </div>
+
+                                </form>
+                            </CardBody>
+                        </Card>
+                    </div>
                 </div>
                 <div id="madz-main-carousel" className=" min-h-[600px] m-auto max-w-[78rem] px-4">
                     <Carousel transition={{duration: 2}} autoplay={true} autoplayDelay={7500} loop={true}

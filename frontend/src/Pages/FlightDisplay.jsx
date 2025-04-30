@@ -52,6 +52,7 @@ export default function FlightDisplay() {
      * Request: getResultingFlights will be called with the form data
      * Response: Payload will contain the found data and page contents will be loaded
      * Access of session storage: an hastable to access for data
+     * if null, return to homepage
      */
     useEffect(() => {
         setFlightData(dummyFlightData)

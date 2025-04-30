@@ -59,7 +59,10 @@ export function SignInModal(props) {
                 headers: {"Content-Type": "application/json"}
             })
             if (response.ok) {
-                return await response.json();
+                await response.json();
+                setIsSignUp(false);
+            } else {
+
             }
         } catch (error) {
             console.error('Invalid Signin: ', error);
@@ -72,12 +75,11 @@ export function SignInModal(props) {
                 await signUp()
             } else {
                 setInvalidPassword(true)
-                return
             }
         } else {
             await signIn()
+            props.handleOpen()
         }
-        props.handleOpen()
     }
     const validPassword = () => {
         return checkPasswordReqs.isLength && checkPasswordReqs.upperChar && checkPasswordReqs.numberChar && checkPasswordReqs.specialChar;
@@ -172,7 +174,9 @@ export function SignInModal(props) {
                             {isSignUp ? "Sign Up" : "Sign In"}
                         </Button>
                         <Typography variant="small" className="mt-4 flex justify-center">
-                            Don&apos;t have an account?
+                            {
+                                isSignUp ? "Already have an account?" : "Don't have an account?"
+                            }
                             <Typography
                                 as="a"
                                 href="#signup"
@@ -181,27 +185,9 @@ export function SignInModal(props) {
                                 className="ml-1 font-bold"
                                 onClick={() => setIsSignUp(!isSignUp)}
                             >
-                                {isSignUp ? "Sign Up" : "Sign In"}
+                                {isSignUp ? "Sign In" : "Sign Up"}
                             </Typography>
                         </Typography>
-                        <div className="mt-4 mb-4 text-center">
-                            <button
-                                className="py-2 p-4 bg-black text-white font-semibold border border-black rounded-md hover:bg-gray-900 hover:border-gray-900 cursor-pointer active:bg-gray-600">
-                              <span className="flex justify-center items-center gap-2">
-                                  <img src="/github.svg" alt="GitHub" width="30" height="30"/>
-                                  Continue with GitHub
-                              </span>
-                            </button>
-                        </div>
-                        <div className="mt-4 mb-4 text-center">
-                            <button
-                                className="py-2 p-4 bg-black text-white font-semibold border border-black rounded-md hover:bg-gray-900 hover:border-gray-900 cursor-pointer active:bg-gray-600">
-                              <span className="flex justify-center items-center gap-2">
-                                <img src="/google.svg" alt="Google" width="30" height="30"/>
-                                Continue with Google
-                              </span>
-                            </button>
-                        </div>
                     </CardFooter>
                 </Card>
             </Dialog>
