@@ -48,8 +48,8 @@ public class AuthenticateController {
 
             if (is_authenticated) {
 
-                return ResponseEntity.ok().body("{\"message\": \"Login successful! User ID:\"" +
-                        database_manager.getRepository().returnUserByUsername(request.getUsername()).get(0).getId() + "}");
+                return ResponseEntity.ok().body("{\"message\": \"Login successful!\", \"User ID\":"
+                        + database_manager.getRepository().returnUserByUsername(request.getUsername()).get(0).getId()+ "}");
             }
             else {
 
@@ -60,6 +60,4 @@ public class AuthenticateController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": " + e.getMessage());
         }
     }
-
-
 }
