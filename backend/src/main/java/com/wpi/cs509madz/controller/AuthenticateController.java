@@ -1,7 +1,7 @@
 package com.wpi.cs509madz.controller;
 
 import com.wpi.cs509madz.service.authenticateService.Authenticate;
-import com.wpi.cs509madz.service.utils.DatabaseManager;
+import com.wpi.cs509madz.service.authenticateService.DatabaseManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -48,7 +48,8 @@ public class AuthenticateController {
 
             if (is_authenticated) {
 
-                return ResponseEntity.ok().body("{\"message\": \"Login successful!\"}");
+                return ResponseEntity.ok().body("{\"message\": \"Login successful! User ID:\"" +
+                        database_manager.getRepository().returnUserByUsername(request.getUsername()).get(0).getId() + "}");
             }
             else {
 
