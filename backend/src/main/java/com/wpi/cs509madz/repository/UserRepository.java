@@ -42,7 +42,7 @@ public class UserRepository {
 
         String sql = "select * from user where username = ?";
 
-        RowMapper<User> rowMapper = new RowMapper<User>() {
+        RowMapper<User> rowMapper = new RowMapper<>() {
 
             @Override
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -67,11 +67,12 @@ public class UserRepository {
         ).size();
     }
 
-    public List<User> findUserByUsernameUser(String username) {
+
+    public List<User> returnUserByUsername(String username) {
 
         String sql = "select * from user where username = ?";
 
-        RowMapper<User> rowMapper = new RowMapper<User>() {
+        RowMapper<User> rowMapper = new RowMapper<>() {
 
             @Override
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -111,7 +112,7 @@ public class UserRepository {
 
         String sql = "select * from user where username = ? and password = ?";
 
-        RowMapper<User> rowMapper = new RowMapper<User>() {
+        RowMapper<User> rowMapper = new RowMapper<>() {
 
             @Override
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -127,14 +128,13 @@ public class UserRepository {
         };
 
         return jdbcTemplate.query(sql, new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setString(1, username);
-                ps.setString(2, password);
-            }
-        },
-        rowMapper
+                    @Override
+                    public void setValues(PreparedStatement ps) throws SQLException {
+                        ps.setString(1, username);
+                        ps.setString(2, password);
+                    }
+                },
+                rowMapper
         );
     }
-
 }
