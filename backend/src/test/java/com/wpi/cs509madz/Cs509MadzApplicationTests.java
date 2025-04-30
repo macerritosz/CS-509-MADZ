@@ -1,4 +1,4 @@
-package java.com.wpi.cs509madz;
+package com.wpi.cs509madz;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
