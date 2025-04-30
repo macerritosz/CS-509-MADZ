@@ -6,7 +6,6 @@ import com.wpi.cs509madz.service.utils.DateTime;
 import java.util.*;
 
 public class Booking implements IBooking {
-    private List<Flight> database;
     private List<Booking> flightDatabase;
     private String flightNumber;
     private DateTime departureDate;
@@ -15,7 +14,6 @@ public class Booking implements IBooking {
     private String arrivalLocation;
 
     public Booking(List<Flight> database, DateTime departureDate, String departureLocation, DateTime arrivalDate, String arrivalLocation) {
-        this.database = database;
         this.departureDate = departureDate;
         this.departureLocation = departureLocation;
         this.arrivalDate = arrivalDate;
