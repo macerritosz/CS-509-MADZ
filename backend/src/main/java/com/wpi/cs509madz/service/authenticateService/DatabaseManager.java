@@ -1,4 +1,4 @@
-package com.wpi.cs509madz.service.utils;
+package com.wpi.cs509madz.service.authenticateService;
 
 //This imports necessary SQL classes, specifically the Connection class, that allows for Java
 //to connect with MySQL databases
@@ -34,9 +34,15 @@ public class DatabaseManager {
 
         //The provided url, username, and password are used on a class called DriverManager, which
         //is also provided by the imported java.sql package. The static getConnection() function
-        //returns a connection object that is swtored in the db_connection attribute already
+        //returns a connection object that is stored in the db_connection attribute already
         //initialized
         this.user_repository = user_repository;
+    }
+
+
+    public UserRepository getRepository() {
+
+        return user_repository;
     }
 
 
@@ -60,7 +66,7 @@ public class DatabaseManager {
         byte[] salt = generateSalt();
 
         //Hash the password with the salt
-        String hashed_password = null;
+        String hashed_password;
 
         try {
 
@@ -86,7 +92,7 @@ public class DatabaseManager {
     public boolean searchUser(String username, String password) throws Exception {
 
         // You’d compare hashed passwords here in a real implementation
-        List<User> user = user_repository.findUserByUsernameUser(username);
+        List<User> user = user_repository.returnUserByUsername(username);
 
         if (!(user.isEmpty())) {
 
@@ -102,7 +108,7 @@ public class DatabaseManager {
 
         Random random = new Random();
 
-        int id = 0;
+        int id;
 
         do {
 
@@ -153,7 +159,7 @@ public class DatabaseManager {
     }
 
 
-    private boolean validPassword(String password) {
+    public boolean validPassword(String password) {
 
         if (password.length() < 8) {
 

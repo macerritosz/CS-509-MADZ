@@ -1,8 +1,5 @@
 package com.wpi.cs509madz.service.authenticateService;
 
-import com.wpi.cs509madz.service.utils.DatabaseManager;
-
-
 
 public class Authenticate {
 
