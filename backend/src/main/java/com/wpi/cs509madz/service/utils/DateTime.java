@@ -24,6 +24,18 @@ public class DateTime {
         }
     }
 
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
     public boolean isBefore(DateTime date) {
         if (year != date.year) {
             return year < date.year;
