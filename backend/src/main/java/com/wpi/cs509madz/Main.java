@@ -20,10 +20,28 @@ public class Main {
         DeltasRepository deltasRepository = context.getBean(DeltasRepository.class);
         List<Flight> flightDatabase = deltasRepository.findAll();
 
+//        flightDatabase.stream()
+//                .map(flight -> new Booking(
+//                        flight.getFlightNumber(),
+//                        flight.getDepartDateTime(),
+//                        flight.getDepartAirport(),
+//                        flight.getArriveDateTime(),
+//                        flight.getArriveAirport()))
+//                .filter(booking -> booking.getDepartureDate().isBefore(booking.getArrivalDate()))
+//                .toList();
+
         System.out.println("Salt Lake City (SLC)" + " -> " + "Sioux Falls (FSD)");
-        Booking test = new Booking(flightDatabase,
+        Booking test = new Booking(flightDatabase.stream()
+                .map(flight -> new Booking(
+                        flight.getFlightNumber(),
+                        flight.getDepartDateTime(),
+                        flight.getDepartAirport(),
+                        flight.getArriveDateTime(),
+                        flight.getArriveAirport()))
+                .filter(booking -> booking.getDepartureDateTime().isBefore(booking.getArrivalDateTime()))
+                .toList(),
                 new DateTime("2022-12-26"), "Salt Lake City (SLC)",
-                new DateTime("2023-12-27"), "Sioux Falls (FSD)");
+                "Sioux Falls (FSD)");
         List<List<IBooking>> flightPaths = test.calculateLayoverOptions();
         for (List<IBooking> booking : flightPaths) {
             System.out.println(booking.toString());
