@@ -1,12 +1,26 @@
-import {Button, Card, CardBody, Carousel, Checkbox, Input, Radio, Typography,} from "@material-tailwind/react";
+import {
+    Alert,
+    Button,
+    Card,
+    CardBody,
+    Carousel,
+    Checkbox,
+    Input,
+    Radio,
+    Tooltip,
+    Typography,
+} from "@material-tailwind/react";
 import Calendar from "../components/Calendar.jsx";
-import {PaperAirplaneIcon} from "@heroicons/react/16/solid/index.js";
+import {BellAlertIcon, PaperAirplaneIcon,} from "@heroicons/react/16/solid/index.js";
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 
 function Homepage() {
     const navigate = useNavigate();
+    const [isSignedIn, setIsSignedIn] = useState(false);
+    const [showSignInAlert, setShowSignInAlert] = useState(false);
+    const [showInvalidDateAlert, setShowInvalidDateAlert] = useState(false);
     /* User input states */
     const [formData, setFormData] = useState({
         departAirport: "",
@@ -42,24 +56,30 @@ function Homepage() {
      */
     const handleSubmit = async (e) => {
         navigate('/Flights');
-        e.preventDefault();
-        try {
-            appendSearchType();
-            const jsonFormData = JSON.stringify(formData);
-            const response = await fetch("/api/submit", {
-                method: "POST",
-                headers: {
-                    ContentType: "application/json",
-                },
-                body: jsonFormData,
-            })
-            if (response.ok) {
-                navigate('/Flights');
-                sessionStorage.setItem("FlightDataResponse", JSON.stringify(response));
-            }
-        } catch (error) {
-            console.log("Form Submission Error: ", error);
-        }
+        // e.preventDefault();
+        // if(!checkValidDates()) return;
+        // if(localStorage.getItem("userID") == null) {
+        //     setIsSignedIn(false);
+        //     setShowSignInAlert(true);
+        // } else {
+        //     try {
+        //         const jsonFormData = JSON.stringify(formData);
+        //         const response = await fetch("/api/submit", {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //             },
+        //             body: jsonFormData,
+        //         })
+        //         if (response.ok) {
+        //             const result = await response.json();
+        //             navigate('/Flights');
+        //             sessionStorage.setItem("FlightDataResponse", JSON.stringify(result.flights));
+        //         }
+        //     } catch (error) {
+        //         console.log("Form Submission Error: ", error);
+        //     }
+        // }
     }
 
     const handleChange = (e) => {
@@ -70,14 +90,23 @@ function Homepage() {
         }
     }
 
-    const appendSearchType = () => {
-        setFormData({...formData, isOneway: isOneway});
-    }
-
     useEffect(() => {
         console.log(formData)
     }, [formData])
 
+
+    const checkValidDates = () => {
+        if(!isOneway && (!formData.returnDate || new Date(formData.returnDate) < new Date(formData.departureDate))){
+            setShowInvalidDateAlert(true)
+            return false
+        }
+        setShowInvalidDateAlert(false); // Hide tooltip if valid
+        return true;
+    }
+
+    useEffect(() => {
+        console.log(showInvalidDateAlert)
+    }, [showInvalidDateAlert]);
 
     return (
         <section className="homepage flex flex-col justify-center items-center">
@@ -85,8 +114,21 @@ function Homepage() {
                 <div className=" relative w-full h-[30rem]">
                     <img src="/StockCake-Expansive%20Cloudy%20Sky_1746028727.jpg"
                          className="max-h-[30rem] w-full object-cover"/>
-
                     <div id="madz-home-form-holder" className="absolute inset-0 flex items-center justify-center">
+                        {
+                            showSignInAlert && (
+                                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-[40rem]">
+                                    <Alert open={showSignInAlert} onClose={() => setShowSignInAlert(false)} color={"green"}>
+                                        <div className="flex gap-2 items-center">
+                                            <BellAlertIcon className=" w-5 h-5" />
+                                            <Typography>
+                                                Sign In to book your flights!
+                                            </Typography>
+                                        </div>
+                                    </Alert>
+                                </div>
+                            )
+                        }
                         <Card className="w-full max-w-[78rem] backdrop-blur-md rounded-lg m-auto " id="madz-form-card">
                             <CardBody className="p-4">
                                 <Typography variant="h4" component="h2" className="mt-2 mb-2">
@@ -145,8 +187,23 @@ function Homepage() {
                                                       handleChange={(e) => handleChange(e)}/>
                                         </div>
                                         <div className="w-full max-w-[16rem]">
-                                            <Calendar type={"return"} isDisabled={isOneway}
-                                                      handleChange={(e) => handleChange(e)}/>
+                                            <Tooltip open={showInvalidDateAlert}
+                                                     handler={() => {}}
+                                                     className="bg-red-400"
+                                                     content={"Invalid Date"}
+                                                     animate={{
+                                                         mount: {scale: 1, y: 0},
+                                                         unmount: {scale: 0, y: 25},
+                                                     }}
+                                                     placement="right">
+                                                <span className="inline-block w-full">
+                                                    <Calendar
+                                                        type="return"
+                                                        isDisabled={isOneway}
+                                                        handleChange={(e) => handleChange(e)}
+                                                    />
+                                                </span>
+                                            </Tooltip>
                                         </div>
 
                                     </div>
@@ -164,6 +221,11 @@ function Homepage() {
                             </CardBody>
                         </Card>
                     </div>
+                </div>
+                <div className="w-full max-w-[78rem] p-4 m-auto">
+                    <Typography variant="body2" component="p" className="">
+                        Meow
+                    </Typography>
                 </div>
                 <div id="madz-main-carousel" className=" min-h-[600px] m-auto max-w-[78rem] px-4">
                     <Carousel transition={{duration: 2}} autoplay={true} autoplayDelay={7500} loop={true}
