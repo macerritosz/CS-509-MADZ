@@ -6,8 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -23,20 +21,17 @@ public class DeltasRepository {
     public List<Flight> findAll() {
         String sql = "select * from deltas";
 
-        RowMapper<Flight> rowMapper = new RowMapper<Flight>() {
-            @Override
-            public Flight mapRow(ResultSet rs, int rowNum) throws SQLException {
+        RowMapper<Flight> rowMapper = (rs, rowNum) -> {
 
-                Flight flight = new Flight();
-                flight.setId(rs.getInt("id"));
-                flight.setArriveAirport(rs.getString("ArriveAirport"));
-                flight.setDepartAirport(rs.getString("DepartAirport"));
-                flight.setArriveDateTime(rs.getString("ArriveDateTime"));
-                flight.setDepartDateTime(rs.getString("DepartDateTime"));
-                flight.setFlightNumber(rs.getString("FlightNumber"));
+            Flight flight = new Flight();
+            flight.setId(rs.getInt("id"));
+            flight.setArriveAirport(rs.getString("ArriveAirport"));
+            flight.setDepartAirport(rs.getString("DepartAirport"));
+            flight.setArriveDateTime(rs.getString("ArriveDateTime"));
+            flight.setDepartDateTime(rs.getString("DepartDateTime"));
+            flight.setFlightNumber(rs.getString("FlightNumber"));
 
-                return flight;
-            }
+            return flight;
         };
 
         return jdbcTemplate.query(sql, rowMapper);
