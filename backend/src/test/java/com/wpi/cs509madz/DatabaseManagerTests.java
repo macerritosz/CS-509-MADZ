@@ -1,4 +1,4 @@
-package java.com.wpi.cs509madz;
+package com.wpi.cs509madz;
 
 import com.wpi.cs509madz.model.User;
 import com.wpi.cs509madz.service.authenticateService.DatabaseManager;
@@ -85,7 +85,7 @@ public class DatabaseManagerTests {
         when(user_repository_mock.doesIdExist(anyInt())).thenReturn(false);
 
         //Force an exception when database_manager calls hashPassword
-        doThrow(new Exception()).when(database_manager).hashPassword(anyString(), any());
+        doThrow(new Exception("Mocked exception")).when(database_manager).hashPassword(anyString(), any());
 
         //When function is run, -1 should be returned; an error occurred
         int result = database_manager.registerUser(username, password);

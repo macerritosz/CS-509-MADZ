@@ -46,13 +46,28 @@ public class TestBooking implements IBooking {
 
 //    following get method calls should be accessing the server
     @Override
-    public DateTime getDepartureDate() {
+    public DateTime getDepartureDateTime() {
         return departureDate;
     }
 
     @Override
-    public DateTime getArrivalDate() {
+    public DateTime getDepartureDate() {
+        return null;
+    }
+
+    @Override
+    public String getDepartureLocation() {
+        return departureLocation;
+    }
+
+    @Override
+    public DateTime getArrivalDateTime() {
         return arrivalDate;
+    }
+
+    @Override
+    public DateTime getArrivalDate() {
+        return null;
     }
 
     @Override
@@ -61,20 +76,20 @@ public class TestBooking implements IBooking {
     }
 
     @Override
-    public ArrayList<ArrayList<IBooking>> calculateLayoverOptions() {
+    public List<List<IBooking>> calculateLayoverOptions() {
         ArrayList<TestBooking> database = new ArrayList<>();
         for (int i = 0; i < flightDatabase.size(); i++) {
             Flight cur = flightDatabase.get(i);
             database.add(
-                    new TestBooking(new DateTime(cur.getDepartDateTime()), cur.getDepartAirport(), new DateTime(cur.getArriveDateTime()), cur.getArriveAirport())
+                    new TestBooking(cur.getDepartDateTime(), cur.getDepartAirport(), cur.getArriveDateTime(), cur.getArriveAirport())
             );
         }
 
         ArrayList<ArrayList<IBooking>> options = new ArrayList<>();
-        ArrayList<ArrayList<IBooking>> finalOptions = new ArrayList<>();
+        List<List<IBooking>> finalOptions = new ArrayList<>();
         System.out.println(departureLocation + " -> " + arrivalLocation);
         for (TestBooking booking : database) {
-            if (Objects.equals(booking.departureLocation, departureLocation) && booking.getDepartureDate().isBefore(booking.getArrivalDate())) {
+            if (Objects.equals(booking.departureLocation, departureLocation) && booking.getDepartureDateTime().isBefore(booking.getArrivalDateTime())) {
                 ArrayList<IBooking> newList = new ArrayList<>();
                 newList.add(booking);
                 options.add(newList);
@@ -85,15 +100,13 @@ public class TestBooking implements IBooking {
             ArrayList<IBooking> cur = options.get(0);
             IBooking lastFlight = cur.get(cur.size() - 1);
 
-//            System.out.println(cur.size() + ", " + lastFlight + " " + cur);
-
             for (TestBooking booking : database) {
                 if (Objects.equals(lastFlight.getArrivalLocation(), booking.departureLocation)
-                        && booking.getDepartureDate().isBefore(booking.getArrivalDate())
-                        && lastFlight.getArrivalDate().isBefore(booking.departureDate)
+                        && booking.getDepartureDateTime().isBefore(booking.getArrivalDateTime())
+                        && lastFlight.getArrivalDateTime().isBefore(booking.departureDate)
                         && !Objects.equals(lastFlight.getArrivalLocation(), arrivalLocation)
-                        && ((lastFlight.getArrivalDate().getDifference(booking.getDepartureDate()) > 90)
-                            && (lastFlight.getArrivalDate().getDifference(booking.getDepartureDate()) < 720))
+                        && ((lastFlight.getArrivalDateTime().getDifference(booking.getDepartureDateTime()) > 90)
+                            && (lastFlight.getArrivalDateTime().getDifference(booking.getDepartureDateTime()) < 720))
                         && cur.size() < 4) {
 
                     ArrayList<IBooking> newList = (ArrayList<IBooking>) cur.clone();
@@ -110,7 +123,7 @@ public class TestBooking implements IBooking {
             options.remove(cur);
         }
 
-        for (ArrayList<IBooking> finalOption : finalOptions) {
+        for (List<IBooking> finalOption : finalOptions) {
             System.out.println(finalOption);
         }
 
