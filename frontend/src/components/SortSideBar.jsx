@@ -7,7 +7,7 @@ import {ChevronDownIcon, ChevronUpIcon, ChevronUpDownIcon} from "@heroicons/reac
 import React from "react";
 
 
-export default function SortSideBar(props) {
+export default function SortSideBar({departureSort, arrivalSort, timeSort}) {
     const FilterState = {
         UP:<ChevronUpIcon  className="w-5 h-5" />,
         DOWN:<ChevronDownIcon className="w-5 h-5" />,
@@ -33,6 +33,18 @@ export default function SortSideBar(props) {
             setArrivalFilter("NONE");
         }
     }
+    
+    useEffect(() => {
+        departureSort(departureFilter);
+    }, [departureFilter, departureSort]);
+
+    useEffect(() => {
+        arrivalSort(arrivalFilter);
+    }, [arrivalFilter, arrivalSort]);
+    useEffect(() => {
+        timeSort(timeFilter);
+    }, [timeFilter, timeSort]);
+
     return (
         <aside className="flex sticky top-0 m-4">
             <Card className="p-4">

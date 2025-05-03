@@ -42,7 +42,8 @@ export function SignInModal(props) {
                 headers: {"Content-Type": "application/json"}
             })
             if (response.ok) {
-                return await response.json();
+                const result = await response.json();
+                localStorage.setItem("userID", result.UserID)
             }
         } catch (error) {
             console.error('Invalid Signin: ', error);
