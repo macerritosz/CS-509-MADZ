@@ -2,7 +2,6 @@ package com.wpi.cs509madz.controller;
 
 import com.wpi.cs509madz.dto.FlightBookingDto;
 import com.wpi.cs509madz.dto.FlightRequestDto;
-import com.wpi.cs509madz.model.Flight;
 import com.wpi.cs509madz.repository.DeltasRepository;
 import com.wpi.cs509madz.repository.SouthwestsRepository;
 import com.wpi.cs509madz.repository.UserBookings;
@@ -18,7 +17,6 @@ public class BookingController {
     private SouthwestsRepository southwestsRepository;
     private DeltasRepository deltasRepository;
 
-    // TODO add total flight time
     @PostMapping("/api/submit")
     public ResponseEntity<Map<String,Object>> submit(@RequestBody FlightRequestDto flightRequest) {
         Map<String, Object> response = new HashMap<>();
@@ -123,7 +121,7 @@ public class BookingController {
         return ResponseEntity.ok(response);
     }
 
-    private class FlightTimeObject {
+    private static class FlightTimeObject {
         List<IBooking> flightPath;
         List<Integer> flightTimes;
 

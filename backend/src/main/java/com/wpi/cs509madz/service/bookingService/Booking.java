@@ -9,12 +9,11 @@ import java.util.*;
 public class Booking implements IBooking {
     private List<Booking> flightDatabase;
     private String flightNumber;
-    private DateTime departureDate;
-    private String departureLocation;
+    private final DateTime departureDate;
+    private final String departureLocation;
     private DateTime arrivalDate;
-    private String arrivalLocation;
+    private final String arrivalLocation;
 
-    private List<List<IBooking>> layovers;
 
     public Booking(List<Booking> database, DateTime departureDate,String departureLocation, String arrivalLocation) {
         this.departureDate = departureDate;
@@ -78,10 +77,20 @@ public class Booking implements IBooking {
         return arrivalLocation;
     }
 
+    /**
+     * Finds all possible flight paths based on the requirements
+     * @return a List<List<IBooking>> with all possible flight paths
+     */
     public List<List<IBooking>> findLayoverOptions() {
         return findLayoverOptions(Optional.empty(), Optional.empty());
     }
 
+    /**
+     * Finds all possible flight paths based on the requirements
+     * @param direct a boolean showing if all the flights are direct or not
+     * @param sameDay a boolean showing if all the flights are the same day or not
+     * @return a List<List<IBooking>> with all possible flight paths depending on the user's requests
+     */
     public List<List<IBooking>> findLayoverOptions(Optional<Boolean> direct, Optional<Boolean> sameDay) {
         boolean isDirect = direct.orElse(false);
         boolean isSameDay = sameDay.orElse(false);
@@ -110,16 +119,14 @@ public class Booking implements IBooking {
             }
         }
 
-        layovers = finalOptions;
         return finalOptions;
     }
 
     private List<List<IBooking>> calculateLayover() {
         Queue<List<IBooking>> options = new LinkedList<>();
-        List<List<IBooking>> finalOptions = new ArrayList<>();
 
         List<List<IBooking>> direct = calculateDirect();
-        finalOptions.addAll(direct);
+        List<List<IBooking>> finalOptions = new ArrayList<>(direct);
 
         for (Booking booking : flightDatabase) {
             if (booking.getDepartureLocation().equals(departureLocation)) {
@@ -152,16 +159,14 @@ public class Booking implements IBooking {
             }
         }
 
-        layovers = finalOptions;
         return finalOptions;
     }
 
     private List<List<IBooking>> calculateSameDay() {
         Queue<List<IBooking>> options = new LinkedList<>();
-        List<List<IBooking>> finalOptions = new ArrayList<>();
 
         List<List<IBooking>> direct = calculateDirect();
-        finalOptions.addAll(direct);
+        List<List<IBooking>> finalOptions = new ArrayList<>(direct);
 
         for (Booking booking : flightDatabase) {
             if (booking.getDepartureLocation().equals(departureLocation)) {
@@ -208,10 +213,14 @@ public class Booking implements IBooking {
             }
         }
 
-        layovers = finalOptions;
         return finalOptions;
     }
 
+    /**
+     * Calculates the total flight time and layover times between each flight
+     * @param booking a List<IBooking> with a single flight path
+     * @return a List<Integer> with the total flight time and time between flights
+     */
     public List<Integer> calculateLayoverTime(List<IBooking> booking) {
         List<Integer> layoverTimes = new ArrayList<>();
 

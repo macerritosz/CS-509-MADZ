@@ -66,7 +66,6 @@ public class Flight {
         return flightNumber;
     }
 
-    // when formatting, add a t to the json for separation
     @Override
     public String toString() {
         return flightNumber + " " + departDateTime + " " + arriveDateTime + " " + departAirport + " " + arriveAirport + " " + flightNumber;

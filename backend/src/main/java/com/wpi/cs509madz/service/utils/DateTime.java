@@ -1,9 +1,9 @@
 package com.wpi.cs509madz.service.utils;
 
 public class DateTime {
-    private int year;
-    private int month;
-    private int day;
+    private final int year;
+    private final int month;
+    private final int day;
     private int hour;
     private int min;
     private int sec;
@@ -36,6 +36,11 @@ public class DateTime {
         return day;
     }
 
+    /**
+     * Calculates if one date is before another
+     * @param date a DateTime
+     * @return a boolean if this date is before the given date
+     */
     public boolean isBefore(DateTime date) {
         if (year != date.year) {
             return year < date.year;
@@ -55,6 +60,11 @@ public class DateTime {
         return sec < date.sec;
     }
 
+    /**
+     * Calculates the difference between two dates
+     * @param date a DateTime
+     * @return the number of minutes between this and the given date
+     */
     public int getDifference(DateTime date) {
         int diff = 0;
 
