@@ -12,6 +12,5 @@ public interface IBooking {
     DateTime getArrivalDate();
     String getArrivalLocation();
 
-    List<List<IBooking>> calculateLayoverOptions();
     String toString();
 }

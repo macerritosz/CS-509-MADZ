@@ -1,6 +1,7 @@
 package com.wpi.cs509madz.repository;
 
 import com.wpi.cs509madz.model.Flight;
+import com.wpi.cs509madz.service.bookingService.Booking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -10,39 +11,49 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class SouthwestsRepository {
 
-    private final JdbcTemplate jdbcTemplate;
-
+    private static JdbcTemplate jdbcTemplate;
+    public JdbcTemplate getJdbcTemplate(){
+        return jdbcTemplate;
+    }
     @Autowired
-    public SouthwestsRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate){
+        SouthwestsRepository.jdbcTemplate = jdbcTemplate;
     }
 
-
-    public List<Flight> findAll() {
+    public List<Booking> findAll() {
         String sql = "select * from southwests";
       
-        RowMapper<Flight> rowMapper = new RowMapper<Flight>() {
-            @Override
-            public Flight mapRow(ResultSet rs, int rowNum) throws SQLException {
+        RowMapper<Flight> rowMapper = (rs, rowNum) -> {
 
-                Flight flight = new Flight();
-                flight.setId(rs.getInt("id"));
-                flight.setArriveAirport(rs.getString("ArriveAirport"));
-                flight.setDepartAirport(rs.getString("DepartAirport"));
-                flight.setArriveDateTime(rs.getString("ArriveDateTime"));
-                flight.setDepartDateTime(rs.getString("DepartDateTime"));
-                flight.setFlightNumber(rs.getString("FlightNumber"));
+            Flight flight = new Flight();
+            flight.setId(rs.getInt("id"));
+            flight.setArriveAirport(rs.getString("ArriveAirport"));
+            flight.setDepartAirport(rs.getString("DepartAirport"));
+            flight.setArriveDateTime(rs.getString("ArriveDateTime"));
+            flight.setDepartDateTime(rs.getString("DepartDateTime"));
+            flight.setFlightNumber(rs.getString("FlightNumber"));
 
-                return flight;
-            }
+            return flight;
         };
 
-        return jdbcTemplate.query(sql, rowMapper);
+        List<Flight> flights = jdbcTemplate.query(sql, rowMapper);
+        List<Booking> bookings = new ArrayList<>();
+
+        for (Flight flight : flights) {
+            bookings.add(new Booking(flight.getFlightNumber(),
+                    flight.getDepartDateTime(),
+                    flight.getDepartAirport(),
+                    flight.getArriveDateTime(),
+                    flight.getArriveAirport()));
+        }
+
+        return bookings;
     }
 
     public List<Flight> getFlightByID(int id) {

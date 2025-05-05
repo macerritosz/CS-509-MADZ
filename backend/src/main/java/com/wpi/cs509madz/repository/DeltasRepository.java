@@ -1,12 +1,17 @@
 package com.wpi.cs509madz.repository;
 
 import com.wpi.cs509madz.model.Flight;
+import com.wpi.cs509madz.service.bookingService.Booking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +29,7 @@ public class DeltasRepository {
         DeltasRepository.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Flight> findAll() {
+    public List<Booking> findAll() {
         String sql = "select * from deltas";
 
         RowMapper<Flight> rowMapper = (rs, rowNum) -> {
@@ -40,7 +45,14 @@ public class DeltasRepository {
             return flight;
         };
 
-        return jdbcTemplate.query(sql, rowMapper);
+        List<Flight> flights = jdbcTemplate.query(sql, rowMapper);
+        List<Booking> bookings = new ArrayList<>();
+
+        for (Flight flight : flights) {
+            bookings.add(new Booking(flight));
+        }
+
+        return bookings;
     }
 
     public List<Flight> getFlightByID(int id) {
