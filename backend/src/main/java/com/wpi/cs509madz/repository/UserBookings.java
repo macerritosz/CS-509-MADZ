@@ -1,7 +1,6 @@
 package com.wpi.cs509madz.repository;
 
 import com.wpi.cs509madz.dto.FlightBookingDto;
-import com.wpi.cs509madz.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -42,6 +41,11 @@ public class UserBookings {
                 booking.getAirline());
     }
 
+    /**
+     * Finds all the flights booked by a specific user
+     * @param id an int that represents the user
+     * @return a List<FlightBookingDto> with all the flights the user has booked
+     */
     public List<FlightBookingDto> getAllFlightsByUserID(int id) {
         String sql = "select * from bookings where UserID = ?";
 

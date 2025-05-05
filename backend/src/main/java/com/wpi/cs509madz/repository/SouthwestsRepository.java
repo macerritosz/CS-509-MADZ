@@ -26,6 +26,10 @@ public class SouthwestsRepository {
         SouthwestsRepository.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Maps the entire database to a list
+     * @return a List<Booking> with all the flight information from the Deltas database
+     */
     public List<Booking> findAll() {
         String sql = "select * from southwests";
       
@@ -52,6 +56,11 @@ public class SouthwestsRepository {
         return bookings;
     }
 
+    /**
+     * Finds a flight based off the SQL given ID
+     * @return a List<Flight> with a flight at the given ID
+     * Note: even though this will only return 1 flight, using a List makes it easier to parse in the rest of our code
+     */
     public List<Flight> getFlightByID(int id) {
         String sql = "select * from deltas where id = ?";
 
