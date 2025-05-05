@@ -49,7 +49,7 @@ public class AuthenticateController {
             if (is_authenticated) {
 
                 return ResponseEntity.ok().body("{\"message\": \"Login successful!\", \"User ID\":"
-                        + database_manager.getRepository().returnUserByUsername(request.getUsername()).get(0).getId()+ "}");
+                        + database_manager.getRepository().getUserViaUsername(request.getUsername()).get(0).getId()+ "}");
             }
             else {
 
