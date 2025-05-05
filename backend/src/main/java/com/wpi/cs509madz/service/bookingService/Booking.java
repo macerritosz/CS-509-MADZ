@@ -1,5 +1,7 @@
 package com.wpi.cs509madz.service.bookingService;
 
+import com.wpi.cs509madz.dto.FlightBookingDto;
+import com.wpi.cs509madz.model.Flight;
 import com.wpi.cs509madz.service.utils.DateTime;
 
 import java.util.*;
@@ -12,6 +14,8 @@ public class Booking implements IBooking {
     private DateTime arrivalDate;
     private String arrivalLocation;
 
+    private List<List<IBooking>> layovers;
+
     public Booking(List<Booking> database, DateTime departureDate,String departureLocation, String arrivalLocation) {
         this.departureDate = departureDate;
         this.departureLocation = departureLocation;
@@ -20,6 +24,22 @@ public class Booking implements IBooking {
         database.removeIf(booking -> booking.getDepartureDateTime().isBefore(departureDate));
 
         flightDatabase = database;
+    }
+
+    public Booking(Flight flight) {
+        this.flightNumber = flight.getFlightNumber();
+        this.departureDate = getDepartureDate();
+        this.departureLocation = getDepartureLocation();
+        this.arrivalDate = getArrivalDateTime();
+        this.arrivalLocation = getArrivalLocation();
+    }
+
+    public Booking (FlightBookingDto flight) {
+        this.flightNumber = flight.getFlightNumber();
+        this.departureDate = new DateTime(flight.getDepartDateTime());
+        this.departureLocation = flight.getDepartAirport();
+        this.arrivalDate = new DateTime(flight.getArriveDateTime());
+        this.arrivalLocation = flight.getArriveAirport();
     }
 
     public Booking(String flightNumber, DateTime departureDate, String departureLocation, DateTime arrivalDate, String arrivalLocation) {
@@ -58,12 +78,11 @@ public class Booking implements IBooking {
         return arrivalLocation;
     }
 
-    @Override
-    public List<List<IBooking>> calculateLayoverOptions() {
-        return calculateLayoverOptions(Optional.empty(), Optional.empty());
+    public List<List<IBooking>> findLayoverOptions() {
+        return findLayoverOptions(Optional.empty(), Optional.empty());
     }
 
-    public List<List<IBooking>> calculateLayoverOptions(Optional<Boolean> direct, Optional<Boolean> sameDay) {
+    public List<List<IBooking>> findLayoverOptions(Optional<Boolean> direct, Optional<Boolean> sameDay) {
         boolean isDirect = direct.orElse(false);
         boolean isSameDay = sameDay.orElse(false);
 
@@ -91,6 +110,7 @@ public class Booking implements IBooking {
             }
         }
 
+        layovers = finalOptions;
         return finalOptions;
     }
 
@@ -132,10 +152,10 @@ public class Booking implements IBooking {
             }
         }
 
+        layovers = finalOptions;
         return finalOptions;
     }
 
-    // fix same day flight algo
     private List<List<IBooking>> calculateSameDay() {
         Queue<List<IBooking>> options = new LinkedList<>();
         List<List<IBooking>> finalOptions = new ArrayList<>();
@@ -188,7 +208,28 @@ public class Booking implements IBooking {
             }
         }
 
+        layovers = finalOptions;
         return finalOptions;
+    }
+
+    public List<Integer> calculateLayoverTime(List<IBooking> booking) {
+        List<Integer> layoverTimes = new ArrayList<>();
+
+        int totalTime = 0;
+        for (int i = 0; i < booking.size() - 1; i++) {
+            IBooking cur = booking.get(i);
+            totalTime += cur.getDepartureDateTime().getDifference(cur.getArrivalDateTime());
+        }
+
+        for (int i = 0; i < booking.size() - 2; i++) {
+            int time = booking.get(i).getArrivalDateTime().getDifference(booking.get(i + 1).getDepartureDateTime());
+            totalTime += time;
+            layoverTimes.add(time);
+        }
+
+        layoverTimes.add(0, totalTime);
+
+        return layoverTimes;
     }
 
     @Override

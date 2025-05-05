@@ -18,7 +18,7 @@ public class FlightBookingDto {
 
     private String flightNumber;
 
-    private List<Integer> referenceIDs = new ArrayList<>(Arrays.asList(null, null));
+    private List<Integer> referenceIDs = new ArrayList<>(Arrays.asList(null, null, null));
 
     private int userID;
 
