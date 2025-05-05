@@ -5,7 +5,7 @@ import {
     CardBody,
     Carousel,
     Checkbox,
-    Input,
+    Input, List, ListItem,
     Radio,
     Tooltip,
     Typography,
@@ -14,6 +14,8 @@ import Calendar from "../components/Calendar.jsx";
 import {BellAlertIcon, PaperAirplaneIcon,} from "@heroicons/react/16/solid/index.js";
 import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
+import depLocation from "../assets/locations/ALL_airport_departure.json"
+import arrLocation from "../assets/locations/ALL_airport_arrivals.json"
 
 
 function Homepage() {
@@ -21,6 +23,11 @@ function Homepage() {
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [showSignInAlert, setShowSignInAlert] = useState(false);
     const [showInvalidDateAlert, setShowInvalidDateAlert] = useState(false);
+    const [availableDepartureLocations, setAvailableDepartureLocations] = useState([]);
+    const [availableArrivalLocations, setAvailableArrivalLocations] = useState([]);
+    const [departureSuggestion, setDepartureSuggestion] = useState([]);
+    const [arrivalSuggestion, setArrivalSuggestion] = useState([]);
+    const [openMenu, setOpenMenu] = useState(false);
     /* User input states */
     const [formData, setFormData] = useState({
         departureAirport: "",
@@ -35,6 +42,11 @@ function Homepage() {
 
     //const [cookies, setCookies] = useCookies(["recentAirSearch"])
 
+    useEffect(() => {
+        setAvailableDepartureLocations(depLocation);
+        setAvailableArrivalLocations(arrLocation);
+    }, []);
+
     const carouselImages = [
         "./istockphoto-1629109811-612x612.jpg",
         "./pexels-sergei-a-1322276-2539430.jpg"
@@ -47,6 +59,26 @@ function Homepage() {
     Display 5 from all flight locaions in drop down
     Use cookies to save the last search and auto fill everything, except return date
      */
+    const getFilteredLocations = (input, type) => {
+        if(type === "departure") {
+            return availableDepartureLocations.filter(loc =>
+                loc.DepartAirport.toLowerCase().includes(input.toLowerCase())
+            );
+        } else {
+            return availableArrivalLocations.filter(loc =>
+                loc.ArriveAirport.toLowerCase().includes(input.toLowerCase())
+            );
+        }
+    };
+
+    /** cookie to hold last user search */
+    useEffect(() => {
+        const lastSearch = JSON.parse(localStorage.getItem('recentSearch'));
+        if (lastSearch) {
+            setFormData({...formData, ...lastSearch});
+        }
+    }, []);
+
 
     /**
      * API Call Handler
@@ -107,6 +139,9 @@ function Homepage() {
         console.log(showInvalidDateAlert)
     }, [showInvalidDateAlert]);
 
+    useEffect(() => {
+        console.log(departureSuggestion);
+    }, [departureSuggestion]);
     return (
         <section className="homepage flex flex-col justify-center items-center">
             <div className="content-start w-full h-full ">
@@ -161,25 +196,71 @@ function Homepage() {
                                     </div>
                                     <hr/>
                                     <div className="flex justify-evenly gap-2 p-3">
-                                        <div className="w-full max-w-[20rem] ">
+                                        <div className="relative w-full max-w-[20rem] ">
                                             <Input label="From"
                                                    name="departureAirport"
+                                                   value={formData.departureAirport}
                                                    className="text-text"
                                                    size="lg"
                                                    onChange={(e) => {
                                                        handleChange(e)
+                                                       setDepartureSuggestion(getFilteredLocations(e.target.value, "departure"))
                                                    }}
+                                                   onFocus={() => setOpenMenu(true)}
+                                                   onBlur={() => setTimeout(() => setOpenMenu(false), 150)}
                                             />
+                                            {departureSuggestion.length > 0 && openMenu && (
+                                                <List className="absolute z-15 w-full bg-white shadow-lg rounded-md mt-1 text-text">
+                                                    {departureSuggestion.slice(0, 4).map((loc, idx) => (
+                                                        <ListItem
+                                                            key={loc.DepartAirport}  // Use the name or unique attribute as key
+                                                            className="cursor-pointer text-sm p-2"
+                                                            onClick={() => {
+                                                                setFormData({...formData, departureAirport: loc.DepartAirport});
+                                                                setDepartureSuggestion([]);
+                                                                setOpenMenu(false)
+                                                            }}
+                                                        >
+                                                            <Typography className="text-sm">
+                                                                {loc.DepartAirport}
+                                                            </Typography>
+                                                        </ListItem>
+                                                    ))}
+                                                </List>
+                                            )}
                                         </div>
-                                        <div className="w-full max-w-[20rem]">
+                                        <div className="relative w-full max-w-[20rem]">
                                             <Input label="To"
                                                    name="arrivalAirport"
+                                                   value={formData.arrivalAirport}
                                                    className="text-text"
                                                    size="lg"
                                                    onChange={(e) => {
                                                        handleChange(e)
+                                                       setArrivalSuggestion(getFilteredLocations(e.target.value, "Arrival"))
                                                    }}
+                                                   onFocus={() => setOpenMenu(true)}
+                                                   onBlur={() => setTimeout(() => setOpenMenu(false), 150)}
                                             />
+                                            {arrivalSuggestion.length > 0 && openMenu && (
+                                                <List className="absolute z-15 w-full bg-white shadow-lg rounded-md mt-1 text-text">
+                                                    {arrivalSuggestion.slice(0, 4).map((loc, idx) => (
+                                                        <ListItem
+                                                            key={loc.ArriveAirport}  // Use the name or unique attribute as key
+                                                            className="cursor-pointer p-2"
+                                                            onClick={() => {
+                                                                setFormData({...formData, arrivalAirport: loc.ArriveAirport});
+                                                                setArrivalSuggestion([]);
+                                                                setOpenMenu(false)
+                                                            }}
+                                                        >
+                                                            <Typography className="text-sm">
+                                                                {loc.ArriveAirport}
+                                                            </Typography>
+                                                        </ListItem>
+                                                    ))}
+                                                </List>
+                                            )}
                                         </div>
                                         <div className="w-full max-w-[16rem]">
                                             <Calendar type={"departure"} isDisabled={false}
@@ -226,7 +307,7 @@ function Homepage() {
 
                     </Typography>
                 </div>
-                <div id="madz-main-carousel" className=" min-h-[600px] m-auto max-w-[78rem] px-4">
+                <div id="madz-main-carousel" className="min-h-[600px] m-auto max-w-[78rem] px-4 z-10">
                     <Carousel transition={{duration: 2}} autoplay={true} autoplayDelay={7500} loop={true}
                               className=" w-full rounded-xl">
                         {carouselImages.map((image, index) => (

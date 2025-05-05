@@ -13,7 +13,15 @@ export default function FlightCard(props) {
     }
 
     const getTime = (date) => {
-        return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: true});
+        let dateStr = new Date(date);
+        return dateStr.toLocaleString([], {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
     }
     
     useEffect(() => {
@@ -61,14 +69,14 @@ export default function FlightCard(props) {
                                             endFlights[0]?.flightNumber
                                         }
                                     </Typography>
-                                    <Typography className="text-lg border-b border-b-black max-w-[150px]">
+                                    <Typography className="text-lg border-b border-b-primary max-w-[150px]">
                                         {
                                             endFlights[0]?.departureLocation
                                         }
                                     </Typography>
                                     <Typography id="DepartureTimeValue">
                                         {
-                                           endFlights[0]?.departureDateTime
+                                          getTime(endFlights[0]?.departureDateTime)
                                         }
                                     </Typography>
                                 </div>
@@ -79,14 +87,14 @@ export default function FlightCard(props) {
                                             (endFlights.length > 1) ? endFlights[1]?.flightNumber : (<></>)
                                         }
                                     </Typography>
-                                    <Typography className="text-lg border-b border-b-black max-w-[150px]">
+                                    <Typography className="text-lg border-b border-b-primary max-w-[150px]">
                                         {
                                            (endFlights.length > 1) ? endFlights[1]?.arrivalLocation : endFlights[0]?.arrivalLocation
                                         }
                                     </Typography>
                                     <Typography id="ArrivalTimeValue">
                                         {
-                                            (endFlights.length > 1) ? endFlights[1]?.arrivalDateTime : endFlights[0]?.arrivalDateTime
+                                            (endFlights.length > 1) ? getTime(endFlights[1]?.arrivalDateTime) : getTime(endFlights[0]?.arrivalDateTime)
                                         }
                                     </Typography>
                                 </div>
@@ -111,8 +119,8 @@ export default function FlightCard(props) {
                 </Card>
             </div>
             {
-                Array.isArray(layovers.length)
-                && layovers.length > 0 ? (
+                layovers &&
+                layovers.length > 0 ? (
                     <div>
                         <Collapse open={open}>
                             <LayoverCollapse layovers={layovers}/>
