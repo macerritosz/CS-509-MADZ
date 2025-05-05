@@ -10,8 +10,7 @@ export default function FlightCard(props) {
     }
 
     const getTime = (date) => {
-        let datestr = date.split("T");
-        return datestr[1];
+        return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: true});
     }
 
     return (
@@ -24,8 +23,8 @@ export default function FlightCard(props) {
                                 props.flightData.flightNumber
                             }
                         </Typography>
-                        <div className="flex justify-between ">
-                            <div className="flex gap-2">
+                        <div className="flex justify-between items-start gap-4">
+                            <div className="flex gap-4 items-center">
                                 <div className="">
                                     <Typography className="text-xl border-b border-b-black">
                                         {
@@ -34,7 +33,7 @@ export default function FlightCard(props) {
                                     </Typography>
                                     <Typography id="DepartureTimeValue">
                                         {
-                                            getTime(props.flightData.departureDateTime)
+                                           getTime(props.flightData.departureDateTime)
                                         }
                                     </Typography>
                                 </div>

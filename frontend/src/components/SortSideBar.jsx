@@ -20,15 +20,15 @@ export default function SortSideBar({departureSort, arrivalSort, timeSort}) {
 
     const handleFilterChange = (filterType) => {
         if (filterType === "departure") {
-            setDepartureFilter(departureFilter === "NONE" ? "UP" : departureFilter === "UP" ? "DOWN" : "NONE");
+            setDepartureFilter(departureFilter === "NONE" ? "DOWN" : departureFilter === "DOWN" ? "UP" : "NONE");
             setArrivalFilter("NONE");
             setTimeFilter("NONE");
         } else if (filterType === "arrival") {
-            setArrivalFilter(arrivalFilter === "NONE" ? "UP" : arrivalFilter === "UP" ? "DOWN" : "NONE");
+            setArrivalFilter(arrivalFilter === "NONE" ? "DOWN" : arrivalFilter === "DOWN" ? "UP" : "NONE");
             setDepartureFilter("NONE");
             setTimeFilter("NONE");
         } else if (filterType === "time") {
-            setTimeFilter(timeFilter === "NONE" ? "UP" : timeFilter === "UP" ? "DOWN" : "NONE");
+            setTimeFilter(timeFilter === "NONE" ? "DOWN" : timeFilter === "DOWN" ? "UP" : "NONE");
             setDepartureFilter("NONE");
             setArrivalFilter("NONE");
         }
@@ -36,14 +36,14 @@ export default function SortSideBar({departureSort, arrivalSort, timeSort}) {
     
     useEffect(() => {
         departureSort(departureFilter);
-    }, [departureFilter, departureSort]);
+    }, [departureFilter]);
 
     useEffect(() => {
         arrivalSort(arrivalFilter);
-    }, [arrivalFilter, arrivalSort]);
+    }, [arrivalFilter]);
     useEffect(() => {
         timeSort(timeFilter);
-    }, [timeFilter, timeSort]);
+    }, [timeFilter]);
 
     return (
         <aside className="flex sticky top-0 m-4">

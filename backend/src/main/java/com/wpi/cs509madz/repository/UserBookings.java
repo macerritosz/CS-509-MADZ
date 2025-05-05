@@ -25,12 +25,22 @@ public class UserBookings {
         UserBookings.jdbcTemplate = jdbcTemplate;
     }
 
-//    public void save(FlightBookingDto booking) {
-//
-//        //pass the query string into the repository execute the user
-//        String sql = "INSERT INTO bookings (DepartDateTime, ArriveDateTime, DepartAirport, ArriveAirport, FlightNumber, UserID, Ref1, Ref2, Ref3, Ref4, Airline) VALUES (?, ?, ?,?)";
-//        jdbcTemplate.update(sql, user.getId(), user.getUsername(), user.getPassword(), user.getSalt());
-//    }
+    public void save(FlightBookingDto booking) {
+
+        //pass the query string into the repository execute the user
+        String sql = "INSERT INTO bookings (DepartDateTime, ArriveDateTime, DepartAirport, ArriveAirport, FlightNumber, UserID, Ref1, Ref2, Airline) " +
+                "VALUES (?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql,
+                booking.getDepartDateTime(),
+                booking.getArriveDateTime(),
+                booking.getDepartAirport(),
+                booking.getArriveAirport(),
+                booking.getFlightNumber(),
+                booking.getUserID(),
+                booking.getReferenceIDs().get(0),
+                booking.getReferenceIDs().get(1),
+                booking.getAirline());
+    }
 
     public List<FlightBookingDto> getAllFlightsByUserID(int id) {
         String sql = "select * from bookings where UserID = ?";
