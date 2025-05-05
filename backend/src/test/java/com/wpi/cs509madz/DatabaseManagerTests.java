@@ -5,6 +5,7 @@ import com.wpi.cs509madz.service.authenticateService.DatabaseManager;
 import com.wpi.cs509madz.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +15,7 @@ import static org.mockito.Mockito.*;
 
 public class DatabaseManagerTests {
 
+    @Mock
     private UserRepository user_repository_mock;
     private DatabaseManager database_manager;
 
@@ -33,7 +35,7 @@ public class DatabaseManagerTests {
         String password = "WorkingPassword#1";
 
         //findUserByUsername returns 0 in this case, as username is unique
-        when(user_repository_mock.findUserByUsername(username)).thenReturn(0);
+        when(user_repository_mock.doesUserExist(username)).thenReturn(0);
 
         //doesIdExist returns false in this case
         when(user_repository_mock.doesIdExist(anyInt())).thenReturn(false);
@@ -50,7 +52,7 @@ public class DatabaseManagerTests {
         String password = "WorkingPassword#2";
 
         //findUserByUsername returns 1 in this case, username is not unique
-        when(user_repository_mock.findUserByUsername(username)).thenReturn(1);
+        when(user_repository_mock.doesUserExist(username)).thenReturn(1);
 
         //When function is run, 1 should be returned; user wasn't registered
         int result = database_manager.registerUser(username, password);
@@ -69,7 +71,7 @@ public class DatabaseManagerTests {
     }
 
     @Test
-    public void test_RegisterUser_with_hashPassword_throwing_exception_should_return_negative_1() throws Exception {
+    public void test_registerUser_with_hashPassword_throwing_exception_should_return_negative_1() throws Exception {
 
         //A spy of database_manager is made in this instance, to function mostly like database_manager
         //except when triggering the error with hashPassword
@@ -79,7 +81,7 @@ public class DatabaseManagerTests {
         String password = "GoodPassword#1";
 
         //findUserByUsername returns 0 in this case, as username is unique
-        when(user_repository_mock.findUserByUsername(username)).thenReturn(0);
+        when(user_repository_mock.doesUserExist(username)).thenReturn(0);
 
         //doesIdExist returns false in this case
         when(user_repository_mock.doesIdExist(anyInt())).thenReturn(false);
@@ -109,7 +111,7 @@ public class DatabaseManagerTests {
         user_mock.setSalt(salt);
 
         //findUserByUsernameUser returns the mock user in this case, as it was provided with the user's username
-        when(user_repository_mock.returnUserByUsername(username)).thenReturn(List.of(user_mock));
+        when(user_repository_mock.getUserViaUsername(username)).thenReturn(List.of(user_mock));
 
         //When function is run, true should be returned; the user was found
         boolean result = database_manager.searchUser(username, password);
@@ -123,7 +125,7 @@ public class DatabaseManagerTests {
         String password = "CompSci509!";
 
         //findUserByUsernameUser returns an empty list in this case, as it was provided with nonexistent credentials
-        when(user_repository_mock.returnUserByUsername(username)).thenReturn(List.of());
+        when(user_repository_mock.getUserViaUsername(username)).thenReturn(List.of());
 
         //When function is run, false should be returned; the user was not found
         boolean result = database_manager.searchUser(username, password);
@@ -147,7 +149,7 @@ public class DatabaseManagerTests {
         mockUser.setSalt(salt);
 
         //findUserByUsernameUser returns the mock user in this case, as it was provided with the user's username
-        when(user_repository_mock.returnUserByUsername(username)).thenReturn(List.of(mockUser));
+        when(user_repository_mock.getUserViaUsername(username)).thenReturn(List.of(mockUser));
 
         //When function is run, false should be returned; the user was found, but the password provided does not match
         boolean result = database_manager.searchUser(username, wrong_pass);
@@ -204,9 +206,6 @@ public class DatabaseManagerTests {
         assertEquals(expected_length, hashed_password.length());
     }
 
-    //THIS PASSES, DO WE WANT IT TO PASS???
-    //OR DO WE WANT SAME PASSWORDS TO STILL HAVE DIFFERENT HASHES
-    //OH NVM IT PASSES CAUSE SALT IS THE SAME
     @Test
     public void test_hashPassword_with_same_input_should_return_same_hashes() throws Exception {
 

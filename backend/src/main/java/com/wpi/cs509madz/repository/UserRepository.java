@@ -38,7 +38,7 @@ public class UserRepository {
     }
 
 
-    public int findUserByUsername(String username) {
+    public int doesUserExist(String username) {
 
         String sql = "select * from user where username = ?";
 
@@ -48,7 +48,7 @@ public class UserRepository {
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 
                 User u = new User();
-                u.setId(rs.getInt("ID"));
+                u.setId(rs.getInt("id"));
                 u.setUsername(rs.getString("username"));
                 u.setPassword(rs.getString("password"));
                 u.setSalt(rs.getBytes("salt"));
@@ -58,8 +58,10 @@ public class UserRepository {
         };
 
         return jdbcTemplate.query(sql, new PreparedStatementSetter() {
+
                     @Override
                     public void setValues(PreparedStatement ps) throws SQLException {
+
                         ps.setString(1, username);
                     }
                 },
@@ -68,7 +70,7 @@ public class UserRepository {
     }
 
 
-    public List<User> returnUserByUsername(String username) {
+    public List<User> getUserViaUsername(String username) {
 
         String sql = "select * from user where username = ?";
 
@@ -78,7 +80,7 @@ public class UserRepository {
             public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 
                 User u = new User();
-                u.setId(rs.getInt("ID"));
+                u.setId(rs.getInt("id"));
                 u.setUsername(rs.getString("username"));
                 u.setPassword(rs.getString("password"));
                 u.setSalt(rs.getBytes("salt"));
@@ -106,35 +108,5 @@ public class UserRepository {
 
         return count != null && count > 0;
 
-    }
-
-    public List<User> authenticateUser(String username, String password) {
-
-        String sql = "select * from user where username = ? and password = ?";
-
-        RowMapper<User> rowMapper = new RowMapper<>() {
-
-            @Override
-            public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-
-                User u = new User();
-                u.setId(rs.getInt("ID"));
-                u.setUsername(rs.getString("username"));
-                u.setPassword(rs.getString("password"));
-                u.setSalt(rs.getBytes("salt"));
-
-                return u;
-            }
-        };
-
-        return jdbcTemplate.query(sql, new PreparedStatementSetter() {
-                    @Override
-                    public void setValues(PreparedStatement ps) throws SQLException {
-                        ps.setString(1, username);
-                        ps.setString(2, password);
-                    }
-                },
-                rowMapper
-        );
     }
 }
