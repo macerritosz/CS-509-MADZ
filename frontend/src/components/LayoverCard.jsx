@@ -7,7 +7,7 @@ export default function LayoverCard(props) {
         <Card>
             <CardBody className="text-text">
                 <Typography className="p-2">
-                    {props.layoverInformation.departAirport}
+                    {props.layoverInformation.departureAirport}
                 </Typography>
                 <hr/>
                 <div className="flex">

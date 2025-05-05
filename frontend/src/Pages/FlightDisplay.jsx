@@ -1,8 +1,10 @@
 import {useEffect, useState} from "react";
 import SortSideBar from "../components/SortSideBar.jsx";
 import FlightCard from "../components/FlightCard.jsx";
+import {useNavigate} from "react-router-dom";
 
 export default function FlightDisplay() {
+    const navigate = useNavigate();
     const [flightData, setFlightData] = useState(null);
     const [parsedFlights, setParsedFlights] = useState([]);
     const [sortByDeparture, setSortByDeparture] = useState([]);
@@ -12,88 +14,54 @@ export default function FlightDisplay() {
     const [arrivalSortState, setArrivalSortState] = useState("NONE");
     const [timeSortState, setTimeSortState] = useState("NONE");
     const [unsortedData, setUnsortedData] = useState([]);
+    const [currentFlights, setCurrentFlights] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 20; // or whatever number you want per page
+
 
     const Strategy = {
         DEPARTURE: "departure",
         ARRIVAL: "arrival",
     }
 
-    const dummyFlightData = [
-        {
-            departureDateTime: "2025-04-12T08:30:00",
-            arrivalDateTime: "2025-04-12T12:15:00",
-            departAirport: "New York (JFK)",
-            arrivalAirport: "Los Angeles (LAX)",
-            layoverFlights: [],
-            flightNumber: "AA100"
-        },
-        {
-            departureDateTime: "2025-04-13T14:45:00",
-            arrivalDateTime: "2025-04-13T22:00:00",
-            departAirport: "ORD",
-            arrivalAirport: "San Francisco (SFO)",
-            layoverFlights: [
-                {
-                    departureDateTime: "2025-04-13T14:45:00",
-                    arrivalDateTime: "2025-04-13T17:15:00",
-                    departAirport: "ORD",
-                    arrivalAirport: "DEN",
-                    flightNumber: "UA300"
-                },
-                {
-                    departureDateTime: "2025-04-13T18:00:00",
-                    arrivalDateTime: "2025-04-13T22:00:00",
-                    departAirport: "DEN",
-                    arrivalAirport: "SFO",
-                    flightNumber: "UA450"
-                }
-            ],
-            flightNumber: "UA999"
-        },
-        {
-            departureDateTime: "2025-04-14T06:20:00",
-            arrivalDateTime: "2025-04-14T09:30:00",
-            departAirport: "ATL",
-            arrivalAirport: "MIA",
-            layoverFlights: [],
-            flightNumber: "DL404"
-        }
-    ];
-
     /**
      * On page Load:
      * Request: getResultingFlights will be called with the form data
      * Response: Payload will contain the found data and page contents will be loaded
-     * Access of session storage: an hastable to access for data
      * if null, return to homepage
      */
     useEffect(() => {
-        setFlightData(dummyFlightData)
+        setFlightData(parseData())
     }, [])
 
-    // useEffect(() => {
-    //     if (flightData === null) {
-    //         //response thats like error getting data, navigate to homepage and
-    //     }
-    // }, [flightData])
-
     const parseData = () => {
-        return JSON.parse(sessionStorage.getItem("FlightDataResponse"));
+        const data = sessionStorage.getItem("FlightDataResponse");
+        if (!data) return null;
+        return JSON.parse(data);
     }
     // make the Departure Date Time string into Date objects
     useEffect(() => {
         //if theres no data in flightData / ParsedData, do nothing
         if (!flightData) return;
 
-        const updatedFlights = flightData.map(flight => ({
-            ...flight,
-            departureDateTime: new Date(flight.departureDateTime),
-            arrivalDateTime: new Date(flight.arrivalDateTime),
-        }));
+        const updatedFlights = parseFlightData(flightData);
 
         setParsedFlights(updatedFlights);
         setUnsortedData(updatedFlights);
     }, [flightData])
+
+    function parseFlightData(rawData) {
+        const allGroups = [];
+
+        if (rawData.southwestFlights) {
+            allGroups.push(...rawData.southwestFlights);
+        }
+        if (rawData.deltaFlights) {
+            allGroups.push(...rawData.deltaFlights);
+        }
+
+        return allGroups;
+    }
 
     // Do Merge sort when user changes sort strategy default is
     function merge(arr, left, right, strategy) {
@@ -153,13 +121,36 @@ export default function FlightDisplay() {
         )
     }, [departureSortState, arrivalSortState, unsortedData]);
 
-    const createFlightCards = (flights, key) => {
+    useEffect(() => {
+        console.log("Current page changed:", currentPage);
+        const flightsToDisplay = parsedFlights.slice(
+            (currentPage - 1) * itemsPerPage,
+            currentPage * itemsPerPage
+        );
+        setCurrentFlights(flightsToDisplay);
+    }, [parsedFlights, currentPage]);
+
+    const totalPages = Math.ceil(parsedFlights.length / itemsPerPage);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
+    const createFlightCards = (data, key) => {
         return (
             <div key={key} className="p-1">
-                <FlightCard flightData={flights}/>
+                <FlightCard data={data}/>
             </div>
         )
     }
+
+    useEffect(() => {
+        console.log(currentFlights);
+    }, [currentFlights]);
 
     return (
         <section className="relative min-h-screen">
@@ -169,11 +160,23 @@ export default function FlightDisplay() {
                         <SortSideBar departureSort={setDepartureSortState} arrivalSort={setArrivalSortState} timeSort={setTimeSortState}/>
                     </aside>
                     <div className="flex-col mt-8 w-full">
-                        {parsedFlights &&
-                            parsedFlights.map((flight, index) => (
-                                createFlightCards(flight, `flightCard-${index}`)
-                            ))
+                        {currentFlights.length > 0 ?
+                            (currentFlights.map((flightGroup, index) => (
+                                createFlightCards(flightGroup, `flightCard-${flightGroup.flightPath[0].departureDateTime}-${flightGroup.flightTimes[0]}-${(totalPages*itemsPerPage) - (index * currentPage)}`)
+                            ))) :
+                            (
+                                <div>No flights to display.</div>
+                            )
                         }
+                        <div className="flex justify-center mt-4 space-x-2">
+                            <button onClick={handlePrevPage} disabled={currentPage === 1}>
+                                Prev
+                            </button>
+                            <span>{currentPage} / {totalPages}</span>
+                            <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                                Next
+                            </button>
+                        </div>
                     </div>
                 </div>
 
