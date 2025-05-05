@@ -1,10 +1,13 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Button, Card, CardBody, Collapse, Typography} from "@material-tailwind/react";
 import {ArrowRightIcon} from "@heroicons/react/16/solid/index.js";
 import LayoverCollapse from "./LayoverCollapse.jsx";
 
 export default function FlightCard(props) {
     const [open, setOpen] = useState(false);
+    const [layovers, setLayovers] = useState([]);
+    const [allFlightData, setAllFlightData] = useState(props.data);
+    const [endFlights, setEndFlights] = useState([]);
     const handleLayoversOpen = () => {
         setOpen((cur) => !cur);
     }
@@ -12,58 +15,95 @@ export default function FlightCard(props) {
     const getTime = (date) => {
         return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: true});
     }
+    
+    useEffect(() => {
+        setAllFlightData(props.data)
+    }, [])
+
+    const parseLayovers = () => {
+        let flightList = allFlightData?.flightPath || [];
+        let layovers = []
+        if(flightList.length > 2) {
+            layovers.push(flightList[1])
+            if(flightList.length > 3) {
+                layovers.push(flightList[2])
+            }
+        }
+        return layovers;
+    }
+    const parseEndFlight = () => {
+        let flightList = allFlightData?.flightPath || [];
+        let endFlights = []
+        endFlights.push(flightList[0])
+        if(flightList.length > 1) {
+            endFlights.push(flightList[flightList.length - 1])
+        }
+        return endFlights;
+    }
+
+    useEffect(() => {
+        if (allFlightData && allFlightData.flightPath) {
+            setLayovers(parseLayovers());
+            setEndFlights(parseEndFlight());
+        }
+    }, [allFlightData]);
 
     return (
         <div>
             <div>
                 <Card className="flightCardInformation hover">
                     <CardBody className="text-text">
-                        <Typography>
-                            {
-                                props.flightData.flightNumber
-                            }
-                        </Typography>
-                        <div className="flex justify-between items-start gap-4">
+                        <div className="flex justify-between items-center gap-4">
                             <div className="flex gap-4 items-center">
-                                <div className="">
-                                    <Typography className="text-xl border-b border-b-black">
+                                <div className="min-w-[150px]">
+                                    <Typography>
                                         {
-                                            props.flightData.departAirport
+                                            endFlights[0]?.flightNumber
+                                        }
+                                    </Typography>
+                                    <Typography className="text-lg border-b border-b-black max-w-[150px]">
+                                        {
+                                            endFlights[0]?.departureLocation
                                         }
                                     </Typography>
                                     <Typography id="DepartureTimeValue">
                                         {
-                                           getTime(props.flightData.departureDateTime)
+                                           endFlights[0]?.departureDateTime
                                         }
                                     </Typography>
                                 </div>
                                 <ArrowRightIcon className="w-7 h-7"/>
-                                <div>
-                                    <Typography className="text-xl border-b border-b-black">
+                                <div className="min-w-[150px]">
+                                    <Typography>
                                         {
-                                            props.flightData.arrivalAirport
+                                            (endFlights.length > 1) ? endFlights[1]?.flightNumber : (<></>)
+                                        }
+                                    </Typography>
+                                    <Typography className="text-lg border-b border-b-black max-w-[150px]">
+                                        {
+                                           (endFlights.length > 1) ? endFlights[1]?.arrivalLocation : endFlights[0]?.arrivalLocation
                                         }
                                     </Typography>
                                     <Typography id="ArrivalTimeValue">
                                         {
-                                            getTime(props.flightData.arrivalDateTime)
+                                            (endFlights.length > 1) ? endFlights[1]?.arrivalDateTime : endFlights[0]?.arrivalDateTime
                                         }
                                     </Typography>
                                 </div>
                             </div>
-                            <div>
+                            <div  className="flex flex-col items-start gap-2 min-w-[150px]">
                                 <Typography className="text-text text-lg">
                                     {
-                                        "Layovers:" + props.flightData.layoverFlights.length
+                                        "Layovers:" + layovers.length
                                     }
                                 </Typography>
                                 <Button onClick={handleLayoversOpen}
-                                        disabled={props.flightData.layoverFlights.length === 0}>
+                                        disabled={layovers.length === 0}>
                                     View Layover Info
                                 </Button>
                             </div>
 
-                            <Button className="block" id="full card size button">
+                            <Button>
                                 Flight Submit
                             </Button>
                         </div>
@@ -71,11 +111,11 @@ export default function FlightCard(props) {
                 </Card>
             </div>
             {
-                Array.isArray(props.flightData.layoverFlights)
-                && props.flightData.layoverFlights.length > 0 ? (
+                Array.isArray(layovers.length)
+                && layovers.length > 0 ? (
                     <div>
                         <Collapse open={open}>
-                            <LayoverCollapse layovers={props.flightData.layoverFlights}/>
+                            <LayoverCollapse layovers={layovers}/>
                         </Collapse>
                     </div>
                 ) : (<Typography></Typography>)

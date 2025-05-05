@@ -50,11 +50,7 @@ public class SouthwestsRepository {
         List<Booking> bookings = new ArrayList<>();
 
         for (Flight flight : flights) {
-            bookings.add(new Booking(flight.getFlightNumber(),
-                    flight.getDepartDateTime(),
-                    flight.getDepartAirport(),
-                    flight.getArriveDateTime(),
-                    flight.getArriveAirport()));
+            bookings.add(new Booking(flight));
         }
 
         return bookings;

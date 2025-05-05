@@ -23,10 +23,10 @@ function Homepage() {
     const [showInvalidDateAlert, setShowInvalidDateAlert] = useState(false);
     /* User input states */
     const [formData, setFormData] = useState({
-        departAirport: "",
+        departureAirport: "",
         arrivalAirport: "",
         departureDate: "",
-        returnDate: "",
+        arrivalDate: "",
         isSameDay: false,
         isDirect: false,
     })
@@ -55,31 +55,30 @@ function Homepage() {
      * @param e
      */
     const handleSubmit = async (e) => {
-        navigate('/Flights');
-        // e.preventDefault();
-        // if(!checkValidDates()) return;
-        // if(localStorage.getItem("userID") == null) {
-        //     setIsSignedIn(false);
-        //     setShowSignInAlert(true);
-        // } else {
-        //     try {
-        //         const jsonFormData = JSON.stringify(formData);
-        //         const response = await fetch("/api/submit", {
-        //             method: "POST",
-        //             headers: {
-        //                 "Content-Type": "application/json",
-        //             },
-        //             body: jsonFormData,
-        //         })
-        //         if (response.ok) {
-        //             const result = await response.json();
-        //             navigate('/Flights');
-        //             sessionStorage.setItem("FlightDataResponse", JSON.stringify(result.flights));
-        //         }
-        //     } catch (error) {
-        //         console.log("Form Submission Error: ", error);
-        //     }
-        // }
+        e.preventDefault();
+        if(!checkValidDates()) return;
+        if(localStorage.getItem("userID") == null) {
+            setIsSignedIn(false);
+            setShowSignInAlert(true);
+        } else {
+            try {
+                const jsonFormData = JSON.stringify(formData);
+                const response = await fetch("/api/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: jsonFormData,
+                })
+                if (response.ok) {
+                    const result = await response.json();
+                    sessionStorage.setItem("FlightDataResponse", JSON.stringify(result.allBookings));
+                    navigate('/Flights');
+                }
+            } catch (error) {
+                console.log("Form Submission Error: ", error);
+            }
+        }
     }
 
     const handleChange = (e) => {
@@ -164,7 +163,7 @@ function Homepage() {
                                     <div className="flex justify-evenly gap-2 p-3">
                                         <div className="w-full max-w-[20rem] ">
                                             <Input label="From"
-                                                   name="departAirport"
+                                                   name="departureAirport"
                                                    className="text-text"
                                                    size="lg"
                                                    onChange={(e) => {
@@ -198,7 +197,7 @@ function Homepage() {
                                                      placement="right">
                                                 <span className="inline-block w-full">
                                                     <Calendar
-                                                        type="return"
+                                                        type={"return"}
                                                         isDisabled={isOneway}
                                                         handleChange={(e) => handleChange(e)}
                                                     />
@@ -224,7 +223,7 @@ function Homepage() {
                 </div>
                 <div className="w-full max-w-[78rem] p-4 m-auto">
                     <Typography variant="body2" component="p" className="">
-                        Meow
+
                     </Typography>
                 </div>
                 <div id="madz-main-carousel" className=" min-h-[600px] m-auto max-w-[78rem] px-4">

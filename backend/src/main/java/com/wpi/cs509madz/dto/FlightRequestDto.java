@@ -73,4 +73,10 @@ public class FlightRequestDto {
     public void setArrivalDate(String arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
+
+
+    @Override
+    public String toString() {
+        return oneWay + " " + roundTrip + " " + isSameDay + " " + isDirect + " " + departureAirport + " " + arrivalAirport + " " + departureDate + " " + arrivalDate;
+    }
 }

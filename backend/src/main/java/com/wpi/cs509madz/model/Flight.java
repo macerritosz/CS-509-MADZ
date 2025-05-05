@@ -2,13 +2,15 @@ package com.wpi.cs509madz.model;
 
 import com.wpi.cs509madz.service.utils.DateTime;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Flight {
-
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
     private String departDateTime;
 
@@ -21,8 +23,7 @@ public class Flight {
     private String flightNumber;
 
 
-
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -68,6 +69,10 @@ public class Flight {
 
     @Override
     public String toString() {
-        return flightNumber + " " + departDateTime + " " + arriveDateTime + " " + departAirport + " " + arriveAirport + " " + flightNumber;
+        return id + " " + flightNumber + " " + departDateTime + " " + arriveDateTime + " " + departAirport + " " + arriveAirport;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }

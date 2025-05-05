@@ -54,7 +54,7 @@ public class DatabaseManager {
             return 2;
         }
 
-        int result = user_repository.findUserByUsername(username);
+        int result = user_repository.doesUserExist(username);
 
         if (result == 1) {
 
@@ -71,7 +71,8 @@ public class DatabaseManager {
         try {
 
             hashed_password = hashPassword(password, salt);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
 
             System.out.println(e.getMessage());
             return -1;
@@ -92,7 +93,7 @@ public class DatabaseManager {
     public boolean searchUser(String username, String password) throws Exception {
 
         // You’d compare hashed passwords here in a real implementation
-        List<User> user = user_repository.returnUserByUsername(username);
+        List<User> user = user_repository.getUserViaUsername(username);
 
         if (!(user.isEmpty())) {
 

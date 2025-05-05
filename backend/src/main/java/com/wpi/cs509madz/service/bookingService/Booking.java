@@ -1,12 +1,16 @@
 package com.wpi.cs509madz.service.bookingService;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.wpi.cs509madz.dto.FlightBookingDto;
 import com.wpi.cs509madz.model.Flight;
 import com.wpi.cs509madz.service.utils.DateTime;
 
 import java.util.*;
 
+@JsonSerialize
 public class Booking implements IBooking {
+    private Integer id;
     private List<Booking> flightDatabase;
     private String flightNumber;
     private final DateTime departureDate;
@@ -26,11 +30,12 @@ public class Booking implements IBooking {
     }
 
     public Booking(Flight flight) {
+        this.id = flight.getId();
         this.flightNumber = flight.getFlightNumber();
-        this.departureDate = getDepartureDate();
-        this.departureLocation = getDepartureLocation();
-        this.arrivalDate = getArrivalDateTime();
-        this.arrivalLocation = getArrivalLocation();
+        this.departureDate = flight.getDepartDateTime();
+        this.departureLocation = flight.getDepartAirport();
+        this.arrivalDate = flight.getArriveDateTime();
+        this.arrivalLocation = flight.getArriveAirport();
     }
 
     public Booking (FlightBookingDto flight) {
@@ -54,6 +59,7 @@ public class Booking implements IBooking {
         return departureDate;
     }
 
+    @JsonIgnore
     public DateTime getDepartureDate() {
         return new DateTime(departureDate.getYear() + "-" + departureDate.getMonth() + "-" + departureDate.getDay());
     }
@@ -67,9 +73,25 @@ public class Booking implements IBooking {
     public DateTime getArrivalDateTime() {
         return arrivalDate;
     }
-
+    @JsonIgnore
     public DateTime getArrivalDate() {
         return new DateTime(arrivalDate.getYear() + "-" + arrivalDate.getMonth() + "-" + arrivalDate.getDay());
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
     }
 
     @Override
@@ -243,6 +265,6 @@ public class Booking implements IBooking {
 
     @Override
     public String toString() {
-        return flightNumber + ": " + departureDate + ", " + departureLocation + " -> " + arrivalDate + ", " + arrivalLocation;
+        return id + " " +  flightNumber + ": " + departureDate + ", " + departureLocation + " -> " + arrivalDate + ", " + arrivalLocation;
     }
 }

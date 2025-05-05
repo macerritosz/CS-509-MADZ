@@ -1,5 +1,8 @@
 package com.wpi.cs509madz.service.utils;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonSerialize(using = DateTimeSerializer.class)
 public class DateTime {
     private final int year;
     private final int month;
@@ -35,6 +38,12 @@ public class DateTime {
     public int getDay() {
         return day;
     }
+
+    public int getHour() {return hour;}
+
+    public int getMin() {return min;}
+
+    public int getSec() {return sec;}
 
     /**
      * Calculates if one date is before another
