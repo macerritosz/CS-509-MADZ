@@ -111,7 +111,7 @@ public class AuthenticateControllerTests {
         //Mock the user repository so that when returnUserByUsername is called, user_mock is returned
         //Also, when the database manager mock calls getRepository, user_repository_mock is returned
         UserRepository user_repository_mock = mock(UserRepository.class);
-        when(user_repository_mock.returnUserByUsername("existing_user")).thenReturn(List.of(user_mock));
+        when(user_repository_mock.getUserViaUsername("existing_user")).thenReturn(List.of(user_mock));
         when(database_manager_mock.getRepository()).thenReturn(user_repository_mock);
 
         ResponseEntity<?> response = authenticate_controller.signIn(request);
@@ -133,7 +133,7 @@ public class AuthenticateControllerTests {
         ResponseEntity<?> response = authenticate_controller.signIn(request);
 
         //When function is run, a response of HTTP 401 UNAUTHORIZED should be returned. "Invalid username or
-        //"password" should also be printed to the console
+        //password" should also be printed to the console
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertTrue(Objects.requireNonNull(response.getBody()).toString().contains("Invalid username or password"));
     }
