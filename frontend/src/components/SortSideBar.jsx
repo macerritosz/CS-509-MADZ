@@ -7,7 +7,7 @@ import {ChevronDownIcon, ChevronUpIcon, ChevronUpDownIcon} from "@heroicons/reac
 import React from "react";
 
 
-export default function SortSideBar(props) {
+export default function SortSideBar({departureSort, arrivalSort, timeSort}) {
     const FilterState = {
         UP:<ChevronUpIcon  className="w-5 h-5" />,
         DOWN:<ChevronDownIcon className="w-5 h-5" />,
@@ -20,19 +20,31 @@ export default function SortSideBar(props) {
 
     const handleFilterChange = (filterType) => {
         if (filterType === "departure") {
-            setDepartureFilter(departureFilter === "NONE" ? "UP" : departureFilter === "UP" ? "DOWN" : "NONE");
+            setDepartureFilter(departureFilter === "NONE" ? "DOWN" : departureFilter === "DOWN" ? "UP" : "NONE");
             setArrivalFilter("NONE");
             setTimeFilter("NONE");
         } else if (filterType === "arrival") {
-            setArrivalFilter(arrivalFilter === "NONE" ? "UP" : arrivalFilter === "UP" ? "DOWN" : "NONE");
+            setArrivalFilter(arrivalFilter === "NONE" ? "DOWN" : arrivalFilter === "DOWN" ? "UP" : "NONE");
             setDepartureFilter("NONE");
             setTimeFilter("NONE");
         } else if (filterType === "time") {
-            setTimeFilter(timeFilter === "NONE" ? "UP" : timeFilter === "UP" ? "DOWN" : "NONE");
+            setTimeFilter(timeFilter === "NONE" ? "DOWN" : timeFilter === "DOWN" ? "UP" : "NONE");
             setDepartureFilter("NONE");
             setArrivalFilter("NONE");
         }
     }
+    
+    useEffect(() => {
+        departureSort(departureFilter);
+    }, [departureFilter]);
+
+    useEffect(() => {
+        arrivalSort(arrivalFilter);
+    }, [arrivalFilter]);
+    useEffect(() => {
+        timeSort(timeFilter);
+    }, [timeFilter]);
+
     return (
         <aside className="flex sticky top-0 m-4">
             <Card className="p-4">

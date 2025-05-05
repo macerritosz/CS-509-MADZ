@@ -1,21 +1,34 @@
-import {Button, Card, CardBody, Carousel, Checkbox, Input, Radio,} from "@material-tailwind/react";
+import {
+    Alert,
+    Button,
+    Card,
+    CardBody,
+    Carousel,
+    Checkbox,
+    Input,
+    Radio,
+    Tooltip,
+    Typography,
+} from "@material-tailwind/react";
 import Calendar from "../components/Calendar.jsx";
-import {PaperAirplaneIcon} from "@heroicons/react/16/solid/index.js";
+import {BellAlertIcon, PaperAirplaneIcon,} from "@heroicons/react/16/solid/index.js";
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {useCookies} from "react-cookie"
+import React, {useEffect, useState} from "react";
 
 
 function Homepage() {
     const navigate = useNavigate();
+    const [isSignedIn, setIsSignedIn] = useState(false);
+    const [showSignInAlert, setShowSignInAlert] = useState(false);
+    const [showInvalidDateAlert, setShowInvalidDateAlert] = useState(false);
     /* User input states */
     const [formData, setFormData] = useState({
-        departAirport : "",
-        arrivalAirport : "",
-        departureDate : "",
-        returnDate : "",
-        isSameDay : false,
-        isDirect : false,
+        departAirport: "",
+        arrivalAirport: "",
+        departureDate: "",
+        returnDate: "",
+        isSameDay: false,
+        isDirect: false,
     })
 
     const [isOneway, setOneway] = useState(true);
@@ -42,35 +55,39 @@ function Homepage() {
      * @param e
      */
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            appendSearchType();
-            const jsonFormData = JSON.stringify(formData);
-            const response = await fetch("/submit", {
-                method: "POST",
-                headers: {
-                    ContentType: "application/json",
-                },
-                body: jsonFormData,
-            })
-            if (response.ok) {
-                navigate('/Flights');
-            }
-        } catch (error) {
-            console.log( "Form Submission Error: ", error);
-        }
+        navigate('/Flights');
+        // e.preventDefault();
+        // if(!checkValidDates()) return;
+        // if(localStorage.getItem("userID") == null) {
+        //     setIsSignedIn(false);
+        //     setShowSignInAlert(true);
+        // } else {
+        //     try {
+        //         const jsonFormData = JSON.stringify(formData);
+        //         const response = await fetch("/api/submit", {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //             },
+        //             body: jsonFormData,
+        //         })
+        //         if (response.ok) {
+        //             const result = await response.json();
+        //             navigate('/Flights');
+        //             sessionStorage.setItem("FlightDataResponse", JSON.stringify(result.flights));
+        //         }
+        //     } catch (error) {
+        //         console.log("Form Submission Error: ", error);
+        //     }
+        // }
     }
 
     const handleChange = (e) => {
-        if(e.target.name === "isSameDay" || e.target.name === "isDirect") {
+        if (e.target.name === "isSameDay" || e.target.name === "isDirect") {
             setFormData({...formData, [e.target.name]: e.target.checked});
-        } else  {
+        } else {
             setFormData({...formData, [e.target.name]: e.target.value});
         }
-    }
-
-    const appendSearchType = () => {
-        setFormData({...formData, isOneway: isOneway});
     }
 
     useEffect(() => {
@@ -78,81 +95,144 @@ function Homepage() {
     }, [formData])
 
 
+    const checkValidDates = () => {
+        if(!isOneway && (!formData.returnDate || new Date(formData.returnDate) < new Date(formData.departureDate))){
+            setShowInvalidDateAlert(true)
+            return false
+        }
+        setShowInvalidDateAlert(false); // Hide tooltip if valid
+        return true;
+    }
+
+    useEffect(() => {
+        console.log(showInvalidDateAlert)
+    }, [showInvalidDateAlert]);
 
     return (
         <section className="homepage flex flex-col justify-center items-center">
-            <div className="container mx-auto">
-                <div id="madz-home-form-holder" className=" p-4 m-10 rounded-lg">
-                    <Card className="w-full" id="madz-form-card">
-                        <CardBody>
-                            <form id="madz-main-flight-form" className="items-center" onSubmit={handleSubmit}>
-                                <div className="flex justify-between">
-                                    <div id="madz-radio-flight-type" className="flex gap-5">
-                                        <Radio name="flight-type"
-                                               label="One-way"
-                                               color="accent"
-                                               onClick={() => {
-                                                   setOneway(true)
-                                               }}
-                                               defaultChecked
-                                        />
-                                        <Radio name="flight-type"
-                                               label="Round-Trip"
-                                               color="accent"
-                                               onClick={() => {
-                                                   setOneway(false)
-                                               }}
-                                        />
-                                    </div>
-                                    <div>
-                                        <Checkbox label="Same-Day Flights Only" color="accent" name="isSameDay" onChange={handleChange}/>
-                                        <Checkbox label="Direct Flights Only" color="accent" name="isDirect" onChange={handleChange}/>
-                                    </div>
+            <div className="content-start w-full h-full ">
+                <div className=" relative w-full h-[30rem]">
+                    <img src="/StockCake-Expansive%20Cloudy%20Sky_1746028727.jpg"
+                         className="max-h-[30rem] w-full object-cover"/>
+                    <div id="madz-home-form-holder" className="absolute inset-0 flex items-center justify-center">
+                        {
+                            showSignInAlert && (
+                                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-[40rem]">
+                                    <Alert open={showSignInAlert} onClose={() => setShowSignInAlert(false)} color={"green"}>
+                                        <div className="flex gap-2 items-center">
+                                            <BellAlertIcon className=" w-5 h-5" />
+                                            <Typography>
+                                                Sign In to book your flights!
+                                            </Typography>
+                                        </div>
+                                    </Alert>
                                 </div>
-                                <div className="flex gap-2 mt-2 justify-evenly">
-                                    <div className="w-full max-w-[16rem] ">
-                                        <Input label="From"
-                                               name="departAirport"
-                                               className="text-text"
-                                               size="lg"
-                                               onChange={(e) => {
-                                                   handleChange(e)
-                                               }}
-                                        />
+                            )
+                        }
+                        <Card className="w-full max-w-[78rem] backdrop-blur-md rounded-lg m-auto " id="madz-form-card">
+                            <CardBody className="p-4">
+                                <Typography variant="h4" component="h2" className="mt-2 mb-2">
+                                    Book Flights through WPI
+                                </Typography>
+                                <form id="madz-main-flight-form" className="items-center h-full" onSubmit={handleSubmit}>
+                                    <div className="flex justify-between pb-1">
+                                        <div id="madz-radio-flight-type" className="flex gap-5">
+                                            <Radio name="flight-type"
+                                                   label="One-way"
+                                                   color="accent"
+                                                   onClick={() => {
+                                                       setOneway(true)
+                                                   }}
+                                                   defaultChecked
+                                            />
+                                            <Radio name="flight-type"
+                                                   label="Round-Trip"
+                                                   color="accent"
+                                                   onClick={() => {
+                                                       setOneway(false)
+                                                   }}
+                                            />
+                                        </div>
+                                        <div>
+                                            <Checkbox label="Same-Day Flights Only" color="accent" name="isSameDay"
+                                                      onChange={handleChange}/>
+                                            <Checkbox label="Direct Flights Only" color="accent" name="isDirect"
+                                                      onChange={handleChange}/>
+                                        </div>
                                     </div>
-                                    <div className="w-full max-w-[16rem]">
-                                        <Input label="To"
-                                               name = "arrivalAirport"
-                                               className="text-text"
-                                               size="lg"
-                                               onChange={(e) => {
-                                                   handleChange(e)
-                                               }}
-                                        />
-                                    </div>
-                                    <div className="w-full max-w-[16rem]">
-                                        <Calendar type={"departure"} isDisabled={false} handleChange={(e) => handleChange(e)} />
-                                    </div>
-                                    <div className="w-full max-w-[16rem]">
-                                        <Calendar type={"return"} isDisabled={isOneway} handleChange={(e) => handleChange(e)} />
-                                    </div>
+                                    <hr/>
+                                    <div className="flex justify-evenly gap-2 p-3">
+                                        <div className="w-full max-w-[20rem] ">
+                                            <Input label="From"
+                                                   name="departAirport"
+                                                   className="text-text"
+                                                   size="lg"
+                                                   onChange={(e) => {
+                                                       handleChange(e)
+                                                   }}
+                                            />
+                                        </div>
+                                        <div className="w-full max-w-[20rem]">
+                                            <Input label="To"
+                                                   name="arrivalAirport"
+                                                   className="text-text"
+                                                   size="lg"
+                                                   onChange={(e) => {
+                                                       handleChange(e)
+                                                   }}
+                                            />
+                                        </div>
+                                        <div className="w-full max-w-[16rem]">
+                                            <Calendar type={"departure"} isDisabled={false}
+                                                      handleChange={(e) => handleChange(e)}/>
+                                        </div>
+                                        <div className="w-full max-w-[16rem]">
+                                            <Tooltip open={showInvalidDateAlert}
+                                                     handler={() => {}}
+                                                     className="bg-red-400"
+                                                     content={"Invalid Date"}
+                                                     animate={{
+                                                         mount: {scale: 1, y: 0},
+                                                         unmount: {scale: 0, y: 25},
+                                                     }}
+                                                     placement="right">
+                                                <span className="inline-block w-full">
+                                                    <Calendar
+                                                        type="return"
+                                                        isDisabled={isOneway}
+                                                        handleChange={(e) => handleChange(e)}
+                                                    />
+                                                </span>
+                                            </Tooltip>
+                                        </div>
 
-                                    <Button type="submit" className="!bg-accent flex items-center gap-1 px-4 py-2">
+                                    </div>
+                                    <div className="pt-2 p-4">
+                                        <Button type="submit"
+                                                className="!bg-accent flex items-center gap-1 px-8">
                                         <span>
                                             Submit
                                         </span>
-                                        <PaperAirplaneIcon className="w-5 h-5"/>
-                                    </Button>
-                                </div>
-                            </form>
-                        </CardBody>
-                    </Card>
+                                            <PaperAirplaneIcon className="w-5 h-5"/>
+                                        </Button>
+                                    </div>
+
+                                </form>
+                            </CardBody>
+                        </Card>
+                    </div>
                 </div>
-                <div id="madz-main-carousel" className=" min-h-[600px] mb-8">
-                    <Carousel transition={{ duration: 2 }} autoplay={true} autoplayDelay={7500} loop={true} className=" w-full rounded-xl">
+                <div className="w-full max-w-[78rem] p-4 m-auto">
+                    <Typography variant="body2" component="p" className="">
+                        Meow
+                    </Typography>
+                </div>
+                <div id="madz-main-carousel" className=" min-h-[600px] m-auto max-w-[78rem] px-4">
+                    <Carousel transition={{duration: 2}} autoplay={true} autoplayDelay={7500} loop={true}
+                              className=" w-full rounded-xl">
                         {carouselImages.map((image, index) => (
                             <div key={index}>
-                                <img src={image} alt={`slide-${index}`} className="w-full h-[600px] object-cover" />
+                                <img src={image} alt={`slide-${index}`} className="w-full h-[600px] object-cover"/>
                             </div>
                         ))}
                     </Carousel>

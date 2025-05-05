@@ -2,13 +2,15 @@ package com.wpi.cs509madz.service.bookingService;
 
 import com.wpi.cs509madz.service.utils.DateTime;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface IBooking {
+    DateTime getDepartureDateTime();
     DateTime getDepartureDate();
+    String getDepartureLocation();
+    DateTime getArrivalDateTime();
     DateTime getArrivalDate();
     String getArrivalLocation();
 
-    ArrayList<ArrayList<IBooking>> calculateLayoverOptions();
     String toString();
 }

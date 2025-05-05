@@ -1,5 +1,6 @@
 package com.wpi.cs509madz.model;
 
+import com.wpi.cs509madz.service.utils.DateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -45,12 +46,12 @@ public class Flight {
         this.flightNumber = flightNumber;
     }
 
-    public String getDepartDateTime() {
-        return departDateTime;
+    public DateTime getDepartDateTime() {
+        return new DateTime(departDateTime);
     }
 
-    public String getArriveDateTime() {
-        return arriveDateTime;
+    public DateTime getArriveDateTime() {
+        return new DateTime(arriveDateTime);
     }
 
     public String getDepartAirport() {
