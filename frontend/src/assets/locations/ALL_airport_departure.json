@@ -1,0 +1,731 @@
+[
+	{
+		"DepartAirport" : "Houston (IAH)"
+	},
+	{
+		"DepartAirport" : "Dallas (DAL)"
+	},
+	{
+		"DepartAirport" : "Washington (DCA)"
+	},
+	{
+		"DepartAirport" : "Nashville (BNA)"
+	},
+	{
+		"DepartAirport" : "Orlando (MCO)"
+	},
+	{
+		"DepartAirport" : "Columbus (CMH)"
+	},
+	{
+		"DepartAirport" : "Tampa (TPA)"
+	},
+	{
+		"DepartAirport" : "Fort Lauderdale (FLL)"
+	},
+	{
+		"DepartAirport" : "Baltimore (BWI)"
+	},
+	{
+		"DepartAirport" : "Chicago (MDW)"
+	},
+	{
+		"DepartAirport" : "Detroit (DTW)"
+	},
+	{
+		"DepartAirport" : "Denver (DEN)"
+	},
+	{
+		"DepartAirport" : "Kansas City (MCI)"
+	},
+	{
+		"DepartAirport" : "Tulsa (TUL)"
+	},
+	{
+		"DepartAirport" : "Phoenix (PHX)"
+	},
+	{
+		"DepartAirport" : "Long Beach (LGB)"
+	},
+	{
+		"DepartAirport" : "Houston (HOU)"
+	},
+	{
+		"DepartAirport" : "Lubbock (LBB)"
+	},
+	{
+		"DepartAirport" : "New Orleans (MSY)"
+	},
+	{
+		"DepartAirport" : "Austin (AUS)"
+	},
+	{
+		"DepartAirport" : "San Jose del Cabo (SJD)"
+	},
+	{
+		"DepartAirport" : "Boston (BOS)"
+	},
+	{
+		"DepartAirport" : "Harlingen (HRL)"
+	},
+	{
+		"DepartAirport" : "Las Vegas (LAS)"
+	},
+	{
+		"DepartAirport" : "Santa Barbara (SBA)"
+	},
+	{
+		"DepartAirport" : "Colorado Springs (COS)"
+	},
+	{
+		"DepartAirport" : "Little Rock (LIT)"
+	},
+	{
+		"DepartAirport" : "Pittsburgh (PIT)"
+	},
+	{
+		"DepartAirport" : "San Antonio (SAT)"
+	},
+	{
+		"DepartAirport" : "Albuquerque (ABQ)"
+	},
+	{
+		"DepartAirport" : "Birmingham (BHM)"
+	},
+	{
+		"DepartAirport" : "Los Angeles (LAX)"
+	},
+	{
+		"DepartAirport" : "Burbank (BUR)"
+	},
+	{
+		"DepartAirport" : "Harrisburg (MDT)"
+	},
+	{
+		"DepartAirport" : "Fort Myers (RSW)"
+	},
+	{
+		"DepartAirport" : "Indianapolis (IND)"
+	},
+	{
+		"DepartAirport" : "El Paso (ELP)"
+	},
+	{
+		"DepartAirport" : "Santa Ana (SNA)"
+	},
+	{
+		"DepartAirport" : "Myrtle Beach (MYR)"
+	},
+	{
+		"DepartAirport" : "Buffalo (BUF)"
+	},
+	{
+		"DepartAirport" : "Oklahoma City (OKC)"
+	},
+	{
+		"DepartAirport" : "Philadelphia (PHL)"
+	},
+	{
+		"DepartAirport" : "St. Louis (STL)"
+	},
+	{
+		"DepartAirport" : "Atlanta (ATL)"
+	},
+	{
+		"DepartAirport" : "Golden Triangle (GTR)"
+	},
+	{
+		"DepartAirport" : "San Jose (SJC)"
+	},
+	{
+		"DepartAirport" : "Oakland (OAK)"
+	},
+	{
+		"DepartAirport" : "Palm Springs (PSP)"
+	},
+	{
+		"DepartAirport" : "Sarasota (SRQ)"
+	},
+	{
+		"DepartAirport" : "Jacksonville (JAX)"
+	},
+	{
+		"DepartAirport" : "Portland (PWM)"
+	},
+	{
+		"DepartAirport" : "Miami (MIA)"
+	},
+	{
+		"DepartAirport" : "Windsor Locks (BDL)"
+	},
+	{
+		"DepartAirport" : "Charlotte (CLT)"
+	},
+	{
+		"DepartAirport" : "George Town (GCM)"
+	},
+	{
+		"DepartAirport" : "Providenciales (PLS)"
+	},
+	{
+		"DepartAirport" : "Richmond (RIC)"
+	},
+	{
+		"DepartAirport" : "Charleston (CHS)"
+	},
+	{
+		"DepartAirport" : "Chicago (ORD)"
+	},
+	{
+		"DepartAirport" : "Spokane (GEG)"
+	},
+	{
+		"DepartAirport" : "Oranjestad (AUA)"
+	},
+	{
+		"DepartAirport" : "Hayden (HDN)"
+	},
+	{
+		"DepartAirport" : "Memphis (MEM)"
+	},
+	{
+		"DepartAirport" : "Midland (MAF)"
+	},
+	{
+		"DepartAirport" : "Corpus Christi (CRP)"
+	},
+	{
+		"DepartAirport" : "San Diego (SAN)"
+	},
+	{
+		"DepartAirport" : "Sacramento (SMF)"
+	},
+	{
+		"DepartAirport" : "Rochester (ROC)"
+	},
+	{
+		"DepartAirport" : "New York (LGA)"
+	},
+	{
+		"DepartAirport" : "Ontario (ONT)"
+	},
+	{
+		"DepartAirport" : "Puerto Vallarta (PVR)"
+	},
+	{
+		"DepartAirport" : "Portland (PDX)"
+	},
+	{
+		"DepartAirport" : "Seattle (SEA)"
+	},
+	{
+		"DepartAirport" : "Pensacola (PNS)"
+	},
+	{
+		"DepartAirport" : "Raleigh-Durham (RDU)"
+	},
+	{
+		"DepartAirport" : "San Francisco (SFO)"
+	},
+	{
+		"DepartAirport" : "Reno (RNO)"
+	},
+	{
+		"DepartAirport" : "Omaha (OMA)"
+	},
+	{
+		"DepartAirport" : "Islip (ISP)"
+	},
+	{
+		"DepartAirport" : "Syracuse (SYR)"
+	},
+	{
+		"DepartAirport" : "Montrose (MTJ)"
+	},
+	{
+		"DepartAirport" : "Panama City (ECP)"
+	},
+	{
+		"DepartAirport" : "West Palm Beach (PBI)"
+	},
+	{
+		"DepartAirport" : "Grand Rapids (GRR)"
+	},
+	{
+		"DepartAirport" : "Savannah (SAV)"
+	},
+	{
+		"DepartAirport" : "Washington (IAD)"
+	},
+	{
+		"DepartAirport" : "Tucson (TUS)"
+	},
+	{
+		"DepartAirport" : "Salt Lake City (SLC)"
+	},
+	{
+		"DepartAirport" : "Albany (ALB)"
+	},
+	{
+		"DepartAirport" : "Cleveland (CLE)"
+	},
+	{
+		"DepartAirport" : "Boise (BOI)"
+	},
+	{
+		"DepartAirport" : "Milwaukee (MKE)"
+	},
+	{
+		"DepartAirport" : "Cancun (CUN)"
+	},
+	{
+		"DepartAirport" : "Manchester (MHT)"
+	},
+	{
+		"DepartAirport" : "Jackson (JAN)"
+	},
+	{
+		"DepartAirport" : "Nassau (NAS)"
+	},
+	{
+		"DepartAirport" : "Minneapolis (MSP)"
+	},
+	{
+		"DepartAirport" : "Providence (PVD)"
+	},
+	{
+		"DepartAirport" : "Wichita (ICT)"
+	},
+	{
+		"DepartAirport" : "Cincinnati (CVG)"
+	},
+	{
+		"DepartAirport" : "Bozeman (BZN)"
+	},
+	{
+		"DepartAirport" : "San Jose (SJO)"
+	},
+	{
+		"DepartAirport" : "Amarillo (AMA)"
+	},
+	{
+		"DepartAirport" : "Louisville (SDF)"
+	},
+	{
+		"DepartAirport" : "Fresno (FAT)"
+	},
+	{
+		"DepartAirport" : "Norfolk (ORF)"
+	},
+	{
+		"DepartAirport" : "Destin Fort Walton Beach (VPS)"
+	},
+	{
+		"DepartAirport" : "Des Moines (DSM)"
+	},
+	{
+		"DepartAirport" : "Punta Cana (PUJ)"
+	},
+	{
+		"DepartAirport" : "Greenville-Spartanburg (GSP)"
+	},
+	{
+		"DepartAirport" : "Belize City (BZE)"
+	},
+	{
+		"DepartAirport" : "San Juan (SJU)"
+	},
+	{
+		"DepartAirport" : "Bellingham (BLI)"
+	},
+	{
+		"DepartAirport" : "San Salvador (SAL)"
+	},
+	{
+		"DepartAirport" : "Eugene (EUG)"
+	},
+	{
+		"DepartAirport" : "Hilo (ITO)"
+	},
+	{
+		"DepartAirport" : "Honolulu (HNL)"
+	},
+	{
+		"DepartAirport" : "Havana (HAV)"
+	},
+	{
+		"DepartAirport" : "Montego Bay (MBJ)"
+	},
+	{
+		"DepartAirport" : "Kahului (OGG)"
+	},
+	{
+		"DepartAirport" : "Cozumel (CZM)"
+	},
+	{
+		"DepartAirport" : "Liberia (LIR)"
+	},
+	{
+		"DepartAirport" : "Kailua-Kona (KOA)"
+	},
+	{
+		"DepartAirport" : "Lihue (LIH)"
+	},
+	{
+		"DepartAirport" : "Everett (PAE)"
+	},
+	{
+		"DepartAirport" : "Knoxville (TYS)"
+	},
+	{
+		"DepartAirport" : "Bountiful (BTF)"
+	},
+	{
+		"DepartAirport" : "Seattle (BFI)"
+	},
+	{
+		"DepartAirport" : "Renton (RNT)"
+	},
+	{
+		"DepartAirport" : "New York (JFK)"
+	},
+	{
+		"DepartAirport" : "Fargo (FAR)"
+	},
+	{
+		"DepartAirport" : "Dallas (DFW)"
+	},
+	{
+		"DepartAirport" : "Key West (EYW)"
+	},
+	{
+		"DepartAirport" : "Chattanooga (CHA)"
+	},
+	{
+		"DepartAirport" : "Melbourne (MLB)"
+	},
+	{
+		"DepartAirport" : "Cedar Rapids (CID)"
+	},
+	{
+		"DepartAirport" : "Monterrey (MTY)"
+	},
+	{
+		"DepartAirport" : "Sioux Falls (FSD)"
+	},
+	{
+		"DepartAirport" : "Mexico City (MEX)"
+	},
+	{
+		"DepartAirport" : "New York (EWR)"
+	},
+	{
+		"DepartAirport" : "Missoula (MSO)"
+	},
+	{
+		"DepartAirport" : "Vancouver (YVR)"
+	},
+	{
+		"DepartAirport" : "Gainesville (GNV)"
+	},
+	{
+		"DepartAirport" : "Calgary (YYC)"
+	},
+	{
+		"DepartAirport" : "Billings (BIL)"
+	},
+	{
+		"DepartAirport" : "Kalispell (FCA)"
+	},
+	{
+		"DepartAirport" : "Winnipeg (YWG)"
+	},
+	{
+		"DepartAirport" : "Lake Charles (CWF)"
+	},
+	{
+		"DepartAirport" : "Baton Rouge (BTR)"
+	},
+	{
+		"DepartAirport" : "Jackson (JAC)"
+	},
+	{
+		"DepartAirport" : "Lansing (LAN)"
+	},
+	{
+		"DepartAirport" : "Green Bay (GRB)"
+	},
+	{
+		"DepartAirport" : "Toronto (YYZ)"
+	},
+	{
+		"DepartAirport" : "Daytona Beach (DAB)"
+	},
+	{
+		"DepartAirport" : "Bermuda (BDA)"
+	},
+	{
+		"DepartAirport" : "Panama City (PTY)"
+	},
+	{
+		"DepartAirport" : "Bonaire (BON)"
+	},
+	{
+		"DepartAirport" : "Gulfport (GPT)"
+	},
+	{
+		"DepartAirport" : "Topeka (FOE)"
+	},
+	{
+		"DepartAirport" : "St. Croix (STX)"
+	},
+	{
+		"DepartAirport" : "Lexington (LEX)"
+	},
+	{
+		"DepartAirport" : "Basseterre (SKB)"
+	},
+	{
+		"DepartAirport" : "San Pedro Sula (SAP)"
+	},
+	{
+		"DepartAirport" : "Greensboro (GSO)"
+	},
+	{
+		"DepartAirport" : "Guadalajara (GDL)"
+	},
+	{
+		"DepartAirport" : "Vieux Fort (UVF)"
+	},
+	{
+		"DepartAirport" : "Juneau (JNU)"
+	},
+	{
+		"DepartAirport" : "Tupelo (TUP)"
+	},
+	{
+		"DepartAirport" : "Antigua (ANU)"
+	},
+	{
+		"DepartAirport" : "Roatan (RTB)"
+	},
+	{
+		"DepartAirport" : "Tallahassee (TLH)"
+	},
+	{
+		"DepartAirport" : "Santo Domingo (SDQ)"
+	},
+	{
+		"DepartAirport" : "Tokyo (HND)"
+	},
+	{
+		"DepartAirport" : "Seoul (ICN)"
+	},
+	{
+		"DepartAirport" : "Paris (CDG)"
+	},
+	{
+		"DepartAirport" : "Amsterdam (AMS)"
+	},
+	{
+		"DepartAirport" : "London (LHR)"
+	},
+	{
+		"DepartAirport" : "Lagos (LOS)"
+	},
+	{
+		"DepartAirport" : "Tel Aviv (TLV)"
+	},
+	{
+		"DepartAirport" : "Shanghai (PVG)"
+	},
+	{
+		"DepartAirport" : "Cedar City (CDC)"
+	},
+	{
+		"DepartAirport" : "Pocatello (PIH)"
+	},
+	{
+		"DepartAirport" : "Butte (BTM)"
+	},
+	{
+		"DepartAirport" : "Twin Falls (TWF)"
+	},
+	{
+		"DepartAirport" : "Elko (EKO)"
+	},
+	{
+		"DepartAirport" : "Iron Mountain (IMT)"
+	},
+	{
+		"DepartAirport" : "Escanaba (ESC)"
+	},
+	{
+		"DepartAirport" : "Pellston (PLN)"
+	},
+	{
+		"DepartAirport" : "Alpena (APN)"
+	},
+	{
+		"DepartAirport" : "Sault Sainte Marie (CIU)"
+	},
+	{
+		"DepartAirport" : "Aberdeen (ABR)"
+	},
+	{
+		"DepartAirport" : "Bemidji (BJI)"
+	},
+	{
+		"DepartAirport" : "International Falls (INL)"
+	},
+	{
+		"DepartAirport" : "Brainerd (BRD)"
+	},
+	{
+		"DepartAirport" : "Hibbing (HIB)"
+	},
+	{
+		"DepartAirport" : "Clarksburg (CKB)"
+	},
+	{
+		"DepartAirport" : "Rhinelander (RHI)"
+	},
+	{
+		"DepartAirport" : "Casper (CPR)"
+	},
+	{
+		"DepartAirport" : "Williston (XWA)"
+	},
+	{
+		"DepartAirport" : "Cape Town (CPT)"
+	},
+	{
+		"DepartAirport" : "Johannesburg (JNB)"
+	},
+	{
+		"DepartAirport" : "Sydney (SYD)"
+	},
+	{
+		"DepartAirport" : "Bangor (BGR)"
+	},
+	{
+		"DepartAirport" : "Hamburg (XFW)"
+	},
+	{
+		"DepartAirport" : "Tokyo (NRT)"
+	},
+	{
+		"DepartAirport" : "Santiago (SCL)"
+	},
+	{
+		"DepartAirport" : "Valdosta (VLD)"
+	},
+	{
+		"DepartAirport" : "Montgomery (MGM)"
+	},
+	{
+		"DepartAirport" : "Appleton (ATW)"
+	},
+	{
+		"DepartAirport" : "Kalamazoo (AZO)"
+	},
+	{
+		"DepartAirport" : "Ithaca (ITH)"
+	},
+	{
+		"DepartAirport" : "Saginaw (MBS)"
+	},
+	{
+		"DepartAirport" : "Marquette (MQT)"
+	},
+	{
+		"DepartAirport" : "Binghamton (BGM)"
+	},
+	{
+		"DepartAirport" : "State College (SCE)"
+	},
+	{
+		"DepartAirport" : "Charleston (CRW)"
+	},
+	{
+		"DepartAirport" : "Charlottesville (CHO)"
+	},
+	{
+		"DepartAirport" : "Albany (ABY)"
+	},
+	{
+		"DepartAirport" : "Huntsville (HSV)"
+	},
+	{
+		"DepartAirport" : "Asheville (AVL)"
+	},
+	{
+		"DepartAirport" : "Columbia (CAE)"
+	},
+	{
+		"DepartAirport" : "Madison (MSN)"
+	},
+	{
+		"DepartAirport" : "Rochester (RST)"
+	},
+	{
+		"DepartAirport" : "Dayton (DAY)"
+	},
+	{
+		"DepartAirport" : "Fayetteville (FAY)"
+	},
+	{
+		"DepartAirport" : "Wausau (CWA)"
+	},
+	{
+		"DepartAirport" : "Sao Paulo (GRU)"
+	},
+	{
+		"DepartAirport" : "Rome (FCO)"
+	},
+	{
+		"DepartAirport" : "Anchorage (ANC)"
+	},
+	{
+		"DepartAirport" : "Kingston (KIN)"
+	},
+	{
+		"DepartAirport" : "Athens (ATH)"
+	},
+	{
+		"DepartAirport" : "Santiago de los Caballeros (STI)"
+	},
+	{
+		"DepartAirport" : "Frankfurt (FRA)"
+	},
+	{
+		"DepartAirport" : "Nagoya (NGO)"
+	},
+	{
+		"DepartAirport" : "Montreal (YUL)"
+	},
+	{
+		"DepartAirport" : "Roanoke (ROA)"
+	},
+	{
+		"DepartAirport" : "Wilmington (ILM)"
+	},
+	{
+		"DepartAirport" : "Duluth (DLH)"
+	},
+	{
+		"DepartAirport" : "Blountville (TRI)"
+	},
+	{
+		"DepartAirport" : "Burlington (BTV)"
+	},
+	{
+		"DepartAirport" : "White Plains (HPN)"
+	},
+	{
+		"DepartAirport" : "Jacksonville (OAJ)"
+	},
+	{
+		"DepartAirport" : "Queretaro (QRO)"
+	}
+]
