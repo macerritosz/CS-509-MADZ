@@ -237,19 +237,13 @@ public class Booking implements IBooking {
     public List<Integer> calculateLayoverTime(List<IBooking> booking) {
         List<Integer> layoverTimes = new ArrayList<>();
 
-        int totalTime = 0;
-        for (int i = 0; i < booking.size() - 1; i++) {
-            IBooking cur = booking.get(i);
-            totalTime += cur.getDepartureDateTime().getDifference(cur.getArrivalDateTime());
-        }
+        int totalTime = booking.get(0).getDepartureDateTime().getDifference(booking.get(booking.size() - 1).getArrivalDateTime());
+        layoverTimes.add(totalTime);
 
         for (int i = 0; i < booking.size() - 2; i++) {
             int time = booking.get(i).getArrivalDateTime().getDifference(booking.get(i + 1).getDepartureDateTime());
-            totalTime += time;
             layoverTimes.add(time);
         }
-
-        layoverTimes.add(0, totalTime);
 
         return layoverTimes;
     }

@@ -68,7 +68,6 @@ public class UserBookings {
             FlightBookingDto.Airline airline = FlightBookingDto.Airline.fromValue(airlineVal);
             flightBooking.setAirline(airline);
 
-
             return flightBooking;
         };
 
