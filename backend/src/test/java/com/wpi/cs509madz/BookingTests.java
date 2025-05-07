@@ -155,11 +155,17 @@ class BookingTests {
             new Booking("DL913", new DateTime("2023-01-03 13:30:00"), "Detroit (DTW)", new DateTime("2023-01-03 17:00:00"), "Denver (DEN)")
     ));
 
+//    TODO add test for all layovers
+    @Test
+    void testLayovers() {
+
+    }
+
     @Test
     void testDirect() {
         Booking direct = new Booking(database, new DateTime("2022-12-27"), "Denver (DEN)", "Detroit (DTW)");
 
-        List<List<IBooking>> directFlights = direct.calculateLayoverOptions(Optional.of(true), Optional.of(false));
+        List<List<IBooking>> directFlights = direct.findLayoverOptions(Optional.of(true), Optional.of(false));
 
         boolean valid = true;
         for (List<IBooking> bookings : directFlights) {
@@ -179,7 +185,7 @@ class BookingTests {
     void testSameDay() {
         Booking sameDay = new Booking(database, new DateTime("2023-01-04"), "Atlanta (ATL)", "Boston (BOS)");
 
-        List<List<IBooking>> sameDayFlights = sameDay.calculateLayoverOptions(Optional.of(false), Optional.of(true));
+        List<List<IBooking>> sameDayFlights = sameDay.findLayoverOptions(Optional.of(false), Optional.of(true));
 
         boolean valid = true;
         for (List<IBooking> bookings : sameDayFlights) {
@@ -192,5 +198,10 @@ class BookingTests {
         }
 
         assertTrue(valid, "Not all the flights are same day");
+    }
+
+    @Test
+    void testLayoverTimes() {
+
     }
 }
