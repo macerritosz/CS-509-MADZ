@@ -2,21 +2,20 @@ import {useEffect, useState} from "react";
 import SortSideBar from "../components/SortSideBar.jsx";
 import FlightCard from "../components/FlightCard.jsx";
 import {useNavigate} from "react-router-dom";
+import {IconButton, Typography} from "@material-tailwind/react";
+import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/16/solid/index.js";
 
 export default function FlightDisplay() {
     const navigate = useNavigate();
     const [flightData, setFlightData] = useState(null);
     const [parsedFlights, setParsedFlights] = useState([]);
-    const [sortByDeparture, setSortByDeparture] = useState([]);
-    const [sortByArrival, setSortByArrival] = useState([]);
-    const [sortByTime, setSortByTime] = useState([]);
     const [departureSortState, setDepartureSortState] = useState("NONE");
     const [arrivalSortState, setArrivalSortState] = useState("NONE");
     const [timeSortState, setTimeSortState] = useState("NONE");
     const [unsortedData, setUnsortedData] = useState([]);
     const [currentFlights, setCurrentFlights] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 20; // or whatever number you want per page
+    const itemsPerPage = 10; // or whatever number you want per page
 
 
     const Strategy = {
@@ -75,9 +74,9 @@ export default function FlightDisplay() {
          */
         const compare = (a, b) => {
             if (strategy === Strategy.DEPARTURE) {
-                return a.departureDateTime < b.departureDateTime;
+                return a.flightPath[0].departureDateTime < b.flightPath[0].departureDateTime;
             } else if (strategy === Strategy.ARRIVAL) {
-                return a.arrivalDateTime < b.arrivalDateTime;
+                return a.flightPath[a.flightPath.length - 1 ].arrivalDateTime < b.flightPath[a.flightPath.length - 1 ].arrivalDateTime;
             } else if (strategy === Strategy.PRICE) {
                 return a.price < b.price;
             }
@@ -112,13 +111,16 @@ export default function FlightDisplay() {
             let sorted = mergeSort([...parsedFlights], Strategy.DEPARTURE);
             if(departureSortState === "UP") sorted.reverse();
             setParsedFlights(sorted);
+            setCurrentPage(1);
         } else if ( arrivalSortState !== "NONE"){
             let sorted = mergeSort([...parsedFlights], Strategy.ARRIVAL);
             if(arrivalSortState === "UP") sorted.reverse();
             setParsedFlights(sorted);
-        } else (
-            setParsedFlights(unsortedData)
-        )
+            setCurrentPage(1);
+        } else {
+            setParsedFlights(unsortedData);
+            setCurrentPage(1);
+        }
     }, [departureSortState, arrivalSortState, unsortedData]);
 
     useEffect(() => {
@@ -159,23 +161,38 @@ export default function FlightDisplay() {
                     <aside className="sticky top-0 mt-8">
                         <SortSideBar departureSort={setDepartureSortState} arrivalSort={setArrivalSortState} timeSort={setTimeSortState}/>
                     </aside>
-                    <div className="flex-col mt-8 w-full">
-                        {currentFlights.length > 0 ?
-                            (currentFlights.map((flightGroup, index) => (
-                                createFlightCards(flightGroup, `flightCard-${flightGroup.flightPath[0].departureDateTime}-${flightGroup.flightTimes[0]}-${(totalPages*itemsPerPage) - (index * currentPage)}`)
-                            ))) :
-                            (
-                                <div>No flights to display.</div>
-                            )
-                        }
-                        <div className="flex justify-center mt-4 space-x-2">
-                            <button onClick={handlePrevPage} disabled={currentPage === 1}>
-                                Prev
-                            </button>
-                            <span>{currentPage} / {totalPages}</span>
-                            <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-                                Next
-                            </button>
+                    <div className="flex-col justify-items-center">
+                        <div className="flex-col mt-8 w-full">
+                            {currentFlights.length > 0 ?
+                                (currentFlights.map((flightGroup, index) => (
+                                    createFlightCards(flightGroup, `flightCard-${flightGroup.flightPath[0].departureDateTime}-${flightGroup.flightTimes[0]}-${(totalPages*itemsPerPage) - (index * currentPage)}`)
+                                ))) :
+                                (
+                                    <div>No flights to display.</div>
+                                )
+                            }
+                        </div>
+                        <div className="flex items-center gap-8 mt-5">
+                            <IconButton
+                                size="sm"
+                                variant="outlined"
+                                onClick={handlePrevPage}
+                                disabled={currentPage === 1}
+                            >
+                                <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
+                            </IconButton>
+                            <Typography color="gray" className="font-normal">
+                                Page <strong className="text-gray-900">{currentPage}</strong> of{" "}
+                                <strong className="text-gray-900">{totalPages}</strong>
+                            </Typography>
+                            <IconButton
+                                size="sm"
+                                variant="outlined"
+                                onClick={handleNextPage}
+                                disabled={currentPage === totalPages - 1}
+                            >
+                                <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+                            </IconButton>
                         </div>
                     </div>
                 </div>
