@@ -46,10 +46,19 @@ export default function FlightDisplay() {
         if (formData && !formData.isOneway) {
             const fetchReturnFlight = async () => {
                 try {
+                    const returnFormData = {
+                        ...formData,
+                        isOneway: true,
+                        departureAirport: formData.arrivalAirport,
+                        arrivalAirport: formData.departureAirport,
+                        departureDate: formData.arrivalDate,
+                        arrivalDate: "",
+                    };
+
                     const response = await fetch('/api/return-flight', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData),
+                        body: JSON.stringify(returnFormData),
                     });
                     if (response.ok) {
                         const result = await response.json();
