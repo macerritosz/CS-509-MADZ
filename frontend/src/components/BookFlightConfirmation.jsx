@@ -124,7 +124,7 @@ export default function BookFlightConfirmation({ open, onClose, data, timeData, 
                     {data.map((flight, index) => (
                         <div key={index} className="border p-2 rounded-md">
                             <Typography variant="h6">
-                                Segment {index + 1}
+                                Leg {index + 1}
                             </Typography>
                             <Typography className="text-sm">
                                 <strong>Date:</strong> {getDate(flight.departureDateTime)}
