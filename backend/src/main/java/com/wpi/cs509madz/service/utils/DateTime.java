@@ -95,6 +95,12 @@ public class DateTime {
         return Math.abs(diff);
     }
 
+    public boolean isSameDay(DateTime other) {
+        return this.getYear() == other.getYear()
+                && this.getMonth() == other.getMonth()
+                && this.getDay() == other.getDay();
+    }
+
     @Override
     public String toString() {
         return year +
