@@ -7,6 +7,7 @@ import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/16/solid/index.js"
 
 export default function FlightDisplay() {
     const navigate = useNavigate();
+    const [formData, setFormData] = useState(null);
     const [flightData, setFlightData] = useState(null);
     const [parsedFlights, setParsedFlights] = useState([]);
     const [departureSortState, setDepartureSortState] = useState("NONE");
@@ -21,6 +22,7 @@ export default function FlightDisplay() {
     const Strategy = {
         DEPARTURE: "departure",
         ARRIVAL: "arrival",
+        TIME: "time",
     }
 
     /**
@@ -30,14 +32,50 @@ export default function FlightDisplay() {
      * if null, return to homepage
      */
     useEffect(() => {
-        setFlightData(parseData())
-    }, [])
+        setFlightData(parseData());
+    }, [location.search])
+
+    useEffect(() => {
+        const savedFormData = JSON.parse(sessionStorage.getItem('FlightFormData'));
+        if (savedFormData) {
+            setFormData(savedFormData);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (formData && !formData.isOneway) {
+            const fetchReturnFlight = async () => {
+                try {
+                    const response = await fetch('/api/return-flight', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData),
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        sessionStorage.setItem("FlightDataReturnResponse", JSON.stringify(result.allBookings));
+                    }
+                } catch (error) {
+                    console.error('Error fetching return flight:', error);
+                }
+            };
+
+            fetchReturnFlight();
+        }
+    }, [formData]);
 
     const parseData = () => {
-        const data = sessionStorage.getItem("FlightDataResponse");
-        if (!data) return null;
-        return JSON.parse(data);
-    }
+        const params = new URLSearchParams(location.search);
+        const isReturn = params.get('inbound');
+        let savedData = null;
+        if (isReturn) {
+            savedData = sessionStorage.getItem('FlightDataReturnResponse');
+        } else {
+            savedData = sessionStorage.getItem("FlightDataResponse");
+        }
+        if (!savedData) return null;
+        return JSON.parse(savedData);
+    };
     // make the Departure Date Time string into Date objects
     useEffect(() => {
         //if theres no data in flightData / ParsedData, do nothing
@@ -76,9 +114,9 @@ export default function FlightDisplay() {
             if (strategy === Strategy.DEPARTURE) {
                 return a.flightPath[0].departureDateTime < b.flightPath[0].departureDateTime;
             } else if (strategy === Strategy.ARRIVAL) {
-                return a.flightPath[a.flightPath.length - 1 ].arrivalDateTime < b.flightPath[a.flightPath.length - 1 ].arrivalDateTime;
-            } else if (strategy === Strategy.PRICE) {
-                return a.price < b.price;
+                return a.flightPath[a.flightPath.length - 1 ].arrivalDateTime < b.flightPath[b.flightPath.length - 1 ].arrivalDateTime;
+            } else if (strategy === Strategy.TIME) {
+                return a.flightTimes[0] < b.flightTimes[0];
             }
             return true; // default to keep order
         };
@@ -117,11 +155,16 @@ export default function FlightDisplay() {
             if(arrivalSortState === "UP") sorted.reverse();
             setParsedFlights(sorted);
             setCurrentPage(1);
-        } else {
+        } else if(timeSortState !== "NONE") {
+            let sorted = mergeSort([...parsedFlights], Strategy.TIME);
+            if(arrivalSortState === "UP") sorted.reverse();
+            setParsedFlights(sorted);
+            setCurrentPage(1);
+        } else{
             setParsedFlights(unsortedData);
             setCurrentPage(1);
         }
-    }, [departureSortState, arrivalSortState, unsortedData]);
+    }, [departureSortState, arrivalSortState,timeSortState, unsortedData]);
 
     useEffect(() => {
         console.log("Current page changed:", currentPage);
@@ -145,7 +188,7 @@ export default function FlightDisplay() {
     const createFlightCards = (data, key) => {
         return (
             <div key={key} className="p-1">
-                <FlightCard data={data}/>
+                <FlightCard data={data}  doReturn={formData ? !formData.isOneway : false}/>
             </div>
         )
     }
@@ -153,6 +196,7 @@ export default function FlightDisplay() {
     useEffect(() => {
         console.log(currentFlights);
     }, [currentFlights]);
+
 
     return (
         <section className="relative min-h-screen">

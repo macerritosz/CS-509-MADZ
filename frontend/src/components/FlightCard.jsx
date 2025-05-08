@@ -2,11 +2,14 @@ import {useEffect, useState} from "react";
 import {Button, Card, CardBody, Collapse, Typography} from "@material-tailwind/react";
 import {ArrowRightIcon} from "@heroicons/react/16/solid/index.js";
 import LayoverCollapse from "./LayoverCollapse.jsx";
+import BookFlightConfirmation from "./BookFlightConfirmation.jsx";
 
 export default function FlightCard(props) {
     const [open, setOpen] = useState(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
     const [layovers, setLayovers] = useState([]);
     const [allFlightData, setAllFlightData] = useState(props.data);
+    const [layoverTimes, setLayoverTimes] = useState([]);
     const [endFlights, setEndFlights] = useState([]);
 
     const handleLayoversOpen = () => {
@@ -14,16 +17,18 @@ export default function FlightCard(props) {
     }
 
     const getTime = (date) => {
-        let dateStr = new Date(date);
-        return dateStr.toLocaleString([], {
-            year: 'numeric',
+        const dateObj = new Date(date);
+        const dateStr = dateObj.toLocaleDateString([], {
             month: 'short',
-            day: '2-digit',
+            day: 'numeric',
+        });
+        const timeStr = dateObj.toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: true
+            hour12: true,
         });
-    }
+        return `${dateStr}, ${timeStr}`;
+    };
     
     useEffect(() => {
         setAllFlightData(props.data)
@@ -32,13 +37,21 @@ export default function FlightCard(props) {
     const parseLayovers = () => {
         let flightList = allFlightData?.flightPath || [];
         let layovers = []
-        if(flightList.length > 1) {
-            layovers.push(flightList[0])
-            layovers.push(flightList[1])
-            if(flightList.length > 3) {
-                layovers.push(flightList[2])
+        // Check that it isn't a direct flight, and if is not, push all the flights to be made into cards for display
+        if(flightList.length !== 1) {
+            for (let i = 0; i < flightList.length - 1; i++) {
+                layovers.push(flightList[i]);
             }
         }
+        //get all the times from the list
+        const timeList = allFlightData?.flightTimes
+        let layoverTimeList = []
+
+        for (let i = 1; i < timeList.length; i++) {
+            layoverTimeList.push(timeList[i])
+        }
+        setLayoverTimes(layoverTimeList)
+
         return layovers;
     }
     const parseEndFlight = () => {
@@ -113,23 +126,33 @@ export default function FlightCard(props) {
                                 </Button>
                             </div>
 
-                            <Button>
-                                Flight Submit
+                            <Button onClick={() => setConfirmOpen(true)}>
+                                Book Flight
                             </Button>
                         </div>
                     </CardBody>
                 </Card>
             </div>
             {
-                allFlightData &&
+                allFlightData && layoverTimes && layoverTimes.length > 0 &&
                 allFlightData.flightPath.length > 0 ? (
                     <div>
                         <Collapse open={open}>
-                            <LayoverCollapse layovers={allFlightData.flightPath}/>
+                            <LayoverCollapse layovers={allFlightData.flightPath} layoverTimes = {layoverTimes} />
                         </Collapse>
                     </div>
                 ) : (<Typography></Typography>)
             }
+            {allFlightData && (
+                <BookFlightConfirmation
+                    open={confirmOpen}
+                    onClose={() => setConfirmOpen(false)}
+                    airline = {allFlightData.airline}
+                    data={allFlightData.flightPath}
+                    timeData={allFlightData.flightTimes}
+                    returnFlight = {props.doReturn}
+                />
+            )}
         </div>
     )
 }
