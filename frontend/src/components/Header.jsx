@@ -1,13 +1,32 @@
 import {Button} from "@material-tailwind/react";
 import '../styles/tailwind.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {SignInModal} from "./SignInModal.jsx";
+import {Profile} from "./Profile.jsx";
 
 function Header() {
     const [open, setOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
     const handleModalOpen = () => {
         setOpen((cur) => !cur);
     }
+    useEffect(() => {
+        const userId = localStorage.getItem("userID");
+        setIsLoggedIn(!!userId);
+    }, []);
+
+    // Add listener if needed when SignInModal updates state
+    const handleLoginSuccess = () => {
+        setIsLoggedIn(true);
+        handleModalOpen();
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem("userID");
+        setIsLoggedIn(false);
+    };
 
     return (
         <header className="madz-global-header">
@@ -27,20 +46,22 @@ function Header() {
                                 <Button className="text-sm">
                                     My Flights
                                 </Button>
-                                <div id="madz-nav-authentication-items">
-                                    <Button className="text-sm" onClick={() => {
-                                        handleModalOpen()
-                                    }}>
-                                        Sign in
-                                    </Button>
-                                </div>
+                                {
+                                    isLoggedIn ? (
+                                        <Profile handleLogout={handleLogout} />
+                                    ) : (
+                                        <Button className="text-sm" onClick={handleModalOpen}>
+                                            Sign in
+                                        </Button>
+                                    )
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             {
-                open && <SignInModal open={open} handleOpen={handleModalOpen} onClose={handleModalOpen}/>
+                open && <SignInModal open={open} handleOpen={handleModalOpen} onClose={handleModalOpen} onLoginSuccess = {handleLoginSuccess}/>
             }
         </header>
     )

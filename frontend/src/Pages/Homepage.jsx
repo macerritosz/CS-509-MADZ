@@ -5,7 +5,9 @@ import {
     CardBody,
     Carousel,
     Checkbox,
-    Input, List, ListItem,
+    Input,
+    List,
+    ListItem,
     Radio,
     Tooltip,
     Typography,
@@ -28,6 +30,7 @@ function Homepage() {
     const [departureSuggestion, setDepartureSuggestion] = useState([]);
     const [arrivalSuggestion, setArrivalSuggestion] = useState([]);
     const [openMenu, setOpenMenu] = useState(false);
+    const [invalidLocationsAlert, setInvalidLocationsAlert] = useState(false);
     /* User input states */
     const [formData, setFormData] = useState({
         departureAirport: "",
@@ -60,7 +63,7 @@ function Homepage() {
     Use cookies to save the last search and auto fill everything, except return date
      */
     const getFilteredLocations = (input, type) => {
-        if(type === "departure") {
+        if (type === "departure") {
             return availableDepartureLocations.filter(loc =>
                 loc.DepartAirport.toLowerCase().includes(input.toLowerCase())
             );
@@ -88,8 +91,9 @@ function Homepage() {
      */
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!checkValidDates()) return;
-        if(localStorage.getItem("userID") == null) {
+        if (!checkValidDates()) return;
+        if (!checkValidLocation()) return;
+        if (localStorage.getItem("userID") == null) {
             setIsSignedIn(false);
             setShowSignInAlert(true);
         } else {
@@ -128,7 +132,7 @@ function Homepage() {
 
 
     const checkValidDates = () => {
-        if(!isOneway && (!formData.arrivalDate || new Date(formData.arrivalDate) < new Date(formData.departureDate))){
+        if (!isOneway && (!formData.arrivalDate || new Date(formData.arrivalDate) < new Date(formData.departureDate))) {
             setShowInvalidDateAlert(true)
             return false
         }
@@ -136,13 +140,13 @@ function Homepage() {
         return true;
     }
 
-    useEffect(() => {
-        console.log(showInvalidDateAlert)
-    }, [showInvalidDateAlert]);
-
-    useEffect(() => {
-        console.log(departureSuggestion);
-    }, [departureSuggestion]);
+    const checkValidLocation = () => {
+        if (formData.departureAirport === formData.arrivalAirport) {
+            return false
+        }
+        setInvalidLocationsAlert(false);
+        return true;
+    }
 
     return (
         <section className="homepage flex flex-col justify-center items-center">
@@ -153,12 +157,32 @@ function Homepage() {
                     <div id="madz-home-form-holder" className="absolute inset-0 flex items-center justify-center">
                         {
                             showSignInAlert && (
-                                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-[40rem]">
-                                    <Alert open={showSignInAlert} onClose={() => setShowSignInAlert(false)} color={"green"}>
+                                <div
+                                    className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-[40rem]">
+                                    <Alert open={showSignInAlert} onClose={() => setShowSignInAlert(false)} variant={"filled"}
+                                           color="accent">
                                         <div className="flex gap-2 items-center">
-                                            <BellAlertIcon className=" w-5 h-5" />
+                                            <BellAlertIcon className=" w-5 h-5"/>
                                             <Typography>
                                                 Sign In to book your flights!
+                                            </Typography>
+                                        </div>
+                                    </Alert>
+                                </div>
+                            )
+                        }
+                        {
+                            invalidLocationsAlert && (
+                                <div
+                                    className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-[40rem]">
+                                    <Alert open={invalidLocationsAlert}
+                                           onClose={() => setInvalidLocationsAlert(false)}
+                                           variant={"filled"}
+                                           color="accent">
+                                        <div className="flex gap-2 items-center">
+                                            <BellAlertIcon className=" w-5 h-5"/>
+                                            <Typography>
+                                                Departure and Arrival cannot be the same.
                                             </Typography>
                                         </div>
                                     </Alert>
@@ -170,7 +194,8 @@ function Homepage() {
                                 <Typography variant="h4" component="h2" className="mt-2 mb-2 pl-3 text-text">
                                     Book Flights through WPI
                                 </Typography>
-                                <form id="madz-main-flight-form" className="items-center h-full" onSubmit={handleSubmit}>
+                                <form id="madz-main-flight-form" className="items-center h-full"
+                                      onSubmit={handleSubmit}>
                                     <div className="flex justify-between pb-1">
                                         <div id="madz-radio-flight-type" className="flex gap-5">
                                             <Radio name="flight-type"
@@ -208,15 +233,20 @@ function Homepage() {
                                                    }}
                                                    onFocus={() => setOpenMenu(true)}
                                                    onBlur={() => setTimeout(() => setOpenMenu(false), 150)}
+                                                   required={true}
                                             />
                                             {departureSuggestion.length > 0 && openMenu && (
-                                                <List className="absolute z-15 w-full bg-white shadow-lg rounded-md mt-1 text-text">
+                                                <List
+                                                    className="absolute z-15 w-full bg-white shadow-lg rounded-md mt-1 text-text">
                                                     {departureSuggestion.slice(0, 4).map((loc, idx) => (
                                                         <ListItem
                                                             key={loc.DepartAirport}  // Use the name or unique attribute as key
                                                             className="cursor-pointer text-sm p-2"
                                                             onClick={() => {
-                                                                setFormData({...formData, departureAirport: loc.DepartAirport});
+                                                                setFormData({
+                                                                    ...formData,
+                                                                    departureAirport: loc.DepartAirport
+                                                                });
                                                                 setDepartureSuggestion([]);
                                                                 setOpenMenu(false)
                                                             }}
@@ -241,15 +271,20 @@ function Homepage() {
                                                    }}
                                                    onFocus={() => setOpenMenu(true)}
                                                    onBlur={() => setTimeout(() => setOpenMenu(false), 150)}
+                                                   required={true}
                                             />
                                             {arrivalSuggestion.length > 0 && openMenu && (
-                                                <List className="absolute z-15 w-full bg-white shadow-lg rounded-md mt-1 text-text">
+                                                <List
+                                                    className="absolute z-15 w-full bg-white shadow-lg rounded-md mt-1 text-text">
                                                     {arrivalSuggestion.slice(0, 4).map((loc, idx) => (
                                                         <ListItem
                                                             key={loc.ArriveAirport}  // Use the name or unique attribute as key
                                                             className="cursor-pointer p-2"
                                                             onClick={() => {
-                                                                setFormData({...formData, arrivalAirport: loc.ArriveAirport});
+                                                                setFormData({
+                                                                    ...formData,
+                                                                    arrivalAirport: loc.ArriveAirport
+                                                                });
                                                                 setArrivalSuggestion([]);
                                                                 setOpenMenu(false)
                                                             }}
@@ -268,7 +303,8 @@ function Homepage() {
                                         </div>
                                         <div className="w-full max-w-[16rem]">
                                             <Tooltip open={showInvalidDateAlert}
-                                                     handler={() => {}}
+                                                     handler={() => {
+                                                     }}
                                                      className="bg-red-400"
                                                      content={"Invalid Date"}
                                                      animate={{

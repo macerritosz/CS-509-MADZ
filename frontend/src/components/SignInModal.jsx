@@ -6,6 +6,7 @@ export function SignInModal(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [invalidPassword, setInvalidPassword] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [checkPasswordReqs, setCheckPasswordReqs] = useState({
         isLength: false,
         upperChar: false,
@@ -44,9 +45,13 @@ export function SignInModal(props) {
             if (response.ok) {
                 const result = await response.json();
                 localStorage.setItem("userID", result.UserID)
+                props.onLoginSuccess()
+            } else if (response.status === 401) {
+                setErrorMessage("Invalid Username or Password.");
             }
         } catch (error) {
             console.error('Invalid Signin: ', error);
+            setErrorMessage("Network error during sign-in.");
         }
     }
 
@@ -62,11 +67,15 @@ export function SignInModal(props) {
             if (response.ok) {
                 await response.json();
                 setIsSignUp(false);
+                setErrorMessage("Sign-up successful! Please sign in.");
+            } else if(response.status === 401) {
+                setErrorMessage("Sign-up failed. Please try again.");
             } else {
-
+                setErrorMessage("Sign-up failed. Please try again.");
             }
         } catch (error) {
-            console.error('Invalid Signin: ', error);
+            console.error('Invalid SignUp: ', error);
+            setErrorMessage("Network error during sign-up.");
         }
     }
 
@@ -76,10 +85,13 @@ export function SignInModal(props) {
                 await signUp()
             } else {
                 setInvalidPassword(true)
+                setErrorMessage("Password does not meet the requirements.");
             }
         } else {
-            await signIn()
-            props.handleOpen()
+            const result = await signIn()
+            if(result.success) {
+                props.handleOpen()
+            }
         }
     }
     const validPassword = () => {
@@ -154,6 +166,13 @@ export function SignInModal(props) {
                         </Typography>
                         <Input label="Password" size="lg" type="password" onChange={handlePasswordChange}
                                value={password}/>
+
+                        {errorMessage && (
+                            <Typography className="text-red-500 text-sm">
+                                &#9888; {errorMessage}
+                            </Typography>
+                        )}
+
                         {
                             isSignUp && invalidPassword ? (
                                 <Typography className="text-red">
