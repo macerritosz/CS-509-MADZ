@@ -12,7 +12,7 @@ function Header() {
     return (
         <header className="madz-global-header">
             <div className="madz-global-header-container block">
-                <div className="madz-header-container flex flex-col justify-center p-4 bg-accent/75">
+                <div className="madz-header-container flex flex-col justify-center p-4 bg-primary">
                     <div className="madz-header-nav-container items-center m-auto w-full">
                         <div className=" flex flex-nowrap items-center justify-between max-w-[78rem] mx-auto px-4">
                             <div>
@@ -24,7 +24,7 @@ function Header() {
                                 }
                             </div>
                             <div className="flex items-center gap-4">
-                                <Button>
+                                <Button className="text-sm">
                                     My Flights
                                 </Button>
                                 <div id="madz-nav-authentication-items">

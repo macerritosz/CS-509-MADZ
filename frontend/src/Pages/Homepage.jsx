@@ -165,7 +165,7 @@ function Homepage() {
                         }
                         <Card className="w-full max-w-[78rem] backdrop-blur-md rounded-lg m-auto " id="madz-form-card">
                             <CardBody className="p-4">
-                                <Typography variant="h4" component="h2" className="mt-2 mb-2">
+                                <Typography variant="h4" component="h2" className="mt-2 mb-2 pl-3 text-text">
                                     Book Flights through WPI
                                 </Typography>
                                 <form id="madz-main-flight-form" className="items-center h-full" onSubmit={handleSubmit}>
@@ -173,7 +173,6 @@ function Homepage() {
                                         <div id="madz-radio-flight-type" className="flex gap-5">
                                             <Radio name="flight-type"
                                                    label="One-way"
-                                                   color="accent"
                                                    onClick={() => {
                                                        setOneway(true)
                                                    }}
@@ -181,16 +180,15 @@ function Homepage() {
                                             />
                                             <Radio name="flight-type"
                                                    label="Round-Trip"
-                                                   color="accent"
                                                    onClick={() => {
                                                        setOneway(false)
                                                    }}
                                             />
                                         </div>
                                         <div>
-                                            <Checkbox label="Same-Day Flights Only" color="accent" name="isSameDay"
+                                            <Checkbox label="Same-Day Flights Only" color="secondary" name="isSameDay"
                                                       onChange={handleChange}/>
-                                            <Checkbox label="Direct Flights Only" color="accent" name="isDirect"
+                                            <Checkbox label="Direct Flights Only" color="secondary" name="isDirect"
                                                       onChange={handleChange}/>
                                         </div>
                                     </div>
@@ -289,7 +287,7 @@ function Homepage() {
                                     </div>
                                     <div className="pt-2 p-4">
                                         <Button type="submit"
-                                                className="!bg-accent flex items-center gap-1 px-8">
+                                                className="!bg-primary flex items-center gap-1 px-8">
                                         <span>
                                             Submit
                                         </span>

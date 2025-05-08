@@ -8,6 +8,7 @@ export default function FlightCard(props) {
     const [layovers, setLayovers] = useState([]);
     const [allFlightData, setAllFlightData] = useState(props.data);
     const [endFlights, setEndFlights] = useState([]);
+
     const handleLayoversOpen = () => {
         setOpen((cur) => !cur);
     }
@@ -31,7 +32,8 @@ export default function FlightCard(props) {
     const parseLayovers = () => {
         let flightList = allFlightData?.flightPath || [];
         let layovers = []
-        if(flightList.length > 2) {
+        if(flightList.length > 1) {
+            layovers.push(flightList[0])
             layovers.push(flightList[1])
             if(flightList.length > 3) {
                 layovers.push(flightList[2])
@@ -84,7 +86,7 @@ export default function FlightCard(props) {
                                 <div className="min-w-[150px]">
                                     <Typography>
                                         {
-                                            (endFlights.length > 1) ? endFlights[1]?.flightNumber : (<></>)
+                                            (endFlights.length > 1) ? endFlights[1]?.flightNumber : ( endFlights[0]?.flightNumber )
                                         }
                                     </Typography>
                                     <Typography className="text-lg border-b border-b-primary max-w-[150px]">
@@ -119,11 +121,11 @@ export default function FlightCard(props) {
                 </Card>
             </div>
             {
-                layovers &&
-                layovers.length > 0 ? (
+                allFlightData &&
+                allFlightData.flightPath.length > 0 ? (
                     <div>
                         <Collapse open={open}>
-                            <LayoverCollapse layovers={layovers}/>
+                            <LayoverCollapse layovers={allFlightData.flightPath}/>
                         </Collapse>
                     </div>
                 ) : (<Typography></Typography>)

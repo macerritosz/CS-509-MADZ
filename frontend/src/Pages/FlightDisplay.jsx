@@ -189,7 +189,7 @@ export default function FlightDisplay() {
                                 size="sm"
                                 variant="outlined"
                                 onClick={handleNextPage}
-                                disabled={currentPage === totalPages - 1}
+                                disabled={currentPage === totalPages}
                             >
                                 <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
                             </IconButton>
