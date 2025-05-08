@@ -49,27 +49,27 @@ export default function SortSideBar({departureSort, arrivalSort, timeSort}) {
         <aside className="flex sticky top-0 m-4">
             <Card className="p-4">
                 <div className="mb-2 p-4">
-                    <Typography variant="h6">
+                    <Typography variant="h6" className="text-text">
                         Filter By:
                     </Typography>
                 </div>
                 <hr className="my-2" />
                 <List>
-                    <ListItem onClick={() => handleFilterChange("departure")}>
+                    <ListItem onClick={() => handleFilterChange("departure")}className="text-text">
                         Departure Time
                         <ListItemSuffix>
                             {FilterState[departureFilter]}
                         </ListItemSuffix>
                     </ListItem>
-                    <ListItem onClick={() => handleFilterChange("arrival")}>
+                    <ListItem onClick={() => handleFilterChange("arrival")}className="text-text">
                         Arrival Time
                         <ListItemSuffix >
                             {FilterState[arrivalFilter]}
                         </ListItemSuffix>
                     </ListItem>
-                    <ListItem onClick={() => handleFilterChange("time")}>
+                    <ListItem onClick={() => handleFilterChange("time")} className="text-text">
                         Travel Time
-                        <ListItemSuffix>
+                        <ListItemSuffix >
                             {FilterState[timeFilter]}
                         </ListItemSuffix>
                     </ListItem>
