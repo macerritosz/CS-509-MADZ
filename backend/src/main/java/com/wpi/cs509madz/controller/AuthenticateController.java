@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class AuthenticateController {
 
@@ -47,17 +50,19 @@ public class AuthenticateController {
             boolean is_authenticated = database_manager.searchUser(request.getUsername(), request.getPassword());
 
             if (is_authenticated) {
-
-                return ResponseEntity.ok().body("{\"message\": \"Login successful!\", \"User ID\":"
-                        + database_manager.getRepository().getUserViaUsername(request.getUsername()).get(0).getId()+ "}");
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "Login successful!");
+                response.put("UserID", database_manager.getRepository().getUserViaUsername(request.getUsername()).get(0).getId());
+                return ResponseEntity.ok(response);
+            } else {
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "Invalid username or password.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
-            else {
-
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"Invalid username or password.\"}");
-            }
-        }
-        catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": " + e.getMessage());
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }

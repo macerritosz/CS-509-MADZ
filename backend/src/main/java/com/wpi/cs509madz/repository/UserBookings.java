@@ -64,9 +64,7 @@ public class UserBookings {
             }
 
             flightBooking.setUserID(rs.getInt("UserID"));
-            String airlineVal = rs.getString("Airline");
-            FlightBookingDto.Airline airline = FlightBookingDto.Airline.fromValue(airlineVal);
-            flightBooking.setAirline(airline);
+            flightBooking.setAirline(rs.getString("Airline"));
 
             return flightBooking;
         };

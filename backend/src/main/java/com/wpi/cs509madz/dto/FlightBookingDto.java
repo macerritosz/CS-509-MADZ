@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 public class FlightBookingDto {
     private int tableId;
 
@@ -22,13 +21,13 @@ public class FlightBookingDto {
 
     private int userID;
 
-    private Airline airline;
+    private String airline;  // Changed from Airline enum to String
 
-    public Airline getAirline() {
+    public String getAirline() {
         return airline;
     }
 
-    public void setAirline(Airline airline) {
+    public void setAirline(String airline) {
         this.airline = airline;
     }
 
@@ -96,27 +95,18 @@ public class FlightBookingDto {
         this.referenceIDs = referenceIDs;
     }
 
-    public enum Airline {
-        DELTAS("deltas"),
-        SOUTHWESTS("southwests");
-
-        private final String value;
-
-        Airline(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public static Airline fromValue(String value) {
-            for (Airline airline : Airline.values()) {
-                if (airline.value.equalsIgnoreCase(value)) {
-                    return airline;
-                }
-            }
-            throw new IllegalArgumentException("Unknown airline: " + value);
-        }
+    @Override
+    public String toString() {
+        return "FlightBookingDto{" +
+                "tableId=" + tableId +
+                ", departDateTime='" + departDateTime + '\'' +
+                ", arriveDateTime='" + arriveDateTime + '\'' +
+                ", departAirport='" + departAirport + '\'' +
+                ", arriveAirport='" + arriveAirport + '\'' +
+                ", flightNumber='" + flightNumber + '\'' +
+                ", referenceIDs=" + referenceIDs +
+                ", userID=" + userID +
+                ", airline='" + airline + '\'' +  // Adjusted to String
+                '}';
     }
 }

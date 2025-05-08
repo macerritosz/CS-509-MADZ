@@ -139,17 +139,17 @@ export function SignInModal(props) {
                             {isSignUp ? "Sign Up" : "Sign In"}
                         </Typography>
                         <Typography
-                            className="mb-3 font-normal"
+                            className="mb-2 text-text font-extralight"
                             variant="paragraph"
                             color="gray"
                         >
                             {isSignUp ? "Create your account." : "Enter your Username and Password to Sign In."}
                         </Typography>
-                        <Typography className="-mb-2" variant="h6">
+                        <Typography className="-mb-2 text-text" variant="h6">
                             Your Username
                         </Typography>
                         <Input label="Username" size="lg" onChange={handleUsernameChange} value={username}/>
-                        <Typography className="-mb-2" variant="h6">
+                        <Typography className="-mb-2 text-text" variant="h6">
                             Your Password
                         </Typography>
                         <Input label="Password" size="lg" type="password" onChange={handlePasswordChange}
@@ -171,10 +171,10 @@ export function SignInModal(props) {
                         }
                     </CardBody>
                     <CardFooter className="pt-0">
-                        <Button onClick={handleSubmit} fullWidth className="!bg-accent">
+                        <Button onClick={handleSubmit} fullWidth className="hover:bg-primary  ">
                             {isSignUp ? "Sign Up" : "Sign In"}
                         </Button>
-                        <Typography variant="small" className="mt-4 flex justify-center">
+                        <Typography variant="small" className="flex justify-center mt-4 text-text/80">
                             {
                                 isSignUp ? "Already have an account?" : "Don't have an account?"
                             }
@@ -183,7 +183,7 @@ export function SignInModal(props) {
                                 href="#signup"
                                 variant="small"
                                 color="blue-gray"
-                                className="ml-1 font-bold"
+                                className="ml-1 font-bold hover: hover:text-primary"
                                 onClick={() => setIsSignUp(!isSignUp)}
                             >
                                 {isSignUp ? "Sign In" : "Sign Up"}

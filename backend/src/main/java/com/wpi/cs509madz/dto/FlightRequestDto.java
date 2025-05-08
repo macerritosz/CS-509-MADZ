@@ -1,9 +1,13 @@
 package com.wpi.cs509madz.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class FlightRequestDto {
     private boolean oneWay;
     private boolean roundTrip;
+    @JsonProperty("isSameDay")
     private boolean isSameDay;
+    @JsonProperty("isDirect")
     private boolean isDirect;
     private String departureAirport;
     private String arrivalAirport;
@@ -30,7 +34,7 @@ public class FlightRequestDto {
         return isSameDay;
     }
 
-    public void setSameDay(boolean sameDay) {
+    public void setisSameDay(boolean sameDay) {
         this.isSameDay = sameDay;
     }
 
