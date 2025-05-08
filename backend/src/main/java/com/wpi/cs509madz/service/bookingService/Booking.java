@@ -7,6 +7,7 @@ import com.wpi.cs509madz.model.Flight;
 import com.wpi.cs509madz.service.utils.DateTime;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @JsonSerialize
 public class Booking implements IBooking {
@@ -127,7 +128,8 @@ public class Booking implements IBooking {
         for (Booking booking : flightDatabase) {
             if (booking.getDepartureDate().toString().equals(departureDate.toString()) &&
                     booking.getDepartureLocation().equals(departureLocation) &&
-                    booking.getArrivalLocation().equals(arrivalLocation)) {
+                    booking.getArrivalLocation().equals(arrivalLocation) &&
+                    booking.getDepartureDateTime().isBefore(booking.getArrivalDateTime())) {
                 finalOptions.add(List.of(booking));
             }
         }
@@ -144,7 +146,8 @@ public class Booking implements IBooking {
         finalOptions.addAll(direct);
 
         for (Booking booking : flightDatabase) {
-            if (booking.getDepartureLocation().equals(departureLocation)) {
+            if (booking.getDepartureLocation().equals(departureLocation) &&
+                    booking.getDepartureDateTime().isSameDay(departureDate)) {
                 options.offer(List.of(booking));
             }
         }
@@ -153,12 +156,17 @@ public class Booking implements IBooking {
             List<IBooking> curPath = options.poll();
             IBooking lastFlight = curPath.get(curPath.size() - 1);
 
+            Set<String> visitedLocations = curPath.stream()
+                    .map(IBooking::getArrivalLocation)
+                    .collect(Collectors.toSet());
+
             for (Booking booking : flightDatabase) {
                 if (curPath.size() < 4 &&
                         Objects.equals(lastFlight.getArrivalLocation(), booking.getDepartureLocation())
                         && booking.getDepartureDateTime().isBefore(booking.getArrivalDateTime())
                         && lastFlight.getArrivalDateTime().isBefore(booking.getDepartureDateTime())
                         && !Objects.equals(lastFlight.getArrivalLocation(), arrivalLocation)
+                        && !visitedLocations.contains(booking.getArrivalLocation())
                         && ((lastFlight.getArrivalDateTime().getDifference(booking.getDepartureDateTime()) > 90)
                         && (lastFlight.getArrivalDateTime().getDifference(booking.getDepartureDateTime()) < 240))) {
 
@@ -186,14 +194,23 @@ public class Booking implements IBooking {
         finalOptions.addAll(direct);
 
         for (Booking booking : flightDatabase) {
-            if (booking.getDepartureLocation().equals(departureLocation)) {
+            if (booking.getDepartureLocation().equals(departureLocation)
+            && booking.getDepartureDateTime().isSameDay(departureDate)) {
                 options.offer(List.of(booking));
             }
         }
 
+
+
         while (!options.isEmpty()) {
             List<IBooking> curPath = options.poll();
             IBooking lastFlight = curPath.get(curPath.size() - 1);
+
+            Set<String> visitedLocations = curPath.stream()
+                    .map(IBooking::getArrivalLocation)
+                    .collect(Collectors.toSet());
+            visitedLocations.add(departureLocation);
+
 
             for (Booking booking : flightDatabase) {
                 if (curPath.size() < 4
@@ -201,8 +218,11 @@ public class Booking implements IBooking {
                         && booking.getDepartureDateTime().isBefore(booking.getArrivalDateTime())
                         && lastFlight.getArrivalDateTime().isBefore(booking.getDepartureDateTime())
                         && !Objects.equals(lastFlight.getArrivalLocation(), arrivalLocation)
+                        && booking.getArrivalDateTime().isSameDay(departureDate)
+                        && !visitedLocations.contains(booking.getArrivalLocation())
                         && ((lastFlight.getArrivalDateTime().getDifference(booking.getDepartureDateTime()) > 90)
-                        && (lastFlight.getArrivalDateTime().getDifference(booking.getDepartureDateTime()) < 240))) {
+                        && (lastFlight.getArrivalDateTime().getDifference(booking.getDepartureDateTime()) < 240)))
+                {
 
                     List<IBooking> newPath = new ArrayList<>(curPath);
                     newPath.add(booking);
@@ -240,7 +260,7 @@ public class Booking implements IBooking {
         int totalTime = booking.get(0).getDepartureDateTime().getDifference(booking.get(booking.size() - 1).getArrivalDateTime());
         layoverTimes.add(totalTime);
 
-        for (int i = 0; i < booking.size() - 2; i++) {
+        for (int i = 0; i < booking.size() - 1; i++) {
             int time = booking.get(i).getArrivalDateTime().getDifference(booking.get(i + 1).getDepartureDateTime());
             layoverTimes.add(time);
         }

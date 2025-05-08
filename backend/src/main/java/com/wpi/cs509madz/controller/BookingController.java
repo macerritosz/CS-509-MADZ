@@ -21,8 +21,9 @@ public class BookingController {
     private SouthwestsRepository southwestsRepository;
     @Autowired
     private DeltasRepository deltasRepository;
+    @Autowired
+    private UserBookings userBookings;
 
-    // TODO add total flight time
     @PostMapping("/api/submit")
     public ResponseEntity<Map<String,Object>> submit(@RequestBody FlightRequestDto flightRequest) {
         System.out.println(flightRequest.toString());
@@ -39,7 +40,7 @@ public class BookingController {
         List<List<IBooking>> swPaths = southwestBooking.findLayoverOptions(Optional.of(flightRequest.isDirectFlight()), Optional.of(flightRequest.isSameDay()));
         List<FlightTimeObject> southwestFlightPaths = new ArrayList<>();
         for (List<IBooking> path : swPaths) {
-            southwestFlightPaths.add(new FlightTimeObject(path, southwestBooking.calculateLayoverTime(path), FlightBookingDto.Airline.SOUTHWESTS.toString()));
+            southwestFlightPaths.add(new FlightTimeObject(path, southwestBooking.calculateLayoverTime(path), Airline.SOUTHWESTS.toString()));
         }
         southwest.put("southwestFlights", southwestFlightPaths);
 
@@ -51,7 +52,47 @@ public class BookingController {
         List<List<IBooking>> dPaths = deltaBooking.findLayoverOptions(Optional.of(flightRequest.isDirectFlight()), Optional.of(flightRequest.isSameDay()));
         List<FlightTimeObject> deltaFlightPaths = new ArrayList<>();
         for (List<IBooking> path : dPaths) {
-            deltaFlightPaths.add(new FlightTimeObject(path, deltaBooking.calculateLayoverTime(path), FlightBookingDto.Airline.DELTAS.toString()));
+            deltaFlightPaths.add(new FlightTimeObject(path, deltaBooking.calculateLayoverTime(path), Airline.DELTAS.toString()));
+        }
+        delta.put("deltaFlights", deltaFlightPaths);
+
+        allBookings.putAll(southwest);
+        allBookings.putAll(delta);
+
+        response.put("allBookings", allBookings);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/api/return-flight")
+    public ResponseEntity<Map<String,Object>> returnFlights(@RequestBody FlightRequestDto flightRequest) {
+        System.out.println(flightRequest.toString());
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> allBookings = new HashMap<>();
+        Map<String, Object> southwest = new HashMap<>();
+        Map<String, Object> delta = new HashMap<>();
+
+        Booking southwestBooking = new Booking(southwestsRepository.findAll(),
+                new DateTime(flightRequest.getDepartureDate()),
+                flightRequest.getDepartureAirport(),
+                flightRequest.getArrivalAirport());
+
+        List<List<IBooking>> swPaths = southwestBooking.findLayoverOptions(Optional.of(flightRequest.isDirectFlight()), Optional.of(flightRequest.isSameDay()));
+        List<FlightTimeObject> southwestFlightPaths = new ArrayList<>();
+        for (List<IBooking> path : swPaths) {
+            southwestFlightPaths.add(new FlightTimeObject(path, southwestBooking.calculateLayoverTime(path), Airline.SOUTHWESTS.toString()));
+        }
+        southwest.put("southwestFlights", southwestFlightPaths);
+
+        Booking deltaBooking = new Booking(deltasRepository.findAll(),
+                new DateTime(flightRequest.getDepartureDate()),
+                flightRequest.getDepartureAirport(),
+                flightRequest.getArrivalAirport());
+
+        List<List<IBooking>> dPaths = deltaBooking.findLayoverOptions(Optional.of(flightRequest.isDirectFlight()), Optional.of(flightRequest.isSameDay()));
+        List<FlightTimeObject> deltaFlightPaths = new ArrayList<>();
+        for (List<IBooking> path : dPaths) {
+            deltaFlightPaths.add(new FlightTimeObject(path, deltaBooking.calculateLayoverTime(path), Airline.DELTAS.toString()));
         }
         delta.put("deltaFlights", deltaFlightPaths);
 
@@ -71,7 +112,10 @@ public class BookingController {
      */
     @PostMapping("/api/bookFlight")
     public ResponseEntity<Map<String,Object>> bookFlight(@RequestBody FlightBookingDto flightRequest) {
+        System.out.println(flightRequest.toString());
         Map<String, Object> response = new HashMap<>();
+
+        userBookings.save(flightRequest);
 
         response.put("bookedFlight",
                 new Booking(
@@ -101,7 +145,7 @@ public class BookingController {
         UserBookings userBookings = new UserBookings();
         List<FlightBookingDto> flightPaths = userBookings.getAllFlightsByUserID(Integer.parseInt(userId));
         for (FlightBookingDto path : flightPaths) {
-            if (path.getAirline() == FlightBookingDto.Airline.SOUTHWESTS) {
+            if (Objects.equals(path.getAirline(), Airline.SOUTHWESTS.toString())) {
                 List<IBooking> swPath = new ArrayList<>();
                 Booking departure = new Booking(path);
                 swPath.add(departure);
@@ -113,7 +157,7 @@ public class BookingController {
                     }
                 }
 
-                southwest.put("flight data", new FlightTimeObject(swPath, departure.calculateLayoverTime(swPath), FlightBookingDto.Airline.SOUTHWESTS.toString()));
+                southwest.put("flight data", new FlightTimeObject(swPath, departure.calculateLayoverTime(swPath), Airline.SOUTHWESTS.toString()));
             } else {
                 List<IBooking> dPath = new ArrayList<>();
                 Booking departure = new Booking(path);
@@ -126,7 +170,7 @@ public class BookingController {
                     }
                 }
 
-                delta.put("flight data", new FlightTimeObject(dPath, departure.calculateLayoverTime(dPath), FlightBookingDto.Airline.DELTAS.toString()));
+                delta.put("flight data", new FlightTimeObject(dPath, departure.calculateLayoverTime(dPath), Airline.DELTAS.toString()));
             }
         }
 
@@ -135,4 +179,14 @@ public class BookingController {
         return ResponseEntity.ok(response);
     }
 
+    public enum Airline {
+        DELTAS("deltas"),
+        SOUTHWESTS("southwests");
+
+        private final String value;
+
+        Airline(String value) {
+            this.value = value;
+        }
+    }
 }
