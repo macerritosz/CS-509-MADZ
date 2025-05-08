@@ -105,6 +105,7 @@ function Homepage() {
                 if (response.ok) {
                     const result = await response.json();
                     sessionStorage.setItem("FlightDataResponse", JSON.stringify(result.allBookings));
+                    sessionStorage.setItem("FlightFormData", JSON.stringify(formData));
                     navigate('/Flights');
                 }
             } catch (error) {
@@ -127,7 +128,7 @@ function Homepage() {
 
 
     const checkValidDates = () => {
-        if(!isOneway && (!formData.returnDate || new Date(formData.returnDate) < new Date(formData.departureDate))){
+        if(!isOneway && (!formData.arrivalDate || new Date(formData.arrivalDate) < new Date(formData.departureDate))){
             setShowInvalidDateAlert(true)
             return false
         }
@@ -142,6 +143,7 @@ function Homepage() {
     useEffect(() => {
         console.log(departureSuggestion);
     }, [departureSuggestion]);
+
     return (
         <section className="homepage flex flex-col justify-center items-center">
             <div className="content-start w-full h-full ">
@@ -276,7 +278,7 @@ function Homepage() {
                                                      placement="right">
                                                 <span className="inline-block w-full">
                                                     <Calendar
-                                                        type={"return"}
+                                                        type={"arrival"}
                                                         isDisabled={isOneway}
                                                         handleChange={(e) => handleChange(e)}
                                                     />
