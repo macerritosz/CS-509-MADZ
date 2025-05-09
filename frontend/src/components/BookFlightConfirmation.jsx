@@ -1,15 +1,8 @@
-import {
-    Button,
-    Card,
-    CardBody,
-    CardFooter,
-    Dialog,
-    Typography
-} from "@material-tailwind/react";
+import {Button, Card, CardBody, CardFooter, Dialog, Typography} from "@material-tailwind/react";
 import React from "react";
 import {useNavigate} from "react-router-dom";
 
-export default function BookFlightConfirmation({ open, onClose, data, timeData, returnFlight , airline}) {
+export default function BookFlightConfirmation({open, onClose, data, timeData, returnFlight, airline}) {
     const navigate = useNavigate();
 
     const getTime = (date) => {
@@ -37,12 +30,10 @@ export default function BookFlightConfirmation({ open, onClose, data, timeData, 
     };
 
     const onConfirm = async () => {
-        //if the value for having a return flight is true, book the flight and redirect to the /Flights page with an inbound url param set to true
         let userID = localStorage.getItem("userID");
-        if(userID === null) {
+        if (userID === null) {
             navigate("/");
-        }
-        if(returnFlight) {
+        } else {
             try {
                 const bookingJSON = parseFlightInfoToJson(userID)
                 const response = await fetch("/api/bookFlight", {
@@ -50,18 +41,20 @@ export default function BookFlightConfirmation({ open, onClose, data, timeData, 
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(bookingJSON), // this should hold the return flight form data
+                    body: JSON.stringify(bookingJSON),
                 });
 
                 if (response.ok) {
                     const result = await response.json();
-                    // Save the return flight data in session or state if needed
-                    onClose()
+
                     if (returnFlight) {
+                        sessionStorage.setItem("LastBookedFlightID", result.bookingId || "");
                         navigate('/Flights?inbound=true');
                     } else {
-                        navigate('/UserFlights'); // userFlightsPage
+                        sessionStorage.removeItem("FlightDataReturnResponse");
+                        navigate('/UserDisplay');
                     }
+                    onClose()
                 } else {
                     console.error("Booking return flight failed.");
                 }
@@ -72,10 +65,8 @@ export default function BookFlightConfirmation({ open, onClose, data, timeData, 
     }
 
 
-
     const parseFlightInfoToJson = (userID) => {
-        //iterate through the data to get the id for each flight save the first one to tbaleID, and the others tot he list of reference ID
-        // , the other values will be the information for the first flight
+
         if (!data || data.length === 0) {
             console.error("No flight data available to parse.");
             return null;
@@ -84,10 +75,9 @@ export default function BookFlightConfirmation({ open, onClose, data, timeData, 
         const mainFlight = data[0];
         console.log(mainFlight);
 
-        const tableId = mainFlight.id;  // assuming each flight has an `id` field
-        const referenceIDs = data.slice(1).map(flight => flight.id);  // remaining flight IDs
+        const tableId = mainFlight.id;
+        const referenceIDs = data.slice(1).map(flight => flight.id);
 
-        // Ensure we fill the referenceIDs array up to 3 slots with nulls if fewer provided
         while (referenceIDs.length < 3) {
             referenceIDs.push(null);
         }
@@ -137,10 +127,10 @@ export default function BookFlightConfirmation({ open, onClose, data, timeData, 
                             </Typography>
                             <Typography className="text-sm">
                                 {index < timeData.length - 1 && (
-                                    <Typography className="text-sm mt-1">
+                                    <span className="text-sm mt-1">
                                         <strong>Layover after this leg:</strong>{" "}
                                         {formatDuration(timeData[index + 1])}
-                                    </Typography>
+                                    </span>
                                 )}
                             </Typography>
                         </div>

@@ -16,6 +16,7 @@ export default function FlightDisplay() {
     const [unsortedData, setUnsortedData] = useState([]);
     const [currentFlights, setCurrentFlights] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [isOneWay, setIsOneWay] = useState(true);
     const itemsPerPage = 10; // or whatever number you want per page
 
 
@@ -39,11 +40,13 @@ export default function FlightDisplay() {
         const savedFormData = JSON.parse(sessionStorage.getItem('FlightFormData'));
         if (savedFormData) {
             setFormData(savedFormData);
+            setIsOneWay(savedFormData.isOneway);
         }
     }, []);
 
+
     useEffect(() => {
-        if (formData && !formData.isOneway) {
+        if (formData  && !isOneWay) {
             const fetchReturnFlight = async () => {
                 try {
                     const returnFormData = {
@@ -71,7 +74,7 @@ export default function FlightDisplay() {
 
             fetchReturnFlight();
         }
-    }, [formData]);
+    }, [formData, isOneWay]);
 
     const parseData = () => {
         const params = new URLSearchParams(location.search);
@@ -156,7 +159,7 @@ export default function FlightDisplay() {
     const createFlightCards = (data, key) => {
         return (
             <div key={key} className="p-1">
-                <FlightCard data={data}  doReturn={formData ? !formData.isOneway : false}/>
+                <FlightCard data={data}  doReturn={isOneWay}/>
             </div>
         )
     }

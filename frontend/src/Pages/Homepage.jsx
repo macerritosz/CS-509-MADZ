@@ -52,18 +52,7 @@ function Homepage() {
         setAvailableArrivalLocations(arrLocation);
     }, []);
 
-    const carouselImages = [
-        "./istockphoto-1629109811-612x612.jpg",
-        "./pexels-sergei-a-1322276-2539430.jpg"
-    ]
-    /*
-    TODO
-    On selecting one way, set the arrival date to
-    Same-day flight option
 
-    Display 5 from all flight locaions in drop down
-    Use cookies to save the last search and auto fill everything, except return date
-     */
     const getFilteredLocations = (input, type) => {
         if (type === "departure") {
             return availableDepartureLocations.filter(loc =>
@@ -247,7 +236,7 @@ function Homepage() {
                                                     className="absolute z-15 w-full bg-white shadow-lg rounded-md mt-1 text-text">
                                                     {departureSuggestion.slice(0, 4).map((loc, idx) => (
                                                         <ListItem
-                                                            key={loc.DepartAirport}  // Use the name or unique attribute as key
+                                                            key={loc.DepartAirport}
                                                             className="cursor-pointer text-sm p-2"
                                                             onClick={() => {
                                                                 setFormData({

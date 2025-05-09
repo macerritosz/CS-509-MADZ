@@ -148,7 +148,6 @@ export default function DisplayCard({ data, isDisplay }) {
                                 <strong>To:</strong> {flight.arrivalLocation} at{" "}
                                 {getTime(flight.arrivalDateTime)}
                             </Typography>
-                            {/* Optional: calculate flight duration here, if you want */}
                             {index < data.flightPath.length - 1 && (
                                 <Typography className="text-sm mt-1">
                                     <strong>Layover after this leg:</strong>{" "}
