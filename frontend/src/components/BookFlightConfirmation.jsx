@@ -36,8 +36,6 @@ export default function BookFlightConfirmation({ open, onClose, data, timeData, 
         return `${h}h ${m}m`;
     };
 
-    const totalTime = timeData.reduce((sum, t) => sum + t, 0);
-
     const onConfirm = async () => {
         //if the value for having a return flight is true, book the flight and redirect to the /Flights page with an inbound url param set to true
         let userID = localStorage.getItem("userID");
@@ -62,7 +60,7 @@ export default function BookFlightConfirmation({ open, onClose, data, timeData, 
                     if (returnFlight) {
                         navigate('/Flights?inbound=true');
                     } else {
-                        navigate('/'); // userFlightsPage
+                        navigate('/UserFlights'); // userFlightsPage
                     }
                 } else {
                     console.error("Booking return flight failed.");
@@ -120,7 +118,9 @@ export default function BookFlightConfirmation({ open, onClose, data, timeData, 
                     <Typography variant="h4" color="blue-gray">
                         Confirm Your Booking
                     </Typography>
-
+                    <Typography variant="h5">
+                        Total trip time: {formatDuration(timeData[0])}
+                    </Typography>
                     {data.map((flight, index) => (
                         <div key={index} className="border p-2 rounded-md">
                             <Typography variant="h6">
@@ -136,16 +136,15 @@ export default function BookFlightConfirmation({ open, onClose, data, timeData, 
                                 <strong>To:</strong> {flight.arrivalLocation} at {getTime(flight.arrivalDateTime)}
                             </Typography>
                             <Typography className="text-sm">
-                                <strong>Duration:</strong> {formatDuration(timeData[index])}
+                                {index < timeData.length - 1 && (
+                                    <Typography className="text-sm mt-1">
+                                        <strong>Layover after this leg:</strong>{" "}
+                                        {formatDuration(timeData[index + 1])}
+                                    </Typography>
+                                )}
                             </Typography>
                         </div>
                     ))}
-
-                    <div className="mt-4">
-                        <Typography variant="h6">
-                            Total Flight Time: {formatDuration(totalTime)}
-                        </Typography>
-                    </div>
                 </CardBody>
                 <CardFooter className="flex justify-end gap-2">
                     <Button variant="outlined" color="red" onClick={onClose}>

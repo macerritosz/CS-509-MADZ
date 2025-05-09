@@ -7,7 +7,6 @@ import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/16/solid/index.js"
 import {mergeSort} from "../utils/mergeSort.js";
 
 export default function FlightDisplay() {
-    const navigate = useNavigate();
     const [formData, setFormData] = useState(null);
     const [flightData, setFlightData] = useState(null);
     const [parsedFlights, setParsedFlights] = useState([]);
@@ -111,26 +110,29 @@ export default function FlightDisplay() {
     }
 
     useEffect(() => {
-        if(departureSortState !== "NONE") {
-            let sorted = mergeSort([...parsedFlights], Strategy.DEPARTURE);
-            if(departureSortState === "UP") sorted.reverse();
+        if (departureSortState !== "NONE") {
+            let sorted = mergeSort([...unsortedData], Strategy.DEPARTURE);
+            if (departureSortState === "DOWN") {
+                setParsedFlights(sorted.reverse());
+            } else {
+                setParsedFlights(sorted);
+            }
+            setCurrentPage(1);
+        } else if (arrivalSortState !== "NONE") {
+            let sorted = mergeSort([...unsortedData], Strategy.ARRIVAL);
+            if (arrivalSortState === "DOWN") sorted.reverse();
             setParsedFlights(sorted);
             setCurrentPage(1);
-        } else if ( arrivalSortState !== "NONE"){
-            let sorted = mergeSort([...parsedFlights], Strategy.ARRIVAL);
-            if(arrivalSortState === "UP") sorted.reverse();
+        } else if (timeSortState !== "NONE") {
+            let sorted = mergeSort([...unsortedData], Strategy.TIME);
+            if (timeSortState === "DOWN") sorted.reverse();
             setParsedFlights(sorted);
             setCurrentPage(1);
-        } else if(timeSortState !== "NONE") {
-            let sorted = mergeSort([...parsedFlights], Strategy.TIME);
-            if(arrivalSortState === "UP") sorted.reverse();
-            setParsedFlights(sorted);
-            setCurrentPage(1);
-        } else{
+        } else {
             setParsedFlights(unsortedData);
             setCurrentPage(1);
         }
-    }, [departureSortState, arrivalSortState,timeSortState, unsortedData]);
+    }, [departureSortState, arrivalSortState, timeSortState, unsortedData]);
 
     useEffect(() => {
         console.log("Current page changed:", currentPage);
@@ -158,11 +160,6 @@ export default function FlightDisplay() {
             </div>
         )
     }
-
-    useEffect(() => {
-        console.log(currentFlights);
-    }, [currentFlights]);
-
 
     return (
         <section className="relative min-h-screen">

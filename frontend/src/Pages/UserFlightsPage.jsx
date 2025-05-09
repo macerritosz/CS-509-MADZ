@@ -5,6 +5,7 @@ import FlightCard from "../components/FlightCard.jsx";
 import { IconButton, Typography } from "@material-tailwind/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/16/solid";
 import {mergeSort} from "../utils/mergeSort.js";
+import DisplayCard from "../components/DisplayCard.jsx";
 
 export default function UserFlightsPage() {
     const navigate = useNavigate();
@@ -88,7 +89,7 @@ export default function UserFlightsPage() {
 
     const createFlightCards = (flight, key) => (
         <div key={key} className="p-1">
-            <FlightCard data={flight} doReturn={false} isDisplay={true} />
+            <DisplayCard data={flight} doReturn={false} isDisplay={true} />
         </div>
     );
 

@@ -44,7 +44,9 @@ function Header() {
                             </div>
                             <div className="flex items-center gap-4">
                                 <Button className="text-sm">
-                                    My Flights
+                                    <a href="/UserDisplay">
+                                        My Flights
+                                    </a>
                                 </Button>
                                 {
                                     isLoggedIn ? (
