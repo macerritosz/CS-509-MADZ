@@ -62,7 +62,7 @@ public class SouthwestsRepository {
      * Note: even though this will only return 1 flight, using a List makes it easier to parse in the rest of our code
      */
     public List<Flight> getFlightByID(int id) {
-        String sql = "select * from deltas where id = ?";
+        String sql = "select * from southwests where id = ?";
 
         RowMapper<Flight> rowMapper = new RowMapper<Flight>() {
             @Override

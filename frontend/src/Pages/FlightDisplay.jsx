@@ -4,9 +4,9 @@ import FlightCard from "../components/FlightCard.jsx";
 import {useNavigate} from "react-router-dom";
 import {IconButton, Typography} from "@material-tailwind/react";
 import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/16/solid/index.js";
+import {mergeSort} from "../utils/mergeSort.js";
 
 export default function FlightDisplay() {
-    const navigate = useNavigate();
     const [formData, setFormData] = useState(null);
     const [flightData, setFlightData] = useState(null);
     const [parsedFlights, setParsedFlights] = useState([]);
@@ -16,6 +16,7 @@ export default function FlightDisplay() {
     const [unsortedData, setUnsortedData] = useState([]);
     const [currentFlights, setCurrentFlights] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [isOneWay, setIsOneWay] = useState(true);
     const itemsPerPage = 10; // or whatever number you want per page
 
 
@@ -39,11 +40,13 @@ export default function FlightDisplay() {
         const savedFormData = JSON.parse(sessionStorage.getItem('FlightFormData'));
         if (savedFormData) {
             setFormData(savedFormData);
+            setIsOneWay(savedFormData.isOneway);
         }
     }, []);
 
+
     useEffect(() => {
-        if (formData && !formData.isOneway) {
+        if (formData  && !isOneWay) {
             const fetchReturnFlight = async () => {
                 try {
                     const returnFormData = {
@@ -71,7 +74,7 @@ export default function FlightDisplay() {
 
             fetchReturnFlight();
         }
-    }, [formData]);
+    }, [formData, isOneWay]);
 
     const parseData = () => {
         const params = new URLSearchParams(location.search);
@@ -109,71 +112,30 @@ export default function FlightDisplay() {
         return allGroups;
     }
 
-    // Do Merge sort when user changes sort strategy default is
-    function merge(arr, left, right, strategy) {
-        let result = []
-        let i = 0;
-        let j = 0
-
-        /*
-        Compare takes in two Flights and compares if the departure time in element L[i] is less than the one on the
-        right and adds to corresponding list
-         */
-        const compare = (a, b) => {
-            if (strategy === Strategy.DEPARTURE) {
-                return a.flightPath[0].departureDateTime < b.flightPath[0].departureDateTime;
-            } else if (strategy === Strategy.ARRIVAL) {
-                return a.flightPath[a.flightPath.length - 1 ].arrivalDateTime < b.flightPath[b.flightPath.length - 1 ].arrivalDateTime;
-            } else if (strategy === Strategy.TIME) {
-                return a.flightTimes[0] < b.flightTimes[0];
-            }
-            return true; // default to keep order
-        };
-
-        while (i < left.length && j < right.length) {
-            if (compare(left[i], right[j])) {
-                result.push(left[i]);
-                i++;
-            } else {
-                result.push(right[j])
-                j++;
-            }
-        }
-
-        return result.concat(left.slice(i)).concat(right.slice(j));
-    }
-
-    function mergeSort(arr, strategy) {
-        if(arr.length <= 1) return arr;
-
-        const mid = Math.floor(arr.length / 2);
-        const left = mergeSort(arr.slice(0, mid), strategy);
-        const right = mergeSort(arr.slice(mid), strategy);
-        return merge(arr, left, right, strategy);
-    }
-
-
     useEffect(() => {
-        if(departureSortState !== "NONE") {
-            let sorted = mergeSort([...parsedFlights], Strategy.DEPARTURE);
-            if(departureSortState === "UP") sorted.reverse();
+        if (departureSortState !== "NONE") {
+            let sorted = mergeSort([...unsortedData], Strategy.DEPARTURE);
+            if (departureSortState === "DOWN") {
+                setParsedFlights(sorted.reverse());
+            } else {
+                setParsedFlights(sorted);
+            }
+            setCurrentPage(1);
+        } else if (arrivalSortState !== "NONE") {
+            let sorted = mergeSort([...unsortedData], Strategy.ARRIVAL);
+            if (arrivalSortState === "DOWN") sorted.reverse();
             setParsedFlights(sorted);
             setCurrentPage(1);
-        } else if ( arrivalSortState !== "NONE"){
-            let sorted = mergeSort([...parsedFlights], Strategy.ARRIVAL);
-            if(arrivalSortState === "UP") sorted.reverse();
+        } else if (timeSortState !== "NONE") {
+            let sorted = mergeSort([...unsortedData], Strategy.TIME);
+            if (timeSortState === "DOWN") sorted.reverse();
             setParsedFlights(sorted);
             setCurrentPage(1);
-        } else if(timeSortState !== "NONE") {
-            let sorted = mergeSort([...parsedFlights], Strategy.TIME);
-            if(arrivalSortState === "UP") sorted.reverse();
-            setParsedFlights(sorted);
-            setCurrentPage(1);
-        } else{
+        } else {
             setParsedFlights(unsortedData);
             setCurrentPage(1);
         }
-    }, [departureSortState, arrivalSortState,timeSortState, unsortedData]);
+    }, [departureSortState, arrivalSortState, timeSortState, unsortedData]);
 
     useEffect(() => {
         console.log("Current page changed:", currentPage);
@@ -197,15 +159,10 @@ export default function FlightDisplay() {
     const createFlightCards = (data, key) => {
         return (
             <div key={key} className="p-1">
-                <FlightCard data={data}  doReturn={formData ? !formData.isOneway : false}/>
+                <FlightCard data={data}  doReturn={isOneWay}/>
             </div>
         )
     }
-
-    useEffect(() => {
-        console.log(currentFlights);
-    }, [currentFlights]);
-
 
     return (
         <section className="relative min-h-screen">

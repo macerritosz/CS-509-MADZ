@@ -20,15 +20,15 @@ export default function SortSideBar({departureSort, arrivalSort, timeSort}) {
 
     const handleFilterChange = (filterType) => {
         if (filterType === "departure") {
-            setDepartureFilter(departureFilter === "NONE" ? "DOWN" : departureFilter === "DOWN" ? "UP" : "NONE");
+            setDepartureFilter(departureFilter === "NONE" ? "UP" : departureFilter === "UP" ? "DOWN" : "NONE");
             setArrivalFilter("NONE");
             setTimeFilter("NONE");
         } else if (filterType === "arrival") {
-            setArrivalFilter(arrivalFilter === "NONE" ? "DOWN" : arrivalFilter === "DOWN" ? "UP" : "NONE");
+            setArrivalFilter(arrivalFilter === "NONE" ? "UP" : arrivalFilter === "UP" ? "DOWN" : "NONE");
             setDepartureFilter("NONE");
             setTimeFilter("NONE");
         } else if (filterType === "time") {
-            setTimeFilter(timeFilter === "NONE" ? "DOWN" : timeFilter === "DOWN" ? "UP" : "NONE");
+            setTimeFilter(timeFilter === "NONE" ? "UP" : timeFilter === "UP" ? "DOWN" : "NONE");
             setDepartureFilter("NONE");
             setArrivalFilter("NONE");
         }

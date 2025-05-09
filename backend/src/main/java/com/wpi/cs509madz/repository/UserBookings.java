@@ -27,8 +27,8 @@ public class UserBookings {
     public void save(FlightBookingDto booking) {
 
         //pass the query string into the repository execute the user
-        String sql = "INSERT INTO bookings (DepartDateTime, ArriveDateTime, DepartAirport, ArriveAirport, FlightNumber, UserID, Ref1, Ref2, Airline) " +
-                "VALUES (?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO bookings (DepartDateTime, ArriveDateTime, DepartAirport, ArriveAirport, FlightNumber, UserID, Ref1, Ref2, Ref3, Airline) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql,
                 booking.getDepartDateTime(),
                 booking.getArriveDateTime(),
@@ -38,6 +38,7 @@ public class UserBookings {
                 booking.getUserID(),
                 booking.getReferenceIDs().get(0),
                 booking.getReferenceIDs().get(1),
+                booking.getReferenceIDs().get(2),
                 booking.getAirline());
     }
 
@@ -59,8 +60,8 @@ public class UserBookings {
             flightBooking.setDepartDateTime(rs.getString("DepartDateTime"));
             flightBooking.setFlightNumber(rs.getString("FlightNumber"));
 
-            for (int i = 1; i < 5; i++) {
-                flightBooking.getReferenceIDs().set(i, rs.getInt("Ref" + i));
+            for (int i = 1; i <= 3; i++) {
+                flightBooking.getReferenceIDs().set(i - 1, rs.getInt("Ref" + i));
             }
 
             flightBooking.setUserID(rs.getInt("UserID"));

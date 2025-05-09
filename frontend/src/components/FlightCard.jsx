@@ -84,7 +84,7 @@ export default function FlightCard(props) {
                                             endFlights[0]?.flightNumber
                                         }
                                     </Typography>
-                                    <Typography className="text-lg border-b border-b-primary max-w-[150px]">
+                                    <Typography className="text-lg border-b border-b-primary max-w-[175px]">
                                         {
                                             endFlights[0]?.departureLocation
                                         }
@@ -102,7 +102,7 @@ export default function FlightCard(props) {
                                             (endFlights.length > 1) ? endFlights[1]?.flightNumber : ( endFlights[0]?.flightNumber )
                                         }
                                     </Typography>
-                                    <Typography className="text-lg border-b border-b-primary max-w-[150px]">
+                                    <Typography className="text-lg border-b border-b-primary max-w-[175px]">
                                         {
                                            (endFlights.length > 1) ? endFlights[1]?.arrivalLocation : endFlights[0]?.arrivalLocation
                                         }
@@ -125,10 +125,13 @@ export default function FlightCard(props) {
                                     View Layover Info
                                 </Button>
                             </div>
-
-                            <Button onClick={() => setConfirmOpen(true)}>
-                                Book Flight
-                            </Button>
+                            {
+                                props.isDisplay ? (<> </>
+                                    ): 
+                                (<Button onClick={() => setConfirmOpen(true)}>
+                                    Book Flight
+                                </Button>)
+                            }
                         </div>
                     </CardBody>
                 </Card>
