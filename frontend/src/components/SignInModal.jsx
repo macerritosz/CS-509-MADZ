@@ -183,9 +183,7 @@ export function SignInModal(props) {
                         {
                             isSignUp ? (updateVisualPasswordChecks()) :
                                 (
-                                    <div className="-ml-2.5 -mt-3">
-                                        <Checkbox label="Remember Me"/>
-                                    </div>
+                                    <></>
                                 )
                         }
                     </CardBody>

@@ -18,6 +18,7 @@ import {useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import depLocation from "../assets/locations/ALL_airport_departure.json"
 import arrLocation from "../assets/locations/ALL_airport_arrivals.json"
+import Loading from "../components/Loading.jsx";
 
 
 function Homepage() {
@@ -31,6 +32,7 @@ function Homepage() {
     const [arrivalSuggestion, setArrivalSuggestion] = useState([]);
     const [openMenu, setOpenMenu] = useState(false);
     const [invalidLocationsAlert, setInvalidLocationsAlert] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     /* User input states */
     const [formData, setFormData] = useState({
         departureAirport: "",
@@ -98,6 +100,8 @@ function Homepage() {
             setShowSignInAlert(true);
         } else {
             try {
+                setIsLoading(true);
+
                 const jsonFormData = JSON.stringify(formData);
                 const response = await fetch("/api/submit", {
                     method: "POST",
@@ -114,6 +118,8 @@ function Homepage() {
                 }
             } catch (error) {
                 console.log("Form Submission Error: ", error);
+            } finally {
+                setIsLoading(false);
             }
         }
     }
@@ -150,6 +156,7 @@ function Homepage() {
 
     return (
         <section className="homepage flex flex-col justify-center items-center">
+            {(isLoading || navigation.state === "loading") && <Loading />}
             <div className="content-start w-full h-full ">
                 <div className=" relative w-full h-[30rem]">
                     <img src="/StockCake-Expansive%20Cloudy%20Sky_1746028727.jpg"
@@ -343,15 +350,37 @@ function Homepage() {
 
                     </Typography>
                 </div>
-                <div id="madz-main-carousel" className="min-h-[600px] m-auto max-w-[78rem] px-4 z-10">
-                    <Carousel transition={{duration: 2}} autoplay={true} autoplayDelay={7500} loop={true}
-                              className=" w-full rounded-xl">
-                        {carouselImages.map((image, index) => (
-                            <div key={index}>
-                                <img src={image} alt={`slide-${index}`} className="w-full h-[600px] object-cover"/>
-                            </div>
+                <div className=" max-w-[78rem] p-4 m-auto">
+                    <div className="grid lg:grid-cols-3 justify-items-center">
+                        {[...Array(3)].map((_, index) => (
+                            <Card key={index} className="w-3/4 h-[300px] shadow-lg">
+                                <CardBody className="flex flex-col justify-center items-center">
+                                    <Typography variant="h6" className="mb-2">
+                                        Placeholder Title {index + 1}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                        This is a placeholder description for this card.
+                                    </Typography>
+                                </CardBody>
+                            </Card>
                         ))}
-                    </Carousel>
+                    </div>
+                </div>
+                <div className="w-full max-w-[78rem] p-4 m-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {[...Array(6)].map((_, index) => (
+                            <Card key={index} className="w-full h-[200px] p-4 shadow-lg">
+                                <CardBody className="flex flex-col justify-center items-center">
+                                    <Typography variant="h6" className="mb-2">
+                                        Placeholder Title {index + 1}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                        This is a placeholder description for this card.
+                                    </Typography>
+                                </CardBody>
+                            </Card>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
