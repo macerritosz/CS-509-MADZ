@@ -7,6 +7,7 @@ import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/16/solid/index.js"
 import {mergeSort} from "../utils/mergeSort.js";
 
 export default function FlightDisplay() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState(null);
     const [flightData, setFlightData] = useState(null);
     const [parsedFlights, setParsedFlights] = useState([]);
@@ -46,35 +47,61 @@ export default function FlightDisplay() {
 
 
     useEffect(() => {
-        if (formData  && !isOneWay) {
-            const fetchReturnFlight = async () => {
-                try {
-                    const returnFormData = {
-                        ...formData,
-                        isOneway: true,
-                        departureAirport: formData.arrivalAirport,
-                        arrivalAirport: formData.departureAirport,
-                        departureDate: formData.arrivalDate,
-                        arrivalDate: "",
-                    };
+        const params = new URLSearchParams(location.search);
+        const isInbound = params.get('inbound');
 
-                    const response = await fetch('/api/return-flight', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(returnFormData),
-                    });
-                    if (response.ok) {
-                        const result = await response.json();
-                        sessionStorage.setItem("FlightDataReturnResponse", JSON.stringify(result.allBookings));
-                    }
-                } catch (error) {
-                    console.error('Error fetching return flight:', error);
-                }
-            };
-
-            fetchReturnFlight();
+        const savedFormData = JSON.parse(sessionStorage.getItem('FlightFormData'));
+        if (!savedFormData) {
+            navigate('/');
+            return;
         }
-    }, [formData, isOneWay]);
+
+        setFormData(savedFormData);
+        setIsOneWay(savedFormData.isOneway);
+        if (isInbound) {
+            const savedReturnData = sessionStorage.getItem('FlightDataReturnResponse');
+            if(!savedReturnData ) {
+                const fetchReturnFlight = async () => {
+                    try {
+                        const returnFormData = {
+                            ...formData,
+                            isOneway: true,
+                            departureAirport: formData.arrivalAirport,
+                            arrivalAirport: formData.departureAirport,
+                            departureDate: formData.arrivalDate,
+                            arrivalDate: "",
+                        };
+                        setIsOneWay(true);
+
+                        const response = await fetch('/api/return-flight', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify(returnFormData),
+                        });
+                        if (response.ok) {
+                            const result = await response.json();
+                            sessionStorage.setItem("FlightDataReturnResponse", JSON.stringify(result.allBookings));
+                            setFlightData(result.allBookings);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching return flight:', error);
+                        sessionStorage.removeItem("FlightDataReturnResponse");
+                        navigate('/');
+                    }
+                };
+                fetchReturnFlight();
+            } else {
+                setFlightData(JSON.parse(savedReturnData));
+            }
+        } else {
+            const savedOutboundData = sessionStorage.getItem("FlightDataResponse");
+            if (savedOutboundData) {
+                setFlightData(JSON.parse(savedOutboundData));
+            } else {
+                navigate('/');
+            }
+        }
+    }, [location.search]);
 
     const parseData = () => {
         const params = new URLSearchParams(location.search);
@@ -159,7 +186,7 @@ export default function FlightDisplay() {
     const createFlightCards = (data, key) => {
         return (
             <div key={key} className="p-1">
-                <FlightCard data={data}  doReturn={isOneWay}/>
+                <FlightCard data={data}  doReturn={!isOneWay}/>
             </div>
         )
     }
