@@ -31,6 +31,10 @@ export default function BookFlightConfirmation({open, onClose, data, timeData, r
 
     const onConfirm = async () => {
         let userID = localStorage.getItem("userID");
+        const params = new URLSearchParams(location.search);
+        const isInbound = params.get('inbound');
+        console.log(params.get('inbound'));
+        console.log(returnFlight)
         if (userID === null) {
             navigate("/");
         } else {
@@ -47,7 +51,7 @@ export default function BookFlightConfirmation({open, onClose, data, timeData, r
                 if (response.ok) {
                     const result = await response.json();
 
-                    if (returnFlight) {
+                    if ( (isInbound === null && returnFlight) && location.pathname === '/Flights') {
                         sessionStorage.setItem("LastBookedFlightID", result.bookingId || "");
                         navigate('/Flights?inbound=true');
                     } else {
