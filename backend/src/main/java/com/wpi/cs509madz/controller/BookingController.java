@@ -2,6 +2,7 @@ package com.wpi.cs509madz.controller;
 
 import com.wpi.cs509madz.dto.FlightBookingDto;
 import com.wpi.cs509madz.dto.FlightRequestDto;
+import com.wpi.cs509madz.model.Flight;
 import com.wpi.cs509madz.model.FlightTimeObject;
 import com.wpi.cs509madz.repository.DeltasRepository;
 import com.wpi.cs509madz.repository.SouthwestsRepository;
@@ -136,46 +137,70 @@ public class BookingController {
     @GetMapping("/api/userBookings/{userId}")
     public ResponseEntity<Map<String,Object>> getUserBookings(@PathVariable String userId) {
         Map<String, Object> response = new HashMap<>();
-        Map<String, Object> southwest = new HashMap<>();
-        Map<String, Object> delta = new HashMap<>();
 
-        SouthwestsRepository swRepo = new SouthwestsRepository();
-        DeltasRepository dRepo = new DeltasRepository();
-
-        UserBookings userBookings = new UserBookings();
         List<FlightBookingDto> flightPaths = userBookings.getAllFlightsByUserID(Integer.parseInt(userId));
+
+
+        List<FlightTimeObject> flightData = new ArrayList<>();
+
+        // Process each flight path
         for (FlightBookingDto path : flightPaths) {
-            if (Objects.equals(path.getAirline(), Airline.SOUTHWESTS.toString())) {
+            if (Objects.equals(path.getAirline(), Airline.SOUTHWESTS.value)) {
+
                 List<IBooking> swPath = new ArrayList<>();
                 Booking departure = new Booking(path);
                 swPath.add(departure);
 
-                List<Integer> layovers = path.getReferenceIDs();
-                for (Integer flightNum : layovers) {
-                    if (layovers.get(flightNum) != null) {
-                        swPath.add(new Booking(swRepo.getFlightByID(layovers.get(flightNum)).get(0)));
-                    }
-                }
 
-                southwest.put("flight data", new FlightTimeObject(swPath, departure.calculateLayoverTime(swPath), Airline.SOUTHWESTS.toString()));
+                List<Integer> layovers = path.getReferenceIDs();
+                layovers.stream()
+                        .filter(Objects::nonNull)
+                        .forEach(flightNum -> {
+
+                            List<Flight> flights = southwestsRepository.getFlightByID(flightNum);
+                            if (!flights.isEmpty()) {
+                                Flight flight = flights.get(0);
+
+                                Booking booking = new Booking(flight);
+
+                                swPath.add(booking);
+                            }
+                        });
+
+
+                // Create FlightTimeObject for Southwest and add to flightData
+                flightData.add(new FlightTimeObject(swPath, departure.calculateLayoverTime(swPath), Airline.SOUTHWESTS.value));
             } else {
+
                 List<IBooking> dPath = new ArrayList<>();
                 Booking departure = new Booking(path);
                 dPath.add(departure);
 
-                List<Integer> layovers = path.getReferenceIDs();
-                for (Integer flightNum : layovers) {
-                    if (layovers.get(flightNum) != null) {
-                        dPath.add(new Booking(dRepo.getFlightByID(layovers.get(flightNum)).get(0)));
-                    }
-                }
 
-                delta.put("flight data", new FlightTimeObject(dPath, departure.calculateLayoverTime(dPath), Airline.DELTAS.toString()));
+                List<Integer> layovers = path.getReferenceIDs();
+                layovers.stream()
+                        .filter(Objects::nonNull)
+                        .forEach(flightNum -> {
+                            System.out.println("Processing layover flightNum: " + flightNum);
+
+                            List<Flight> flights = deltasRepository.getFlightByID(flightNum);
+                            if (!flights.isEmpty()) {
+                                Flight flight = flights.get(0);
+
+                                Booking booking = new Booking(flight);
+
+                                dPath.add(booking);
+                            }
+                        });
+
+                // Create FlightTimeObject for Delta and add to flightData
+                flightData.add(new FlightTimeObject(dPath, departure.calculateLayoverTime(dPath), Airline.DELTAS.value));
             }
         }
 
-        response.putAll(southwest);
-        response.putAll( delta);
+        // Add the flightData list to the response
+        response.put("flightData", flightData);
+
         return ResponseEntity.ok(response);
     }
 
